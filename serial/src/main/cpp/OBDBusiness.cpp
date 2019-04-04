@@ -1,13 +1,12 @@
 #include <jni.h>
 #include <string>
 #include <termios.h>
+#include <stdio.h>
+#include <sys/time.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
-//#include <sqlite3.h>
 #include "android/log.h"
-static const char *TAG="serial_port";
+static const char *TAG="obd_core";
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO,  TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
@@ -16,6 +15,23 @@ static const char *TAG="serial_port";
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+void LOGE_HEX(char* msg,char* data,int len)
+{
+	char buffer[1024];
+	char temp[5];
+
+	memset(buffer, 0, sizeof(buffer));
+
+	sprintf(buffer, "%s[%d][", (char*) msg, len);
+
+ 	for (int i = 0; i < len; i++) {
+        sprintf((char*) temp, "%02X ", data[i]);
+        strcat((char*) buffer, temp);
+    }
+    strcat((char*) buffer, "]\r\n");
+    LOGE("%s", buffer);
+}
 
 static speed_t getBaudrate(jint baudrate)
 {
@@ -54,6 +70,7 @@ static speed_t getBaudrate(jint baudrate)
 	default: return -1;
 	}
 }
+int fd;
 /*
  * Class:     com_miyuan_obd_serial_OBDBusiness
  * Method:    open
@@ -61,7 +78,6 @@ static speed_t getBaudrate(jint baudrate)
  */
 JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path, jint baudrate, jint flags)
 {
-    int fd;
 	speed_t speed;
 	jobject mFileDescriptor;
 
@@ -79,9 +95,9 @@ JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *en
 	{
 		jboolean iscopy;
 		const char *path_utf = env->GetStringUTFChars(path, &iscopy);
-		LOGD("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | flags);
+		LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | flags);
 		fd = open(path_utf, O_RDWR | flags);
-		LOGD("open() fd = %d", fd);
+		LOGE("open() fd = %d", fd);
 		env->ReleaseStringUTFChars(path, path_utf);
 		if (fd == -1)
 		{
@@ -95,7 +111,7 @@ JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *en
 	/* Configure device */
 	{
 		struct termios cfg;
-		LOGD("Configuring serial port");
+		LOGE("Configuring serial port");
 		if (tcgetattr(fd, &cfg))
 		{
 			LOGE("tcgetattr() failed");
@@ -144,7 +160,7 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv * env
     jobject mFd = env->GetObjectField(jobj, mFdID);
     jint descriptor = env->GetIntField(mFd, descriptorID);
 
-    LOGD("close(fd = %d)", descriptor);
+    LOGE("close(fd = %d)", descriptor);
     close(descriptor);
 }
 
@@ -156,16 +172,11 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv * env
 JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject jobj)
 {
   std::string version = "V5.0";
+  char data[] = {1,2,4,5,99,100};
+  LOGE_HEX("getVersion ",data,7);
   return env->NewStringUTF(version.c_str());
 }
 
-static int callback(void *data, int argc, char **argv, char **azColName){
-   LOGE("callback: %s",(const char*)data);
-   for(int i=0; i<argc; i++){
-      LOGE("callback: %s",azColName[i], argv[i] ? argv[i] : "NULL");
-   }
-   return 0;
-}
 /*
  * Class:     com_miyuan_obd_serial_OBDBusiness
  * Method:    getFaultCode
@@ -199,6 +210,8 @@ JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JN
     //   LOGE("Operation done successfully");
     // }
     // sqlite3_close(db);
+
+    return NULL;
 }
 
 /*
@@ -208,7 +221,7 @@ JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JN
  */
 JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj)
 {
-
+    return 1;
 }
 
 /*
@@ -218,7 +231,7 @@ JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode
  */
 JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj, jint fixedType)
 {
-
+	return 0;
 }
 
 /*
@@ -228,7 +241,8 @@ JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEn
  */
 JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType)
 {
-
+    std::string version = "V5.0";
+    return env->NewStringUTF(version.c_str());
 }
 /*
  * Class:     com_miyuan_obd_serial_OBDBusiness
@@ -238,6 +252,69 @@ JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(
 JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, jboolean status)
 {
 
+}
+
+/*
+ * 向串口写入数据
+ */
+int writeToBox(char* buffer, int len)
+{
+	if(fd == -1){
+		LOGE("seriail open fail!");
+		return -1;
+	}
+	LOGE_HEX("APP-OBD",buffer,len);
+	int length = write(fd, buffer, len);
+	sleep(1); //写完之后睡一秒
+    if (length > 0) {
+        LOGI("write device success");
+        return length;
+    } else {
+        LOGE("write device error");
+    }
+    return -1;
+}
+
+int readFormBox(JNIEnv *env,char* buffer,int timeOut)
+{
+	if(fd == -1){
+		LOGE("seriail open fail!");
+		return -1;
+	}
+
+	int ret;
+    fd_set readfd;
+    struct timeval timeout;
+    while (fd != -1) {
+        timeout.tv_sec = 0; //设定超时秒数
+        timeout.tv_usec = timeOut; //设定超时毫秒数
+
+        FD_ZERO(&readfd); //清空集合
+        FD_SET(fd, &readfd); // 把要检测的句柄fd加入到集合里
+        ret = select(fd + 1, &readfd, NULL, NULL, &timeout); // 检测我们上面设置到集合readfd里的句柄是否有可读信息
+        LOGE("ret=%d", ret);
+        switch (ret) {
+        case -1: // 这说明select函数出错
+            LOGE("fd read failure");
+            return -1;
+            break;
+        case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
+            LOGE("fd read timeOut");
+            return -2;
+        default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
+            if (FD_ISSET(fd, &readfd)) { // 先判断一下mTty这外被监视的句柄是否真的变成可读的了
+                char tempBuff[1024];
+                bzero(tempBuff, 1024);
+                int nread = read(fd, tempBuff, 1024);
+                if (nread > 0) {
+					LOGE_HEX("OBD-APP", tempBuff, nread);
+                    return nread;
+                }
+            }
+            break;
+        }
+    }
+    return -1;
 }
 
 #ifdef __cplusplus
