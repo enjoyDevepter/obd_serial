@@ -11,7 +11,7 @@ static const char *TAG="obd_core";
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 #define HEAD 0x7e
-#define TIMEOUT 3000
+#define TIMEOUT 5
 #ifndef _Included_com_miyuan_obd_serial_OBDBusiness
 #define _Included_com_miyuan_obd_serial_OBDBusiness
 #ifdef __cplusplus
@@ -159,7 +159,7 @@ int writeToBox(char* buffer, int len)
 	int length = write(fd, buffer, len);
 	sleep(1); //写完之后睡一秒
     if (length > 0) {
-        LOGI("write device success");
+        LOGE("write device success");
         return length;
     } else {
         LOGE("write device error");
@@ -178,8 +178,8 @@ int readFormBox(char* buffer,int timeOut)
     fd_set readfd;
     struct timeval timeout;
     while (fd != -1) {
-        timeout.tv_sec = 0; //设定超时秒数
-        timeout.tv_usec = timeOut; //设定超时毫秒数
+        timeout.tv_sec = timeOut; //设定超时秒数
+        timeout.tv_usec = 0; //设定超时毫秒数
 
         FD_ZERO(&readfd); //清空集合
         FD_SET(fd, &readfd); // 把要检测的句柄fd加入到集合里

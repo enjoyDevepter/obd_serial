@@ -1,5 +1,7 @@
 package com.miyuan.obd.serial;
 
+import android.util.Log;
+
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,7 +23,16 @@ class OBDBusiness {
         System.loadLibrary("serial");
     }
 
-    native static FileDescriptor open(String path, int baudrate, int flags);
+    public OBDBusiness() {
+        mFd = open("/dev/ttyS0", 115200, 0);
+//        mFd = open("/dev/ttyMT2", 19200, 0);
+        if (mFd == null) {
+            Log.e("obd_core", "native open returns null");
+            return;
+        }
+        mFileInputStream = new FileInputStream(mFd);
+        mFileOutputStream = new FileOutputStream(mFd);
+    }
 
     native void close();
 
@@ -37,16 +48,8 @@ class OBDBusiness {
 
     native boolean setCarStatus(boolean status);
 
-    public OBDBusiness() {
-//        mFd = open("/", 112500, 0);
-//        if (mFd == null) {
-//            Log.e("", "native open returns null");
-//        }
-//        mFileInputStream = new FileInputStream(mFd);
-//        mFileOutputStream = new FileOutputStream(mFd);
-    }
+    native FileDescriptor open(String path, int baudrate, int flags);
 
-    // Getters and setters
     public InputStream getInputStream() {
         return mFileInputStream;
     }

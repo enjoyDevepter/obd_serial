@@ -59,7 +59,7 @@ public class OBDCore {
      * @return 清除成功标示
      */
     public boolean cleanFaultCode() {
-        return true;
+        return obdBusiness.cleanFaultCode();
     }
 
 
@@ -70,7 +70,7 @@ public class OBDCore {
      * @return 固定数据类型对应数据
      */
     public int getFixedData(int fixedDataType) {
-        return 0;
+        return obdBusiness.getFixedData(fixedDataType);
     }
 
 
@@ -81,7 +81,7 @@ public class OBDCore {
      * @return 实时数据类型对应数据
      */
     public String getDynamicData(int dynamicDataType) {
-        return "";
+        return obdBusiness.getDynamicData(dynamicDataType);
     }
 
 
