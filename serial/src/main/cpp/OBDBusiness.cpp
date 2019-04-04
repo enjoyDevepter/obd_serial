@@ -10,6 +10,8 @@ static const char *TAG="obd_core";
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO,  TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
+#define HEAD 0x7e
+#define TIMEOUT 3000
 #ifndef _Included_com_miyuan_obd_serial_OBDBusiness
 #define _Included_com_miyuan_obd_serial_OBDBusiness
 #ifdef __cplusplus
@@ -145,116 +147,6 @@ JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *en
 }
 
 /*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    close
- * Signature: ()V
- */
-JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv * env, jobject jobj)
-{
-    jclass SerialPortClass = env->GetObjectClass(jobj);
-    jclass FileDescriptorClass = env->FindClass("java/io/FileDescriptor");
-
-    jfieldID mFdID = env->GetFieldID(SerialPortClass, "mFd", "Ljava/io/FileDescriptor;");
-    jfieldID descriptorID = env->GetFieldID(FileDescriptorClass, "descriptor", "I");
-
-    jobject mFd = env->GetObjectField(jobj, mFdID);
-    jint descriptor = env->GetIntField(mFd, descriptorID);
-
-    LOGE("close(fd = %d)", descriptor);
-    close(descriptor);
-}
-
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    getVersion
- * Signature: ()Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject jobj)
-{
-  std::string version = "V5.0";
-  char data[] = {1,2,4,5,99,100};
-  LOGE_HEX("getVersion ",data,7);
-  return env->NewStringUTF(version.c_str());
-}
-
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    getFaultCode
- * Signature: ()Ljava/util/List;
- */
-JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj)
-{
-    // sqlite3 *db;
-    // char *zErrMsg = 0;
-    // char *sql;
-    // const char* data = "Callback function called";
-    // int rc;
-    // /* Open database */
-    // rc = sqlite3_open("/mnt/sdcard/physical.db", &db);
-
-    // if(rc){
-    //   LOGE("Can't open database: %s",sqlite3_errmsg(db));
-    //   return NULL;
-    // } else {
-    //   LOGE("Opened database successfully!");
-    // }
-    // /* Create SQL statement */
-    // sql = "SELECT * from code where id = 'B0001'";
-
-    // /* Execute SQL statement */
-    // rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
-    // if( rc != SQLITE_OK ){
-    //   LOGE("SQL error: %s",zErrMsg);
-    //   sqlite3_free(zErrMsg);
-    // }else{
-    //   LOGE("Operation done successfully");
-    // }
-    // sqlite3_close(db);
-
-    return NULL;
-}
-
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    cleanFaultCode
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj)
-{
-    return 1;
-}
-
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    getFixedData
- * Signature: (I)I
- */
-JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj, jint fixedType)
-{
-	return 0;
-}
-
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    getDynamicData
- * Signature: (I)Ljava/lang/String;
- */
-JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType)
-{
-    std::string version = "V5.0";
-    return env->NewStringUTF(version.c_str());
-}
-/*
- * Class:     com_miyuan_obd_serial_OBDBusiness
- * Method:    setCarStatus
- * Signature: (Z)V
- */
-JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, jboolean status)
-{
-
-}
-
-/*
  * 向串口写入数据
  */
 int writeToBox(char* buffer, int len)
@@ -275,7 +167,7 @@ int writeToBox(char* buffer, int len)
     return -1;
 }
 
-int readFormBox(JNIEnv *env,char* buffer,int timeOut)
+int readFormBox(char* buffer,int timeOut)
 {
 	if(fd == -1){
 		LOGE("seriail open fail!");
@@ -317,6 +209,167 @@ int readFormBox(JNIEnv *env,char* buffer,int timeOut)
     return -1;
 }
 
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    close
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv * env, jobject jobj)
+{
+    jclass SerialPortClass = env->GetObjectClass(jobj);
+    jclass FileDescriptorClass = env->FindClass("java/io/FileDescriptor");
+
+    jfieldID mFdID = env->GetFieldID(SerialPortClass, "mFd", "Ljava/io/FileDescriptor;");
+    jfieldID descriptorID = env->GetFieldID(FileDescriptorClass, "descriptor", "I");
+
+    jobject mFd = env->GetObjectField(jobj, mFdID);
+    jint descriptor = env->GetIntField(mFd, descriptorID);
+
+    LOGE("close(fd = %d)", descriptor);
+    close(descriptor);
+}
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    getVersion
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject jobj)
+{
+  std::string version = "V5.0";
+  char data[] = {1,2,4,5,99,100};
+  LOGE_HEX("getVersion ",data,7);
+  return env->NewStringUTF(version.c_str());
+}
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    getFaultCode
+ * Signature: ()Ljava/util/List;
+ */
+JNIEXPORT jobject JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj)
+{
+    char input[6] = {HEAD,0x81,0x02,0x00,0x00,HEAD};
+    input[4] = input[1]^input[2]^input[3];
+
+    writeToBox(input,sizeof(input));
+
+    char result[1024];
+
+    int len = readFormBox(result,TIMEOUT);
+
+    // sqlite3 *db;
+    // char *zErrMsg = 0;
+    // char *sql;
+    // const char* data = "Callback function called";
+    // int rc;
+    // /* Open database */
+    // rc = sqlite3_open("/mnt/sdcard/physical.db", &db);
+
+    // if(rc){
+    //   LOGE("Can't open database: %s",sqlite3_errmsg(db));
+    //   return NULL;
+    // } else {
+    //   LOGE("Opened database successfully!");
+    // }
+    // /* Create SQL statement */
+    // sql = "SELECT * from code where id = 'B0001'";
+
+    // /* Execute SQL statement */
+    // rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
+    // if( rc != SQLITE_OK ){
+    //   LOGE("SQL error: %s",zErrMsg);
+    //   sqlite3_free(zErrMsg);
+    // }else{
+    //   LOGE("Operation done successfully");
+    // }
+    // sqlite3_close(db);
+
+    return NULL;
+}
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    cleanFaultCode
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj)
+{
+    char input[6] = {HEAD,0x81,0x02,0x00,0x00,HEAD};
+    input[4] = input[1]^input[2]^input[3];
+
+    writeToBox(input,sizeof(input));
+
+    char result[1024];
+
+    int len = readFormBox(result,TIMEOUT);
+
+    return 1;
+}
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    getFixedData
+ * Signature: (I)I
+ */
+JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj, jint fixedType)
+{
+    char input[6] = {HEAD,0x83,0x01,0x01,0x00,HEAD};
+    input[3] = fixedType;
+    input[4] = input[1]^input[2]^input[3];
+
+    writeToBox(input,sizeof(input));
+
+    char result[1024];
+
+    int len = readFormBox(result,TIMEOUT);
+	return 0;
+}
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    getDynamicData
+ * Signature: (I)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType)
+{
+    char input[6] = {HEAD,0x83,0x02,0x01,0x00,HEAD};
+    input[3] = dynamicType;
+    input[4] = input[1]^input[2]^input[3];
+
+    writeToBox(input,sizeof(input));
+
+    char result[1024];
+
+    int len = readFormBox(result,TIMEOUT);
+
+    std::string version = "V5.0";
+    return env->NewStringUTF(version.c_str());
+}
+
+
+
+/*
+ * Class:     com_miyuan_obd_serial_OBDBusiness
+ * Method:    setCarStatus
+ * Signature: (Z)V
+ */
+JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, jboolean status)
+{
+	char input[6] = {HEAD,0x89,0x01,0x01,0x00,HEAD};
+    if(!status){
+		input[3] = 0x00;
+	}
+	input[4] = input[1]^input[2]^input[3];
+
+	writeToBox(input,sizeof(input));
+
+	char result[1024]; 
+
+	int len = readFormBox(result,TIMEOUT);
+
+	return len>0;
+}
 #ifdef __cplusplus
 }
 #endif

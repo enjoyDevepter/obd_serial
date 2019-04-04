@@ -35,7 +35,7 @@ class OBDBusiness {
 
     native String getDynamicData(int dynamicDataType);
 
-    native void setCarStatus(boolean status);
+    native boolean setCarStatus(boolean status);
 
     public OBDBusiness() {
 //        mFd = open("/", 112500, 0);

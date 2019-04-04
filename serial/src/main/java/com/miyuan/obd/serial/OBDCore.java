@@ -92,8 +92,8 @@ public class OBDCore {
      *               true   车辆启动
      *               false  车辆停止
      */
-    public void setCarStatus(boolean status) {
-
+    public boolean setCarStatus(boolean status) {
+        return obdBusiness.setCarStatus(status);
     }
 
 }
