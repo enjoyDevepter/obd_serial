@@ -39,7 +39,7 @@ public class OBDCore {
      *
      * @return 版本号
      */
-    public String getVersion() {
+    public synchronized String getVersion() {
         return obdBusiness.getVersion();
     }
 
@@ -49,7 +49,7 @@ public class OBDCore {
      *
      * @return 故障码集合
      */
-    public List<FaultCode> getFaultCode() {
+    public synchronized List<FaultCode> getFaultCode() {
         return new ArrayList<>();
     }
 
@@ -58,7 +58,7 @@ public class OBDCore {
      *
      * @return 清除成功标示
      */
-    public boolean cleanFaultCode() {
+    public synchronized boolean cleanFaultCode() {
         return obdBusiness.cleanFaultCode();
     }
 
@@ -69,7 +69,7 @@ public class OBDCore {
      * @param fixedDataType 固定数据类型 {@link com.miyuan.obd.serial.FixedDataType}
      * @return 固定数据类型对应数据
      */
-    public int getFixedData(int fixedDataType) {
+    public synchronized String getFixedData(int fixedDataType) {
         return obdBusiness.getFixedData(fixedDataType);
     }
 
@@ -80,7 +80,7 @@ public class OBDCore {
      * @param dynamicDataType 实时数据类型 {@link com.miyuan.obd.serial.DynamicDataType}
      * @return 实时数据类型对应数据
      */
-    public String getDynamicData(int dynamicDataType) {
+    public synchronized String getDynamicData(int dynamicDataType) {
         return obdBusiness.getDynamicData(dynamicDataType);
     }
 
@@ -92,7 +92,7 @@ public class OBDCore {
      *               true   车辆启动
      *               false  车辆停止
      */
-    public boolean setCarStatus(boolean status) {
+    public synchronized boolean setCarStatus(boolean status) {
         return obdBusiness.setCarStatus(status);
     }
 

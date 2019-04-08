@@ -42,7 +42,7 @@ class OBDBusiness {
 
     native boolean cleanFaultCode();
 
-    native int getFixedData(int fixedDataType);
+    native String getFixedData(int fixedDataType);
 
     native String getDynamicData(int dynamicDataType);
 

@@ -209,6 +209,19 @@ int readFormBox(char* buffer,int timeOut)
     return -1;
 }
 
+bool isValid(char* result,int len)
+{
+	if(result[0]==0x7e && result[len-1]== 0x7e && len>=7)
+	{	
+		int cr;
+		for(int i=1;i<len-2;i++){
+			cr = cr ^ result[i];
+		}
+		return cr==result[len-2];
+	}
+	return false;
+}
+
 /*
  * Class:     com_miyuan_obd_serial_OBDBusiness
  * Method:    close
@@ -236,10 +249,8 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv * env
  */
 JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject jobj)
 {
-  std::string version = "V5.0";
-  char data[] = {1,2,4,5,99,100};
-  LOGE_HEX("getVersion ",data,7);
-  return env->NewStringUTF(version.c_str());
+    std::string version = "V1.0";
+    return env->NewStringUTF(version.c_str());
 }
 
 /*
@@ -304,15 +315,15 @@ JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode
 
     int len = readFormBox(result,TIMEOUT);
 
-    return 1;
+    return len>7 && result[5]==0;
 }
 
 /*
  * Class:     com_miyuan_obd_serial_OBDBusiness
  * Method:    getFixedData
- * Signature: (I)I
+ * Signature: (I)Ljava/lang/String;
  */
-JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj, jint fixedType)
+JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj, jint fixedType)
 {
     char input[6] = {HEAD,0x83,0x01,0x01,0x00,HEAD};
     input[3] = fixedType;
@@ -320,10 +331,30 @@ JNIEXPORT jint JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEn
 
     writeToBox(input,sizeof(input));
 
-    char result[1024];
+    char buf[1024];
 
-    int len = readFormBox(result,TIMEOUT);
-	return 0;
+    int len = readFormBox(buf,TIMEOUT);
+
+	char result[100];
+
+	if(len==12 && buf[1]==0x03 && buf[2]==0x01 && buf[7]==0){ 
+		short id = (buf[6]<<8) + buf[5];
+		switch (fixedType)
+		{
+			case 0x02: // 瞬时油耗
+			case 0x03: // 瞬时油耗
+				float temp;
+				temp =  ((buf[9]<<8) + buf[8])*0.1;
+				sprintf(result,"%0.2f",temp);
+				break;
+			default:
+				unsigned short tempS;
+				tempS =  (buf[9]<<8) + buf[8];
+				sprintf(result,"%hd",tempS);
+				break;
+		}
+	}
+	return env->NewStringUTF(result);;
 }
 
 /*
@@ -339,12 +370,259 @@ JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(
 
     writeToBox(input,sizeof(input));
 
-    char result[1024];
+    char buf[1024];
 
-    int len = readFormBox(result,TIMEOUT);
+    int len = readFormBox(buf,TIMEOUT);
 
-    std::string version = "V5.0";
-    return env->NewStringUTF(version.c_str());
+	char result[100];
+
+	unsigned short tempS;
+	float tempF;
+	if(isValid(buf,len)){
+		if(buf[1]==0x03 && buf[2]==0x02 && buf[7]==0){ 
+			short id = (buf[6]<<8) + buf[5];
+			switch (id)
+			{
+				case 0x01: // 电脑(ECU)中存储的故障码数量
+					tempS = buf[8] & 0x7f;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x02: // 冻结故障码
+					tempS = (buf[9]<<8) + buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x03:
+					break;
+				case 0x04:
+					tempF = buf[8]*100/255;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x05:
+					tempS = buf[8]-40;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x06:
+				case 0x07:
+				case 0x08:
+				case 0x09:
+					tempF = buf[8]*100/128-100;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x0A:
+					tempS = buf[8]*3;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x0B:
+					tempS = buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x0C:
+					tempF = ((buf[9]<<8) + buf[8])/4;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x0D:
+					tempS = buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x0E:
+					tempF = buf[8]/2 - 64;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x0F:
+					tempS = buf[8] - 40;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x10:
+					tempF = ((buf[9]<<8) + buf[8])/100;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x11:
+					tempF = buf[8]*100/255;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x12:
+					break;
+				case 0x13:
+					tempS = buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x14:
+					break;	
+				case 0x15:
+					break;
+				case 0x16:
+					break;
+				case 0x17:
+					break;	
+				case 0x18:
+					break;	
+				case 0x19:
+					break;
+				case 0x1A:
+					break;
+				case 0x1B:
+					break;
+				case 0x1C:
+					break;	
+				case 0x1D:
+					break;
+				case 0x1E:
+					break;
+				case 0x1F:
+					tempS = (buf[9]<<8) + buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x21:
+					tempS = (buf[9]<<8) + buf[8];
+					sprintf(result,"%hd",tempS);
+					break;	
+				case 0x22:
+					tempF = ((buf[9]<<8) + buf[8])*0.079;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x23:
+					tempS = ((buf[9]<<8) + buf[8])*10;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x24:
+					tempF = ((buf[9]<<8) + buf[8])*2/65536;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x25:
+					break;	
+				case 0x26:
+					break;
+				case 0x27:
+					break;
+				case 0x28:
+					break;
+				case 0x29:
+					break;	
+				case 0x2A:
+					break;
+				case 0x2B:
+					break;
+				case 0x2C:
+					tempF = buf[8]*100/255;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x2D:
+					tempF = buf[8]*100/128-100;
+					sprintf(result,"%0.2f",tempF);
+					break;	
+				case 0x2E:
+				case 0x2F:
+					tempF = buf[8]*100/255;
+					sprintf(result,"%0.2f",tempF);
+					break;
+				case 0x31:
+					break;
+				case 0x32:
+					break;	
+				case 0x33:
+					break;
+				case 0x34:
+					break;
+				case 0x35:
+					break;	
+				case 0x36:
+					break;	
+				case 0x37:
+					break;
+				case 0x38:
+					break;
+				case 0x39:
+					break;
+				case 0x3A:
+					break;
+				case 0x3B:
+					break;	
+				case 0x3C:
+					break;	
+				case 0x3D:
+					break;
+				case 0x3E:
+					break;
+				case 0x3F:
+					break;
+				case 0x42:
+					break;
+				case 0x43:
+					break;
+				case 0x44:
+					break;
+				case 0x45:
+					break;	
+				case 0x46:
+					break;	
+				case 0x47:
+					break;
+				case 0x48:
+					break;
+				case 0x49:
+					break;
+				case 0x4A:
+					break;	
+				case 0x4B:
+					break;	
+				case 0x4C:
+					break;
+				case 0x4D:
+					break;
+				case 0x4E:
+					break;
+				case 0x51:
+					break;	
+				case 0x52:
+					break;
+				case 0x53:
+					break;
+				case 0x54:
+					break;
+				case 0x55:
+					break;	
+				case 0x56:
+					break;	
+				case 0x57:
+					break;
+				case 0x58:
+					break;
+				case 0x59:
+					tempS = ((buf[9]<<8) + buf[8])*10;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x5A:	
+				case 0x5B:
+					tempF = buf[8]*100/255;
+					sprintf(result,"%0.2F",tempF);
+					break;	
+				case 0x5C:
+					tempS = buf[8]-40;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x5D:
+					tempF = ((buf[9]<<8) + buf[8])/128-210;
+					sprintf(result,"%0.2F",tempF);
+					break;
+				case 0x5E:
+					tempF = ((buf[9]<<8) + buf[8])/20;
+					sprintf(result,"%0.2F",tempF);
+					break;	
+				case 0x61:
+				case 0x62:
+					tempS = buf[8]-125;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x63:
+					tempS = ((buf[9]<<8) + buf[8])*10;
+					sprintf(result,"%hd",tempS);
+					break;
+				case 0x64:
+					break;			
+			}
+		}
+	}
+    return env->NewStringUTF(result);
 }
 
 
@@ -367,8 +645,8 @@ JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(J
 	char result[1024]; 
 
 	int len = readFormBox(result,TIMEOUT);
-
-	return len>0;
+	
+	return len>7;
 }
 #ifdef __cplusplus
 }
