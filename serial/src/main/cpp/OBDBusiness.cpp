@@ -254,8 +254,8 @@ bool isValid(char* result,int len)
 {
 	if(result[0]==0x7e && result[len-1]== 0x7e && len>=7)
 	{	
-		int cr;
-		for(int i=1;i<len-2;i++){
+		int cr = result[1] ;
+		for(int i=2;i<len-2;i++){
 			cr = cr ^ result[i];
 		}
 		return cr==result[len-2];
