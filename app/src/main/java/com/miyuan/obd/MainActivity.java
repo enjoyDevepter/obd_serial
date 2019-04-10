@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.getFixedData).setOnClickListener(this);
         findViewById(R.id.getDynamicData).setOnClickListener(this);
         sample_text.setText(OBDCore.getInstance().getVersion());
-        OBDCore.getInstance().cleanFaultCode();
-
     }
 
     @Override

@@ -11,28 +11,51 @@ static const char *TAG="obd_core";
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 #define HEAD 0x7e
-#define TIMEOUT 5
+#define TIMEOUT 3
 #ifndef _Included_com_miyuan_obd_serial_OBDBusiness
 #define _Included_com_miyuan_obd_serial_OBDBusiness
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void formatStr(char* buf,char* data,int len)
+{
+	if(buf==NULL || data==NULL)
+	{
+		return;
+	}
+	char temp[5] = {0};
+	strcat(buf, "[");
+	for (int i = 0; i < len; i++) {
+		if(i!=len-1)
+		{
+        	sprintf(temp, "%02X ", data[i]);
+		} else{
+        	sprintf(temp, "%02X", data[i]);
+		}
+        strcat(buf, temp);
+    }
+	strcat(buf, "]\r\n");
+}
+
 void LOGE_HEX(char* msg,char* data,int len)
 {
-	char buffer[1024];
-	char temp[5];
+	char* buffer = (char*)malloc((sizeof(char))*1024);
+	char* temp = (char*)malloc((sizeof(char))*5);
 
 	memset(buffer, 0, sizeof(buffer));
 
-	sprintf(buffer, "%s[%d][", (char*) msg, len);
+	sprintf(buffer, "%s[%d]", (char*) msg, len);
 
- 	for (int i = 0; i < len; i++) {
-        sprintf((char*) temp, "%02X ", data[i]);
-        strcat((char*) buffer, temp);
-    }
-    strcat((char*) buffer, "]\r\n");
+	if(len > 512){ // 超出512个字符不打印
+	    return;
+	}
+	formatStr(buffer,data,len);
     LOGE("%s", buffer);
+    free(buffer);
+	free(temp);
+	temp = NULL;
+    buffer = NULL;
 }
 
 static speed_t getBaudrate(jint baudrate)
@@ -188,19 +211,37 @@ int readFormBox(char* buffer,int timeOut)
         switch (ret) {
         case -1: // 这说明select函数出错
             LOGE("fd read failure");
-            return -1;
-            break;
+			return -1;
         case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
             LOGE("fd read timeOut");
-            return -2;
+			return -1;
         default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
             if (FD_ISSET(fd, &readfd)) { // 先判断一下mTty这外被监视的句柄是否真的变成可读的了
                 char tempBuff[1024];
                 bzero(tempBuff, 1024);
-                int nread = read(fd, tempBuff, 1024);
+                int nread = read(fd, tempBuff, sizeof(tempBuff));
                 if (nread > 0) {
 					LOGE_HEX("OBD-APP", tempBuff, nread);
-                    return nread;
+					memset(buffer, 0, sizeof(char)*100);
+					bool start;
+					int k =1;
+					LOGE("nread[%d]",nread);
+					for(int i=0;i<nread;i++)
+					{	
+						if(start){
+							buffer[k]=tempBuff[i];
+							k++;
+							if(tempBuff[i]==0x7e){
+								LOGE_HEX("deal OBD-APP ", buffer, k);
+                    			return k;
+							}
+						}
+						if(!start && tempBuff[i]==0x7e){
+							start = true;
+							buffer[0] = 0x7e;
+						}
+					}
+					
                 }
             }
             break;
@@ -332,29 +373,38 @@ JNIEXPORT jstring JNICALL Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JN
     writeToBox(input,sizeof(input));
 
     char buf[1024];
+	memset(buf,0,sizeof(char)*1024);
 
     int len = readFormBox(buf,TIMEOUT);
 
 	char result[100];
-
-	if(len==12 && buf[1]==0x03 && buf[2]==0x01 && buf[7]==0){ 
-		short id = (buf[6]<<8) + buf[5];
-		switch (fixedType)
-		{
-			case 0x02: // 瞬时油耗
-			case 0x03: // 瞬时油耗
-				float temp;
-				temp =  ((buf[9]<<8) + buf[8])*0.1;
-				sprintf(result,"%0.2f",temp);
-				break;
-			default:
-				unsigned short tempS;
-				tempS =  (buf[9]<<8) + buf[8];
-				sprintf(result,"%hd",tempS);
-				break;
+	memset(result,0,sizeof(char)*100);
+	if(isValid(buf,len))
+	{
+		if(len==12 && buf[1]==0x03 && buf[2]==0x01 && buf[7]==0)
+		{ 
+			short id = (buf[6]<<8) + buf[5];
+			switch (fixedType)
+			{
+				case 0x02: // 瞬时油耗
+				case 0x03: // 瞬时油耗
+					float temp;
+					temp =  ((buf[9]<<8) + buf[8])*0.1;
+					sprintf(result,"%0.2f",temp);
+					break;
+				default:
+					unsigned short tempS;
+					tempS =  (buf[9]<<8) + buf[8];
+					sprintf(result,"%hd",tempS);
+					break;
+			}
+		} else {
+			sprintf(result,"%s","数据异常!");
 		}
+	} else {
+		sprintf(result,"%s","数据异常!");
 	}
-	return env->NewStringUTF(result);;
+	return env->NewStringUTF(result);
 }
 
 /*
@@ -645,8 +695,8 @@ JNIEXPORT jboolean JNICALL Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(J
 	char result[1024]; 
 
 	int len = readFormBox(result,TIMEOUT);
-	
-	return len>7;
+
+	return isValid(result,len);
 }
 #ifdef __cplusplus
 }

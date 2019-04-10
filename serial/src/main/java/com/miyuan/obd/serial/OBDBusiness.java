@@ -24,8 +24,8 @@ class OBDBusiness {
     }
 
     public OBDBusiness() {
-        mFd = open("/dev/ttyS0", 115200, 0);
-//        mFd = open("/dev/ttyMT2", 19200, 0);
+        mFd = open("/dev/ttyS3", 19200, 0);
+        // mFd = open("/dev/ttyMT2", 19200, 0);
         if (mFd == null) {
             Log.e("obd_core", "native open returns null");
             return;
