@@ -38,7 +38,7 @@ class OBDBusiness {
 
     native String getVersion();
 
-    native List<FaultCode> getFaultCode();
+    native List<FaultCode> getFaultCode(String path);
 
     native boolean cleanFaultCode();
 

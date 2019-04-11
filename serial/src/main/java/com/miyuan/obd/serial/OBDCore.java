@@ -1,5 +1,12 @@
 package com.miyuan.obd.serial;
 
+import android.content.Context;
+import android.os.Environment;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +29,29 @@ public class OBDCore {
      *
      * @return {@link OBDCore}
      */
-    public static OBDCore getInstance() {
+    public static OBDCore getInstance(final Context context) {
+        final File db = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "physical.db");
+        if (!db.exists()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream is = context.getAssets().open("physical.db");
+                        FileOutputStream fos = new FileOutputStream(db);
+                        byte[] buffer = new byte[1024];
+                        int byteCount = 0;
+                        while ((byteCount = is.read(buffer)) != -1) {//循环从输入流读取 buffer字节
+                            fos.write(buffer, 0, byteCount);//将读取的输入流写入到输出流
+                        }
+                        fos.flush();//刷新缓冲区
+                        is.close();
+                        fos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
         return InstanceHolder.INSTANCE;
     }
 
@@ -49,7 +78,8 @@ public class OBDCore {
      *
      * @return 故障码集合
      */
-    public synchronized List<FaultCode> getFaultCode() {
+    public synchronized List<FaultCode> getFaultCode(String path) {
+        obdBusiness.getFaultCode(path);
         return new ArrayList<>();
     }
 

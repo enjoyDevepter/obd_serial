@@ -5,21 +5,73 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+include_directories(src/main/cpp)
+include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-# 添加.so动态库(jsoncpp)
-#add_library(sqlite SHARED IMPORTED)
+# 添加.so动态库
+add_library(sqlite
+        SHARED
+        IMPORTED)
+add_library(utils
+        SHARED
+        IMPORTED)
+add_library(c++
+        SHARED
+        IMPORTED)
+add_library(cutils
+        SHARED
+        IMPORTED)
+add_library(vndksupport
+        SHARED
+        IMPORTED)
 
-# 链接
-#set_target_properties(
-        # 库名字
-#        sqlite
-        # 库所在的目录
-#        PROPERTIES IMPORTED_LOCATION ${CMAKE_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libsqlite.so)
+set_target_properties(
+        vndksupport
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libvndksupport.so)
 
+
+set_target_properties(
+        cutils
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
+
+set_target_properties(
+        sqlite
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
+
+set_target_properties(
+        utils
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libutils.so)
+
+set_target_properties(
+        c++
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
+
+# 添加两个预编译库
+add_library(openssl-crypto
+        STATIC
+        IMPORTED)
+
+set_target_properties(openssl-crypto
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
+
+add_library(openssl-ssl
+        STATIC
+        IMPORTED)
+
+set_target_properties(openssl-ssl
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
 
 add_library( # Sets the name of the library.
         serial
@@ -28,7 +80,7 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        OBDBusiness.cpp)
+        src/main/cpp/OBDBusiness.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -61,4 +113,4 @@ target_link_libraries( # Specifies the target library.
 #        sqlite
         # Links the target library to the log library
         # included in the NDK.
-        ${log-lib})
+        ${log-lib} openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport)
