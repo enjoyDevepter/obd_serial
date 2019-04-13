@@ -34,117 +34,117 @@ extern "C"
 std::string KEY = "MIYUAN_0BD";
 
 typedef struct { // 故障码信息
-    std::string id;
-    std::string suit;
-    std::string desc_ch;
-    std::string desc_en;
-    std::string system;
-    std::string detail;
+	std::string id;
+	std::string suit;
+	std::string desc_ch;
+	std::string desc_en;
+	std::string system;
+	std::string detail;
 } FaultCode;
 
 void formatStr(char *buf, char *data, int len) {
-    if (buf == NULL || data == NULL) {
-        return;
-    }
-    char temp[5] = {0};
-    strcat(buf, "[");
-    for (int i = 0; i < len; i++) {
-        if (i != len - 1) {
-            sprintf(temp, "%02X ", data[i]);
-        } else {
-            sprintf(temp, "%02X", data[i]);
-        }
-        strcat(buf, temp);
-    }
-    strcat(buf, "]\r\n");
+	if (buf == NULL || data == NULL) {
+		return;
+	}
+	char temp[5] = {0};
+	strcat(buf, "[");
+	for (int i = 0; i < len; i++) {
+		if (i != len - 1) {
+			sprintf(temp, "%02X ", data[i]);
+		} else {
+			sprintf(temp, "%02X", data[i]);
+		}
+		strcat(buf, temp);
+	}
+	strcat(buf, "]\r\n");
 }
 
 void LOGE_HEX(char *msg, char *data, int len) {
-    char *buffer = (char *) malloc((sizeof(char)) * 1024);
-    char *temp = (char *) malloc((sizeof(char)) * 5);
+	char *buffer = (char *) malloc((sizeof(char)) * 1024);
+	char *temp = (char *) malloc((sizeof(char)) * 5);
 
-    memset(buffer, 0, sizeof(buffer));
+	memset(buffer, 0, sizeof(buffer));
 
-    sprintf(buffer, "%s[%d]", (char *) msg, len);
+	sprintf(buffer, "%s[%d]", (char *) msg, len);
 
-    if (len > 512) { // 超出512个字符不打印
-        return;
-    }
-    formatStr(buffer, data, len);
-    LOGE("%s", buffer);
-    free(buffer);
-    free(temp);
-    temp = NULL;
-    buffer = NULL;
+	if (len > 512) { // 超出512个字符不打印
+		return;
+	}
+	formatStr(buffer, data, len);
+	LOGE("%s", buffer);
+	free(buffer);
+	free(temp);
+	temp = NULL;
+	buffer = NULL;
 }
 
 static speed_t getBaudrate(jint baudrate) {
-    switch (baudrate) {
-        case 0:
-            return B0;
-        case 50:
-            return B50;
-        case 75:
-            return B75;
-        case 110:
-            return B110;
-        case 134:
-            return B134;
-        case 150:
-            return B150;
-        case 200:
-            return B200;
-        case 300:
-            return B300;
-        case 600:
-            return B600;
-        case 1200:
-            return B1200;
-        case 1800:
-            return B1800;
-        case 2400:
-            return B2400;
-        case 4800:
-            return B4800;
-        case 9600:
-            return B9600;
-        case 19200:
-            return B19200;
-        case 38400:
-            return B38400;
-        case 57600:
-            return B57600;
-        case 115200:
-            return B115200;
-        case 230400:
-            return B230400;
-        case 460800:
-            return B460800;
-        case 500000:
-            return B500000;
-        case 576000:
-            return B576000;
-        case 921600:
-            return B921600;
-        case 1000000:
-            return B1000000;
-        case 1152000:
-            return B1152000;
-        case 1500000:
-            return B1500000;
-        case 2000000:
-            return B2000000;
-        case 2500000:
-            return B2500000;
-        case 3000000:
-            return B3000000;
-        case 3500000:
-            return B3500000;
-        case 4000000:
-            return B4000000;
-        default:
-            return -1;
-    }
+	switch (baudrate) {
+		case 0:
+			return B0;
+		case 50:
+			return B50;
+		case 75:
+			return B75;
+		case 110:
+			return B110;
+		case 134:
+			return B134;
+		case 150:
+			return B150;
+		case 200:
+			return B200;
+		case 300:
+			return B300;
+		case 600:
+			return B600;
+		case 1200:
+			return B1200;
+		case 1800:
+			return B1800;
+		case 2400:
+			return B2400;
+		case 4800:
+			return B4800;
+		case 9600:
+			return B9600;
+		case 19200:
+			return B19200;
+		case 38400:
+			return B38400;
+		case 57600:
+			return B57600;
+		case 115200:
+			return B115200;
+		case 230400:
+			return B230400;
+		case 460800:
+			return B460800;
+		case 500000:
+			return B500000;
+		case 576000:
+			return B576000;
+		case 921600:
+			return B921600;
+		case 1000000:
+			return B1000000;
+		case 1152000:
+			return B1152000;
+		case 1500000:
+			return B1500000;
+		case 2000000:
+			return B2000000;
+		case 2500000:
+			return B2500000;
+		case 3000000:
+			return B3000000;
+		case 3500000:
+			return B3500000;
+		case 4000000:
+			return B4000000;
+		default:
+			return -1;
+	}
 }
 int fd;
 /*
@@ -155,157 +155,157 @@ int fd;
 JNIEXPORT jobject
 JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path, jint baudrate,
-                                            jint flags) {
-    speed_t speed;
-    jobject mFileDescriptor;
+											jint flags) {
+	speed_t speed;
+	jobject mFileDescriptor;
 
-    /* Check arguments */
-    {
-        speed = getBaudrate(baudrate);
-        if (speed == -1) {
-            /* TODO: throw an exception */
-            LOGE("Invalid baudrate");
-            return NULL;
-        }
-    }
+	/* Check arguments */
+	{
+		speed = getBaudrate(baudrate);
+		if (speed == -1) {
+			/* TODO: throw an exception */
+			LOGE("Invalid baudrate");
+			return NULL;
+		}
+	}
 
-    /* Opening device */
-    {
-        jboolean iscopy;
-        const char *path_utf = env->GetStringUTFChars(path, &iscopy);
-        LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | flags);
-        fd = open(path_utf, O_RDWR | flags);
-        LOGE("open() fd = %d", fd);
-        env->ReleaseStringUTFChars(path, path_utf);
-        if (fd == -1) {
-            /* Throw an exception */
-            LOGE("Cannot open port");
-            /* TODO: throw an exception */
-            return NULL;
-        }
-    }
+	/* Opening device */
+	{
+		jboolean iscopy;
+		const char *path_utf = env->GetStringUTFChars(path, &iscopy);
+		LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | flags);
+		fd = open(path_utf, O_RDWR | flags);
+		LOGE("open() fd = %d", fd);
+		env->ReleaseStringUTFChars(path, path_utf);
+		if (fd == -1) {
+			/* Throw an exception */
+			LOGE("Cannot open port");
+			/* TODO: throw an exception */
+			return NULL;
+		}
+	}
 
-    /* Configure device */
-    {
-        struct termios cfg;
-        LOGE("Configuring serial port");
-        if (tcgetattr(fd, &cfg)) {
-            LOGE("tcgetattr() failed");
-            close(fd);
-            /* TODO: throw an exception */
-            return NULL;
-        }
+	/* Configure device */
+	{
+		struct termios cfg;
+		LOGE("Configuring serial port");
+		if (tcgetattr(fd, &cfg)) {
+			LOGE("tcgetattr() failed");
+			close(fd);
+			/* TODO: throw an exception */
+			return NULL;
+		}
 
-        cfmakeraw(&cfg);
-        cfsetispeed(&cfg, speed);
-        cfsetospeed(&cfg, speed);
+		cfmakeraw(&cfg);
+		cfsetispeed(&cfg, speed);
+		cfsetospeed(&cfg, speed);
 
-        if (tcsetattr(fd, TCSANOW, &cfg)) {
-            LOGE("tcsetattr() failed");
-            close(fd);
-            /* TODO: throw an exception */
-            return NULL;
-        }
-    }
+		if (tcsetattr(fd, TCSANOW, &cfg)) {
+			LOGE("tcsetattr() failed");
+			close(fd);
+			/* TODO: throw an exception */
+			return NULL;
+		}
+	}
 
-    /* Create a corresponding file descriptor */
-    {
-        jclass cFileDescriptor = env->FindClass("java/io/FileDescriptor");
-        jmethodID iFileDescriptor = env->GetMethodID(cFileDescriptor, "<init>", "()V");
-        jfieldID descriptorID = env->GetFieldID(cFileDescriptor, "descriptor", "I");
-        mFileDescriptor = env->NewObject(cFileDescriptor, iFileDescriptor);
-        env->SetIntField(mFileDescriptor, descriptorID, (jint) fd);
-    }
-    return mFileDescriptor;
+	/* Create a corresponding file descriptor */
+	{
+		jclass cFileDescriptor = env->FindClass("java/io/FileDescriptor");
+		jmethodID iFileDescriptor = env->GetMethodID(cFileDescriptor, "<init>", "()V");
+		jfieldID descriptorID = env->GetFieldID(cFileDescriptor, "descriptor", "I");
+		mFileDescriptor = env->NewObject(cFileDescriptor, iFileDescriptor);
+		env->SetIntField(mFileDescriptor, descriptorID, (jint) fd);
+	}
+	return mFileDescriptor;
 }
 
 /*
 * 向串口写入数据
 */
 int writeToBox(char *buffer, int len) {
-    if (fd == -1) {
-        LOGE("seriail open fail!");
-        return -1;
-    }
-    LOGE_HEX("APP-OBD", buffer, len);
-    int length = write(fd, buffer, len);
-    sleep(1); //写完之后睡一秒
-    if (length > 0) {
-        LOGE("write device success");
-        return length;
-    } else {
-        LOGE("write device error");
-    }
-    return -1;
+	if (fd == -1) {
+		LOGE("seriail open fail!");
+		return -1;
+	}
+	LOGE_HEX("APP-OBD", buffer, len);
+	int length = write(fd, buffer, len);
+	sleep(1); //写完之后睡一秒
+	if (length > 0) {
+		LOGE("write device success");
+		return length;
+	} else {
+		LOGE("write device error");
+	}
+	return -1;
 }
 
 int readFormBox(char *buffer, int timeOut) {
-    if (fd == -1) {
-        LOGE("seriail open fail!");
-        return -1;
-    }
+	if (fd == -1) {
+		LOGE("seriail open fail!");
+		return -1;
+	}
 
-    int ret;
-    fd_set readfd;
-    struct timeval timeout;
-    while (fd != -1) {
-        timeout.tv_sec = timeOut; //设定超时秒数
-        timeout.tv_usec = 0;      //设定超时毫秒数
+	int ret;
+	fd_set readfd;
+	struct timeval timeout;
+	while (fd != -1) {
+		timeout.tv_sec = timeOut; //设定超时秒数
+		timeout.tv_usec = 0;      //设定超时毫秒数
 
-        FD_ZERO(&readfd);                                     //清空集合
-        FD_SET(fd, &readfd);                                 // 把要检测的句柄fd加入到集合里
-        ret = select(fd + 1, &readfd, NULL, NULL, &timeout); // 检测我们上面设置到集合readfd里的句柄是否有可读信息
-        LOGE("ret=%d", ret);
-        switch (ret) {
-            case -1: // 这说明select函数出错
-                LOGE("fd read failure");
-                return -1;
-            case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
-                LOGE("fd read timeOut");
-                return -1;
-            default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
-                if (FD_ISSET(fd, &readfd)) { // 先判断一下mTty这外被监视的句柄是否真的变成可读的了
-                    char tempBuff[300];
-                    bzero(tempBuff, sizeof(tempBuff));
-                    int nread = read(fd, tempBuff, sizeof(tempBuff));
-                    if (nread > 0) {
-                        LOGE_HEX("OBD-APP", tempBuff, nread);
-                        memset(buffer, 0, sizeof(char) * 100);
-                        bool start = false;
-                        int k = 1;
-                        LOGE("nread[%d]", nread);
-                        for (int i = 0; i < nread; i++) {
-                            if (start) {
-                                buffer[k] = tempBuff[i];
-                                k++;
-                                if (tempBuff[i] == 0x7e) {
-                                    LOGE_HEX("deal OBD-APP ", buffer, k);
-                                    return k;
-                                }
-                            }
-                            if (!start && tempBuff[i] == 0x7e) {
-                                start = true;
-                                buffer[0] = 0x7e;
-                            }
-                        }
-                        return -1;
-                    }
-                }
-                break;
-        }
-    }
-    return -1;
+		FD_ZERO(&readfd);                                     //清空集合
+		FD_SET(fd, &readfd);                                 // 把要检测的句柄fd加入到集合里
+		ret = select(fd + 1, &readfd, NULL, NULL, &timeout); // 检测我们上面设置到集合readfd里的句柄是否有可读信息
+		LOGE("ret=%d", ret);
+		switch (ret) {
+			case -1: // 这说明select函数出错
+				LOGE("fd read failure");
+				return -1;
+			case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
+				LOGE("fd read timeOut");
+				return -1;
+			default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
+				if (FD_ISSET(fd, &readfd)) { // 先判断一下mTty这外被监视的句柄是否真的变成可读的了
+					char tempBuff[300];
+					bzero(tempBuff, sizeof(tempBuff));
+					int nread = read(fd, tempBuff, sizeof(tempBuff));
+					if (nread > 0) {
+						LOGE_HEX("OBD-APP", tempBuff, nread);
+						memset(buffer, 0, sizeof(char) * 100);
+						bool start = false;
+						int k = 1;
+						LOGE("nread[%d]", nread);
+						for (int i = 0; i < nread; i++) {
+							if (start) {
+								buffer[k] = tempBuff[i];
+								k++;
+								if (tempBuff[i] == 0x7e) {
+									LOGE_HEX("deal OBD-APP ", buffer, k);
+									return k;
+								}
+							}
+							if (!start && tempBuff[i] == 0x7e) {
+								start = true;
+								buffer[0] = 0x7e;
+							}
+						}
+						return -1;
+					}
+				}
+				break;
+		}
+	}
+	return -1;
 }
 
 bool isValid(char *result, int len) {
-    if (result[0] == 0x7e && result[len - 1] == 0x7e && len >= 7) {
-        int cr = result[1];
-        for (int i = 2; i < len - 2; i++) {
-            cr = cr ^ result[i];
-        }
-        return cr == result[len - 2];
-    }
-    return false;
+	if (result[0] == 0x7e && result[len - 1] == 0x7e && len >= 7) {
+		int cr = result[1];
+		for (int i = 2; i < len - 2; i++) {
+			cr = cr ^ result[i];
+		}
+		return cr == result[len - 2];
+	}
+	return false;
 }
 
 /*
@@ -330,141 +330,141 @@ close(descriptor);
 }
 
 char *base64_encode(const char *input, int length) {
-    BIO *bmem = NULL;
-    BIO *b64 = NULL;
-    BUF_MEM *bptr = NULL;
+	BIO *bmem = NULL;
+	BIO *b64 = NULL;
+	BUF_MEM *bptr = NULL;
 
-    b64 = BIO_new(BIO_f_base64());
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    bmem = BIO_new(BIO_s_mem());
-    b64 = BIO_push(b64, bmem);
-    BIO_write(b64, input, length);
-    BIO_flush(b64);
-    BIO_get_mem_ptr(b64, &bptr);
+	b64 = BIO_new(BIO_f_base64());
+	BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+	bmem = BIO_new(BIO_s_mem());
+	b64 = BIO_push(b64, bmem);
+	BIO_write(b64, input, length);
+	BIO_flush(b64);
+	BIO_get_mem_ptr(b64, &bptr);
 
-    char *buff = (char *) malloc(bptr->length + 1);
-    memcpy(buff, bptr->data, bptr->length);
-    buff[bptr->length] = 0;
+	char *buff = (char *) malloc(bptr->length + 1);
+	memcpy(buff, bptr->data, bptr->length);
+	buff[bptr->length] = 0;
 
-    BIO_free_all(b64);
+	BIO_free_all(b64);
 
-    return buff;
+	return buff;
 }
 
 char *base64_decode(char *input, int length) {
-    BIO *b64 = NULL;
-    BIO *bmem = NULL;
-    char *buffer = (char *) malloc(length);
-    memset(buffer, 0, length);
+	BIO *b64 = NULL;
+	BIO *bmem = NULL;
+	char *buffer = (char *) malloc(length);
+	memset(buffer, 0, length);
 
-    b64 = BIO_new(BIO_f_base64());
-    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-    bmem = BIO_new_mem_buf(input, length);
-    bmem = BIO_push(b64, bmem);
-    BIO_read(bmem, buffer, length);
+	b64 = BIO_new(BIO_f_base64());
+	BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+	bmem = BIO_new_mem_buf(input, length);
+	bmem = BIO_push(b64, bmem);
+	BIO_read(bmem, buffer, length);
 
-    BIO_free_all(bmem);
+	BIO_free_all(bmem);
 
-    return buffer;
+	return buffer;
 }
 
 // 加密 ecb模式
 std::string des_encrypt(const std::string &clearText) {
-    std::string cipherText; // 密文
+	std::string cipherText; // 密文
 
-    DES_cblock keyEncrypt;
-    memset(keyEncrypt, 0, 8);
+	DES_cblock keyEncrypt;
+	memset(keyEncrypt, 0, 8);
 
-    // 构造补齐后的密钥
-    if (KEY.length() <= 8)
-        memcpy(keyEncrypt, KEY.c_str(), KEY.length());
-    else
-        memcpy(keyEncrypt, KEY.c_str(), 8);
+	// 构造补齐后的密钥
+	if (KEY.length() <= 8)
+		memcpy(keyEncrypt, KEY.c_str(), KEY.length());
+	else
+		memcpy(keyEncrypt, KEY.c_str(), 8);
 
-    // 密钥置换
-    DES_key_schedule keySchedule;
-    DES_set_key_unchecked(&keyEncrypt, &keySchedule);
+	// 密钥置换
+	DES_key_schedule keySchedule;
+	DES_set_key_unchecked(&keyEncrypt, &keySchedule);
 
-    // 循环加密，每8字节一次
-    const_DES_cblock inputText;
-    DES_cblock outputText;
-    std::vector<unsigned char> vecCiphertext;
-    unsigned char tmp[8];
+	// 循环加密，每8字节一次
+	const_DES_cblock inputText;
+	DES_cblock outputText;
+	std::vector<unsigned char> vecCiphertext;
+	unsigned char tmp[8];
 
-    for (int i = 0; i < clearText.length() / 8; i++) {
-        memcpy(inputText, clearText.c_str() + i * 8, 8);
-        DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_ENCRYPT);
-        memcpy(tmp, outputText, 8);
+	for (int i = 0; i < clearText.length() / 8; i++) {
+		memcpy(inputText, clearText.c_str() + i * 8, 8);
+		DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_ENCRYPT);
+		memcpy(tmp, outputText, 8);
 
-        for (int j = 0; j < 8; j++)
-            vecCiphertext.push_back(tmp[j]);
-    }
+		for (int j = 0; j < 8; j++)
+			vecCiphertext.push_back(tmp[j]);
+	}
 
-    if (clearText.length() % 8 != 0) {
-        int tmp1 = clearText.length() / 8 * 8;
-        int tmp2 = clearText.length() - tmp1;
-        memset(inputText, 0, 8);
-        memcpy(inputText, clearText.c_str() + tmp1, tmp2);
-        // 加密函数
-        DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_ENCRYPT);
-        memcpy(tmp, outputText, 8);
+	if (clearText.length() % 8 != 0) {
+		int tmp1 = clearText.length() / 8 * 8;
+		int tmp2 = clearText.length() - tmp1;
+		memset(inputText, 0, 8);
+		memcpy(inputText, clearText.c_str() + tmp1, tmp2);
+		// 加密函数
+		DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_ENCRYPT);
+		memcpy(tmp, outputText, 8);
 
-        for (int j = 0; j < 8; j++)
-            vecCiphertext.push_back(tmp[j]);
-    }
+		for (int j = 0; j < 8; j++)
+			vecCiphertext.push_back(tmp[j]);
+	}
 
-    cipherText.clear();
-    cipherText.assign(vecCiphertext.begin(), vecCiphertext.end());
+	cipherText.clear();
+	cipherText.assign(vecCiphertext.begin(), vecCiphertext.end());
 
-    return cipherText;
+	return cipherText;
 }
 
 // 解密 ecb模式
 std::string des_decrypt(const std::string &cipherText) {
-    std::string clearText; // 明文
+	std::string clearText; // 明文
 
-    DES_cblock keyEncrypt;
-    memset(keyEncrypt, 0, 8);
+	DES_cblock keyEncrypt;
+	memset(keyEncrypt, 0, 8);
 
-    if (KEY.length() <= 8)
-        memcpy(keyEncrypt, KEY.c_str(), KEY.length());
-    else
-        memcpy(keyEncrypt, KEY.c_str(), 8);
+	if (KEY.length() <= 8)
+		memcpy(keyEncrypt, KEY.c_str(), KEY.length());
+	else
+		memcpy(keyEncrypt, KEY.c_str(), 8);
 
-    DES_key_schedule keySchedule;
-    DES_set_key_unchecked(&keyEncrypt, &keySchedule);
+	DES_key_schedule keySchedule;
+	DES_set_key_unchecked(&keyEncrypt, &keySchedule);
 
-    const_DES_cblock inputText;
-    DES_cblock outputText;
-    std::vector<unsigned char> vecCleartext;
-    unsigned char tmp[8];
+	const_DES_cblock inputText;
+	DES_cblock outputText;
+	std::vector<unsigned char> vecCleartext;
+	unsigned char tmp[8];
 
-    for (int i = 0; i < cipherText.length() / 8; i++) {
-        memcpy(inputText, cipherText.c_str() + i * 8, 8);
-        DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_DECRYPT);
-        memcpy(tmp, outputText, 8);
+	for (int i = 0; i < cipherText.length() / 8; i++) {
+		memcpy(inputText, cipherText.c_str() + i * 8, 8);
+		DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_DECRYPT);
+		memcpy(tmp, outputText, 8);
 
-        for (int j = 0; j < 8; j++)
-            vecCleartext.push_back(tmp[j]);
-    }
+		for (int j = 0; j < 8; j++)
+			vecCleartext.push_back(tmp[j]);
+	}
 
-    if (cipherText.length() % 8 != 0) {
-        int tmp1 = cipherText.length() / 8 * 8;
-        int tmp2 = cipherText.length() - tmp1;
-        memset(inputText, 0, 8);
-        memcpy(inputText, cipherText.c_str() + tmp1, tmp2);
-        // 解密函数
-        DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_DECRYPT);
-        memcpy(tmp, outputText, 8);
+	if (cipherText.length() % 8 != 0) {
+		int tmp1 = cipherText.length() / 8 * 8;
+		int tmp2 = cipherText.length() - tmp1;
+		memset(inputText, 0, 8);
+		memcpy(inputText, cipherText.c_str() + tmp1, tmp2);
+		// 解密函数
+		DES_ecb_encrypt(&inputText, &outputText, &keySchedule, DES_DECRYPT);
+		memcpy(tmp, outputText, 8);
 
-        for (int j = 0; j < 8; j++)
-            vecCleartext.push_back(tmp[j]);
-    }
+		for (int j = 0; j < 8; j++)
+			vecCleartext.push_back(tmp[j]);
+	}
 
-    clearText.clear();
-    clearText.assign(vecCleartext.begin(), vecCleartext.end());
+	clearText.clear();
+	clearText.assign(vecCleartext.begin(), vecCleartext.end());
 
-    return clearText;
+	return clearText;
 }
 
 /*
@@ -474,7 +474,7 @@ std::string des_decrypt(const std::string &cipherText) {
 */
 JNIEXPORT jstring
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv * env, jobject
 jobj)
 {
 std::string version = "V1.0";
@@ -731,7 +731,7 @@ rtn;
 */
 JNIEXPORT jobject
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv * env, jobject
 jobj,
 jstring path
 )
@@ -765,13 +765,13 @@ jmethodID list_init = env->GetMethodID(list_jcs, "<init>", "()V");
 jobject list_obj = env->NewObject(list_jcs, list_init, "");
 //获取ArrayList对象的add()的methodID
 jmethodID list_add = env->GetMethodID(list_jcs, "add",
-                                      "(Ljava/lang/Object;)Z");
+									  "(Ljava/lang/Object;)Z");
 
 //获取FaultCode类
 jclass fault_code_cls = env->FindClass("com/miyuan/obd/serial/FaultCode");
 //获取FaultCode的构造函数
 jmethodID fault_code_init = env->GetMethodID(fault_code_cls, "<init>",
-                                             "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+											 "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
 for (
 i = 0;
@@ -815,12 +815,12 @@ strcat(code, temp
 faultCode.
 id = code;
 jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
-                                        env->NewStringUTF(faultCode.id.c_str()),
-                                        env->NewStringUTF(faultCode.suit.c_str()),
-                                        env->NewStringUTF(faultCode.desc_ch.c_str()),
-                                        env->NewStringUTF(faultCode.desc_en.c_str()),
-                                        env->NewStringUTF(faultCode.system.c_str()),
-                                        env->NewStringUTF(faultCode.detail.c_str()));
+										env->NewStringUTF(faultCode.id.c_str()),
+										env->NewStringUTF(faultCode.suit.c_str()),
+										env->NewStringUTF(faultCode.desc_ch.c_str()),
+										env->NewStringUTF(faultCode.desc_en.c_str()),
+										env->NewStringUTF(faultCode.system.c_str()),
+										env->NewStringUTF(faultCode.detail.c_str()));
 env->
 CallBooleanMethod(list_obj, list_add, fault_code_obj
 );
@@ -840,7 +840,7 @@ NULL;
 */
 JNIEXPORT jboolean
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv * env, jobject
 jobj)
 {
 char input[6] = {HEAD, 0x81, 0x02, 0x00, 0x00, HEAD};
@@ -872,7 +872,7 @@ return false;
 */
 JNIEXPORT jstring
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv * env, jobject
 jobj,
 jint fixedType
 )
@@ -966,12 +966,71 @@ NewStringUTF(result);
 */
 JNIEXPORT jstring
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv * env, jobject
 jobj,
 jint dynamicType
 )
 {
 char input[7] = {HEAD, 0x83, 0x02, 0x01, 0x00, 0x00, HEAD};
+if (dynamicType == 300 || dynamicType == 301)
+input[4] = 3;
+else if (dynamicType == 200 || dynamicType == 201)
+input[4] = 20;
+else if (dynamicType == 210 || dynamicType == 211)
+input[4] = 21;
+else if (dynamicType == 220 || dynamicType == 221)
+input[4] = 22;
+else if (dynamicType == 230 || dynamicType == 231)
+input[4] = 23;
+else if (dynamicType == 240 || dynamicType == 241)
+input[4] = 24;
+else if (dynamicType == 250 || dynamicType == 251)
+input[4] = 25;
+else if (dynamicType == 260 || dynamicType == 261)
+input[4] = 26;
+else if (dynamicType == 270 || dynamicType == 271)
+input[4] = 27;
+else if (dynamicType == 360 || dynamicType == 361)
+input[4] = 36;
+else if (dynamicType == 370 || dynamicType == 371)
+input[4] = 37;
+else if (dynamicType == 380 || dynamicType == 381)
+input[4] = 38;
+else if (dynamicType == 390 || dynamicType == 391)
+input[4] = 39;
+else if (dynamicType == 400 || dynamicType == 401)
+input[4] = 40;
+else if (dynamicType == 410 || dynamicType == 411)
+input[4] = 41;
+else if (dynamicType == 420 || dynamicType == 421)
+input[4] = 42;
+else if (dynamicType == 430 || dynamicType == 431)
+input[4] = 43;
+else if (dynamicType == 520 || dynamicType == 521)
+input[4] = 52;
+else if (dynamicType == 530 || dynamicType == 531)
+input[4] = 53;
+else if (dynamicType == 540 || dynamicType == 541)
+input[4] = 54;
+else if (dynamicType == 550 || dynamicType == 551)
+input[4] = 55;
+else if (dynamicType == 560 || dynamicType == 561)
+input[4] = 56;
+else if (dynamicType == 570 || dynamicType == 571)
+input[4] = 57;
+else if (dynamicType == 580 || dynamicType == 581)
+input[4] = 58;
+else if (dynamicType == 590 || dynamicType == 591)
+input[4] = 59;
+else if (dynamicType == 850 || dynamicType == 851)
+input[4] = 85;
+else if (dynamicType == 860 || dynamicType == 861)
+input[4] = 86;
+else if (dynamicType == 870 || dynamicType == 871)
+input[4] = 87;
+else if (dynamicType == 880 || dynamicType == 881)
+input[4] = 88;
+else
 input[4] =
 dynamicType;
 input[5] = input[1] ^ input[2] ^ input[3] ^ input[4];
@@ -2027,7 +2086,7 @@ NewStringUTF(result);
 */
 JNIEXPORT jboolean
 JNICALL
-        Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv * env, jobject
+		Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv * env, jobject
 jobj,
 jboolean status
 )
