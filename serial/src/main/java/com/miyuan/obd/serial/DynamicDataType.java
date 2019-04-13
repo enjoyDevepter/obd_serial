@@ -15,11 +15,11 @@ public class DynamicDataType {
     /**
      * 燃油系统1状态
      */
-    public static final int DYNAMIC_DATA_FUEL_SYSTEM_1_STATUS = 3;
+    public static final int DYNAMIC_DATA_FUEL_SYSTEM_1_STATUS = 300;
     /**
      * 燃油系统2状态
      */
-    public static final int DYNAMIC_DATA_FUEL_SYSTEM_2_STATUS = 3;
+    public static final int DYNAMIC_DATA_FUEL_SYSTEM_2_STATUS = 301;
     /**
      * 发动机负荷
      */
@@ -89,68 +89,68 @@ public class DynamicDataType {
     /**
      * 氧传感器输出电压（缸组1 传感器1）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_1 = 20;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_1 = 200;
     /**
      * 短期燃油修正（缸组1 传感器1）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_1 = 20;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_1 = 201;
     /**
      * 氧传感器输出电压（缸组1 传感器2）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_2 = 21;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_2 = 210;
     /**
      * 短期燃油修正（缸组1 传感器2）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_2 = 21;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_2 = 211;
     /**
      * 氧传感器输出电压（缸组1 传感器3）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_3 = 22;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_3 = 220;
     /**
      * 短期燃油修正（缸组1 传感器3）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_3 = 22;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_3 = 221;
     /**
      * 氧传感器输出电压（缸组1 传感器4）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_4 = 23;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_1_SENSOR_4 = 230;
     /**
      * 短期燃油修正（缸组1 传感器4）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_4 = 23;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_1_SENSOR_4 = 231;
 
     /**
      * 氧传感器输出电压（缸组2 传感器1）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_1 = 24;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_1 = 240;
     /**
      * 短期燃油修正（缸组2 传感器1）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_1 = 24;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_1 = 241;
     /**
      * 氧传感器输出电压（缸组2 传感器2）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_2 = 25;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_2 = 250;
     /**
      * 短期燃油修正（缸组2 传感器2）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_2 = 25;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_2 = 251;
     /**
      * 氧传感器输出电压（缸组2 传感器3）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_3 = 26;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_3 = 260;
     /**
      * 短期燃油修正（缸组2 传感器3）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_3 = 26;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_3 = 261;
     /**
      * 氧传感器输出电压（缸组2 传感器4）
      */
-    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_4 = 27;
+    public static final int DYNAMIC_DATA_OUTPUT_VOLTAGE_OF_OXYGEN_SENSOR_CYLINDER_GROUP_2_SENSOR_4 = 270;
     /**
      * 短期燃油修正（缸组2 传感器4）
      */
-    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_4 = 27;
+    public static final int DYNAMIC_DATA_SHORT_TERM_FUEL_CORRECTION_CYLINDER_GROUP_2_SENSOR_4 = 271;
     /**
      * 当前所使用的OBD标准
      */
@@ -182,74 +182,74 @@ public class DynamicDataType {
     /**
      * 氧传感器1线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 36;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 360;
     /**
      * 氧传感器1线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 36;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 361;
 
     /**
      * 氧传感器2线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 37;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 370;
     /**
      * 氧传感器2线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 37;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 371;
 
     /**
      * 氧传感器3线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 38;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 380;
     /**
      * 氧传感器3线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 38;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 381;
 
     /**
      * 氧传感器4线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 39;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 390;
     /**
      * 氧传感器4线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 39;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 391;
 
     /**
      * 氧传感器5线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 40;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 400;
     /**
      * 氧传感器5线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 40;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 401;
 
     /**
      * 氧传感器6线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 41;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 410;
     /**
      * 氧传感器6线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 41;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 411;
 
     /**
      * 氧传感器7线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 42;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 420;
     /**
      * 氧传感器7线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 42;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 421;
 
     /**
      * 氧传感器8线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 43;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO_1 = 430;
     /**
      * 氧传感器8线性或宽带式氧传感器电压
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 43;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_VOLTAGE = 431;
 
     /**
      * 设置废气再循环
@@ -283,67 +283,67 @@ public class DynamicDataType {
     /**
      * 氧传感器1线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 52;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 520;
     /**
      * 氧传感器1线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 52;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_1_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 521;
     /**
      * 氧传感器2线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 53;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 530;
     /**
      * 氧传感器2线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 53;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_2_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 531;
     /**
      * 氧传感器3线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 54;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 540;
     /**
      * 氧传感器3线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 54;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_3_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 541;
     /**
      * 氧传感器4线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 55;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 550;
     /**
      * 氧传感器4线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 55;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_4_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 551;
     /**
      * 氧传感器5线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 56;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 560;
     /**
      * 氧传感器5线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 56;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_5_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 561;
     /**
      * 氧传感器6线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 57;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 570;
     /**
      * 氧传感器6线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 57;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_6_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 571;
     /**
      * 氧传感器7线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 58;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 580;
     /**
      * 氧传感器7线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 58;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_7_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 581;
     /**
      * 氧传感器8线性或宽带式氧传感器，当量比
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 59;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_EQUIVALENT_RATIO = 590;
     /**
      * 氧传感器8线性或宽带式氧传感器电流
      */
-    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 59;
+    public static final int DYNAMIC_DATA_OXYGEN_SENSOR_8_LINEAR_OR_BROADBAND_OXYGEN_SENSOR_CURRENT = 591;
 
     /**
      * 缸组1的1号传感器催化剂温度
@@ -435,40 +435,40 @@ public class DynamicDataType {
     /**
      * 短周期缸组1二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_1 = 85;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_1 = 850;
     /**
      * 短周期缸组3二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_3 = 85;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_3 = 851;
 
 
     /**
      * 长周期缸组1二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_1 = 86;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_1 = 860;
     /**
      * 长周期缸组3二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_3 = 86;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_3 = 861;
 
 
     /**
      * 短周期缸组2二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_2 = 87;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_2 = 870;
     /**
      * 短周期缸组4二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_4 = 87;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_SHORT_CYLINDER_GROUP_4 = 871;
 
     /**
      * 长周期缸组2二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_2 = 88;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_2 = 880;
     /**
      * 长周期缸组4二次氧传感器燃油调整
      */
-    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_4 = 88;
+    public static final int DYNAMIC_DATA_FUEL_ADJUSTMENT_OF_SECONDARY_OXYGEN_SENSOR_FOR_LONG_CYLINDER_GROUP_4 = 881;
 
     /**
      * 油轨压力（绝对压力）

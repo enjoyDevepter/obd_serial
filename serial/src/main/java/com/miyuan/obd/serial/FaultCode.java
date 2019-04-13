@@ -103,6 +103,15 @@ public class FaultCode {
         this.system = system;
     }
 
+    FaultCode(String id, String suit, String desc_ch, String desc_en, String system, String detail) {
+        this.id = id;
+        this.suit = suit;
+        this.desc_ch = desc_ch;
+        this.desc_en = desc_en;
+        this.system = system;
+        this.detail = detail;
+    }
+
     @Override
     public String toString() {
         return "FaultCode{" +

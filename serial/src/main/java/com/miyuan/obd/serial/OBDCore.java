@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,8 +78,7 @@ public class OBDCore {
      * @return 故障码集合
      */
     public synchronized List<FaultCode> getFaultCode(String path) {
-        obdBusiness.getFaultCode(path);
-        return new ArrayList<>();
+        return obdBusiness.getFaultCode(path);
     }
 
     /**
