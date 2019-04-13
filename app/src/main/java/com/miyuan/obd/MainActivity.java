@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sample_text = findViewById(R.id.sample_text);
         findViewById(R.id.start).setOnClickListener(this);
         findViewById(R.id.stop).setOnClickListener(this);
+        findViewById(R.id.mile).setOnClickListener(this);
         findViewById(R.id.getFaultCode).setOnClickListener(this);
         findViewById(R.id.cleanFaultCode).setOnClickListener(this);
         findViewById(R.id.getFixedData).setOnClickListener(this);
@@ -74,6 +75,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 }
                 sample_text.setText(OBDCore.getInstance(this).getDynamicData(index));
+                break;
+            case R.id.mile:
+                try {
+                    index = Integer.valueOf(indexET.getText().toString().trim());
+                } catch (Exception e) {
+                    Toast.makeText(this, "请输入数字后重试!", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                sample_text.setText(String.valueOf(OBDCore.getInstance(this).initMiles(index)));
                 break;
 
         }

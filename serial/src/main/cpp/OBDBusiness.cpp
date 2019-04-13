@@ -2021,6 +2021,37 @@ extern "C"
 
 		return isValid(result, len);
 	}
+
+	/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    initMileage
+* Signature: (I)Z;
+*/
+	JNIEXPORT jboolean
+		JNICALL
+		Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj,
+														   jint mile)
+	{
+		char input[9] = {HEAD, 0x86, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, HEAD};
+		input[3] = (mile & 0xFF000000) >> 24;
+		input[4] = (mile & 0x00FF0000) >> 16;
+		input[5] = (mile & 0x0000FF00) >> 8;
+		input[6] = mile & 0x0000FF00;
+		input[7] = input[1] ^ input[2] ^ input[3] ^ input[4] ^ input[5] ^ input[6];
+
+		writeToBox(input,
+				   sizeof(input));
+
+		char buf[1024];
+
+		int len = readFormBox(buf, TIMEOUT);
+
+		if (isValid(buf, len) && len == 10)
+		{
+			return mile == ((buf[5] << 24) + (buf[6] << 16 + (buf[7] << 8) + buf[8]));
+		}
+		return false;
+	}
 #ifdef __cplusplus
 }
 #endif

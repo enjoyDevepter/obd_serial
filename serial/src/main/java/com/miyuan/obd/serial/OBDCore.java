@@ -124,4 +124,13 @@ public class OBDCore {
         return obdBusiness.setCarStatus(status);
     }
 
+    /**
+     * 设置车辆里程
+     *
+     * @param mile 仪表盘里程数
+     */
+    public synchronized boolean initMiles(int mile) {
+        return obdBusiness.initMileage(mile);
+    }
+
 }

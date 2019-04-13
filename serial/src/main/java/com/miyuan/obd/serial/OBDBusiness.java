@@ -15,9 +15,6 @@ class OBDBusiness {
      * Do not remove or rename the field mFd: it is used by native method close();
      */
     private FileDescriptor mFd;
-    private FileInputStream mFileInputStream;
-    private FileOutputStream mFileOutputStream;
-
 
     static {
         System.loadLibrary("serial");
@@ -30,8 +27,6 @@ class OBDBusiness {
             Log.e("obd_core", "native open returns null");
             return;
         }
-        mFileInputStream = new FileInputStream(mFd);
-        mFileOutputStream = new FileOutputStream(mFd);
     }
 
     native void close();
@@ -48,13 +43,8 @@ class OBDBusiness {
 
     native boolean setCarStatus(boolean status);
 
+    native boolean initMileage(int mile);
+
     native FileDescriptor open(String path, int baudrate, int flags);
 
-    public InputStream getInputStream() {
-        return mFileInputStream;
-    }
-
-    public OutputStream getOutputStream() {
-        return mFileOutputStream;
-    }
 }
