@@ -1,5 +1,6 @@
 package com.miyuan.obd;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -65,16 +66,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, "请输入数字后重试!", Toast.LENGTH_LONG).show();
                     break;
                 }
-                sample_text.setText(String.valueOf(OBDCore.getInstance(this).getFixedData(index)));
+//                sample_text.setText(String.valueOf(OBDCore.getInstance(this).getFixedData(index)));
                 break;
             case R.id.getDynamicData:
-                try {
-                    index = Integer.valueOf(indexET.getText().toString().trim());
-                } catch (Exception e) {
-                    Toast.makeText(this, "请输入数字后重试!", Toast.LENGTH_LONG).show();
-                    break;
-                }
-                sample_text.setText(OBDCore.getInstance(this).getDynamicData(index));
+                Intent intent = new Intent(this, PanelActivity.class);
+                startActivity(intent);
                 break;
             case R.id.mile:
                 try {
@@ -85,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 sample_text.setText(String.valueOf(OBDCore.getInstance(this).initMiles(index)));
                 break;
-
+            default:
+                break;
         }
     }
 }

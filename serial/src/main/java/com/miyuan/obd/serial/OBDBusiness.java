@@ -3,17 +3,10 @@ package com.miyuan.obd.serial;
 import android.util.Log;
 
 import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 
 class OBDBusiness {
 
-    /*
-     * Do not remove or rename the field mFd: it is used by native method close();
-     */
     private FileDescriptor mFd;
 
     static {
@@ -21,8 +14,7 @@ class OBDBusiness {
     }
 
     public OBDBusiness() {
-        mFd = open("/dev/ttyS3", 19200, 0);
-        // mFd = open("/dev/ttyMT2", 19200, 0);
+        mFd = open("/dev/ttyMT1", 19200, 0);
         if (mFd == null) {
             Log.e("obd_core", "native open returns null");
             return;
@@ -37,7 +29,7 @@ class OBDBusiness {
 
     native boolean cleanFaultCode();
 
-    native String getFixedData(int fixedDataType);
+    native PanelBoardInfo getFixedData();
 
     native String getDynamicData(int dynamicDataType);
 

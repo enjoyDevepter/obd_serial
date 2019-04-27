@@ -36,7 +36,7 @@ public class OBDCore {
                 public void run() {
                     try {
                         InputStream is = context.getAssets().open("physical.db");
-                        FileOutputStream fos = new FileOutputStream(db);
+                        final FileOutputStream fos = new FileOutputStream(db);
                         byte[] buffer = new byte[1024];
                         int byteCount = 0;
                         while ((byteCount = is.read(buffer)) != -1) {//循环从输入流读取 buffer字节
@@ -92,13 +92,12 @@ public class OBDCore {
 
 
     /**
-     * 根据固定数据类型获取相应数据
+     * 获取仪表盘信息
      *
-     * @param fixedDataType 固定数据类型 {@link com.miyuan.obd.serial.FixedDataType}
-     * @return 固定数据类型对应数据
+     * @return
      */
-    public synchronized String getFixedData(int fixedDataType) {
-        return obdBusiness.getFixedData(fixedDataType);
+    public synchronized PanelBoardInfo getFixedData() {
+        return obdBusiness.getFixedData();
     }
 
 

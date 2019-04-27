@@ -275,7 +275,7 @@ public class DynamicDataType {
     /**
      * 燃油蒸汽排放系统蒸汽绝对压力（Kpa）
      */
-    public static final int DYNAMIC_DATA_Absolute_Steam_Pressure_Kpa_IN_FUEL_STEAM_EMISSION_SYSTEM = 50;
+    public static final int DYNAMIC_DATA_ABSOLUTE_STEAM_PRESSURE_KPA_IN_FUEL_STEAM_EMISSION_SYSTEM = 50;
     /**
      * 大气压
      */
@@ -485,7 +485,7 @@ public class DynamicDataType {
     /**
      * 引擎润滑油温度
      */
-    public static final int DYNAMIC_DATA_Engine_Lubricant_Temperature = 92;
+    public static final int DYNAMIC_DATA_ENGINE_LUBRICANT_TEMPERATURE = 92;
     /**
      * 喷油提前角
      */

@@ -10,6 +10,7 @@ public class FaultCode {
      */
     private String id;
     /**
+     *
      * 故障
      */
     private String suit;

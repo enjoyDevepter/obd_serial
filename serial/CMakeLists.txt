@@ -29,7 +29,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 #add_library(vndksupport
 #        SHARED
 #        IMPORTED)
-
+#
 #set_target_properties(
 #        vndksupport
 #        PROPERTIES IMPORTED_LOCATION
@@ -57,21 +57,21 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 #        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
 
 # 添加两个预编译库
-add_library(openssl-crypto
-        STATIC
-        IMPORTED)
-
-set_target_properties(openssl-crypto
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
-
-add_library(openssl-ssl
-        STATIC
-        IMPORTED)
-
-set_target_properties(openssl-ssl
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
+#add_library(openssl-crypto
+#        STATIC
+#        IMPORTED)
+#
+#set_target_properties(openssl-crypto
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
+#
+#add_library(openssl-ssl
+#        STATIC
+#        IMPORTED)
+#
+#set_target_properties(openssl-ssl
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
 
 add_library( # Sets the name of the library.
         serial
@@ -100,7 +100,7 @@ find_library( # Sets the name of the path variable.
 #target_include_directories(
 #        serial
 #        PRIVATE
-        # serial 需要的头文件
+#        # serial 需要的头文件
 #        ${CMAKE_SOURCE_DIR}/../jniLibs/include
 #)
 
@@ -113,5 +113,5 @@ target_link_libraries( # Specifies the target library.
 #        sqlite
         # Links the target library to the log library
         # included in the NDK.
-        # sqlite utils c++ cutils vndksupport
-        ${log-lib} openssl-ssl openssl-crypto)
+        # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
+        ${log-lib})
