@@ -356,11 +356,7 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv *env,
 JNIEXPORT jstring JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
     std::string version = "V1.0";
-    return env->NewStringUTF((version).
-
-            c_str()
-
-    );
+    return env->NewStringUTF((version).c_str());
 }
 
 char *jstring2str(JNIEnv *env, jstring jstr) {
@@ -386,6 +382,100 @@ char *jstring2str(JNIEnv *env, jstring jstr) {
 }
 
 /*
+* 解密
+*/
+// char *base64_decode(const char *input, int length)
+// {
+// 	BIO *b64 = NULL;
+// 	BIO *bmem = NULL;
+// 	char *buffer = (char *)malloc(length);
+// 	memset(buffer, 0, length);
+
+// 	b64 = BIO_new(BIO_f_base64());
+// 	BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+// 	bmem = BIO_new_mem_buf(input, length);
+// 	bmem = BIO_push(b64, bmem);
+// 	BIO_read(bmem, buffer, length);
+
+// 	BIO_free_all(bmem);
+
+// 	return buffer;
+// }
+
+// static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName)
+// {
+// 	int i = 0;
+// 	FaultCode code;
+// 	for (i = 0; i < argc; i++)
+// 	{
+// 		char* decode = base64_decode(argv[i], strlen(argv[i]));
+// 		if (!strcmp(azColName[i], "suit")) {
+// 			strcpy_s(code.suit, decode);
+// 		}
+// 		if (!strcmp(azColName[i], "desc_ch")) {
+// 			strcpy_s(code.desc_ch, decode);
+// 		}
+// 		if (!strcmp(azColName[i], "desc_en")) {
+// 			strcpy_s(code.desc_en, decode);
+// 		}
+// 		if (!strcmp(azColName[i], "system")) {
+// 			strcpy_s(code.system, decode);
+// 		}
+// 		if (!strcmp(azColName[i], "detail")) {
+// 			strcpy_s(code.detail, decode);
+// 		}
+// 	}
+// 	codes.push_back(code);
+// 	return 0;
+// }
+
+
+// void getFaultCodeInfo(FaultCode* faultCode,vector<string> ids)
+// {
+// 	char sql[1024] = { 0 };
+// 	sqlite3 *db;
+// 	char *zErrMsg = 0;
+// 	const char *data = "Callback function called";
+// 	int rc;
+// 	rc = sqlite3_open_v2("physical.db", &db, SQLITE_OPEN_READONLY, NULL);
+// 	if (rc != SQLITE_OK)
+// 	{
+// 		printf("Can't open database: %s \n", sqlite3_errmsg(db));
+// 		return;
+// 	}
+
+// 	strcat_s(sql, "SELECT suit,desc_ch,desc_en,system,detail from code where id in(");
+// 	int i = 0;
+// 	for (i = 0; i < ids.size(); i++)
+// 	{
+// 		char temp[10] = { 0 };
+// 		if (i != ids.size() - 1)
+// 		{
+// 			sprintf_s(temp, "'%s',", ids[i].c_str());
+// 		}
+// 		else
+// 		{
+// 			sprintf_s(temp, "'%s');", ids[i].c_str());
+// 		}
+// 		strcat_s(sql, temp);
+// 	}
+
+// 	//printf("SQL  %s\n", sql);
+
+// 	rc = sqlite3_exec(db, sql, callback_fault, (void *)data, &zErrMsg);
+// 	if (rc != SQLITE_OK)
+// 	{
+// 		printf("SQL error: %s\n", zErrMsg);
+// 		sqlite3_free(zErrMsg);
+// 		return;
+// 	}
+// 	else
+// 	{
+// 		sqlite3_close(db);
+// 	}
+// }
+
+/*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    getFaultCode
 * Signature: ()Ljava/util/List;
@@ -396,8 +486,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj,
     char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
     input[4] = input[1] ^ input[2] ^ input[3];
 
-    writeToBox(input,
-               sizeof(input));
+    writeToBox(input, sizeof(input));
 
     char buf[1024] = {0};
 
@@ -525,12 +614,12 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 
         memset(temp, 0, sizeof(temp));
         sprintf(temp, "%.1f",
-                ((buf[24] << 24) + (buf[25] << 16) + (buf[26] << 8) + buf[27]) * 0.1 / 1000);
+                ((buf[24] << 24) + (buf[25] << 16) + (buf[26] << 8) + buf[27]) / 1000.0);
         memcpy(panelBoard.mileageOfTrip, temp, sizeof(temp));
 
         memset(temp, 0, sizeof(temp));
         sprintf(temp, "%.1f",
-                ((buf[28] << 24) + (buf[29] << 16) + (buf[30] << 8) + buf[31]) * 0.1 / 1000);
+                ((buf[28] << 24) + (buf[29] << 16) + (buf[30] << 8) + buf[31]) / 1000.0);
         memcpy(panelBoard.totalMileage, temp, sizeof(temp));
 
         memset(temp, 0, sizeof(temp));
@@ -595,8 +684,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 * Signature: (I)Ljava/lang/String;
 */
 JNIEXPORT jstring JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj,
-                                                      jint dynamicType) {
+Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType) {
     char input[7] = {HEAD, 0x83, 0x02, 0x01, 0x00, 0x00, HEAD};
     if (dynamicType == 300 || dynamicType == 301)
         input[4] = 3;
@@ -1438,8 +1526,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj,
 * Signature: (Z)V
 */
 JNIEXPORT jboolean JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj,
-                                                    jboolean status) {
+Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, jboolean status) {
     char input[6] = {HEAD, 0x89, 0x01, 0x01, 0x00, HEAD};
     if (!status) {
         input[3] = 0x00;
@@ -1461,13 +1548,12 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj,
 * Signature: (I)Z;
 */
 JNIEXPORT jboolean JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj,
-                                                   jint mile) {
+Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj, jint mile) {
     char input[9] = {HEAD, 0x86, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, HEAD};
     input[3] = (mile & 0xFF000000) >> 24;
     input[4] = (mile & 0x00FF0000) >> 16;
     input[5] = (mile & 0x0000FF00) >> 8;
-    input[6] = mile & 0x0000FF00;
+    input[6] = mile & 0x000000FF;
     input[7] = input[1] ^ input[2] ^ input[3] ^ input[4] ^ input[5] ^ input[6];
 
     writeToBox(input, sizeof(input));
@@ -1476,7 +1562,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj,
 
     int len = readFormBox(buf, TIMEOUT);
 
-    if (isValid(buf, len) && len == 10) {
+    if (isValid(buf, len) && len == 11) {
         return mile == ((buf[5] << 24) + (buf[6] << 16 + (buf[7] << 8) + buf[8]));
     }
     return false;
