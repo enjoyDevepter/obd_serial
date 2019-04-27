@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.cleanFaultCode).setOnClickListener(this);
         findViewById(R.id.getFixedData).setOnClickListener(this);
         findViewById(R.id.getDynamicData).setOnClickListener(this);
-        sample_text.setText(OBDCore.getInstance(this).getVersion());
         indexET = findViewById(R.id.index);
+        OBDCore.getInstance(this).open("/dev/ttyMT1", 19200);
     }
 
     @Override
@@ -84,5 +84,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OBDCore.getInstance(this).close();
     }
 }

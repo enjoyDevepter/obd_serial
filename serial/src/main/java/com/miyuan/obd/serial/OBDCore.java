@@ -61,6 +61,23 @@ public class OBDCore {
         private static final OBDCore INSTANCE = new OBDCore();
     }
 
+    /**
+     * 开启串口设备
+     *
+     * @param path     串口名称
+     * @param baudrate 波特率
+     * @return 成功标识
+     */
+    public boolean open(String path, int baudrate) {
+        return obdBusiness.open(path, baudrate);
+    }
+
+    /**
+     * 关闭串口设备
+     */
+    public void close() {
+        obdBusiness.close();
+    }
 
     /**
      * 获取OBD版本号

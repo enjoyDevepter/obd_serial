@@ -33,6 +33,8 @@ extern "C"
 
 std::string KEY = "MIYUAN_0BD";
 
+int fd;
+
 /*
 * 故障码信息
 */
@@ -168,17 +170,15 @@ static speed_t getBaudrate(jint baudrate) {
             return -1;
     }
 }
-int fd;
+
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    open
-* Signature: (Ljava/lang/String;II)Ljava/io/FileDescriptor;
+* Signature: (Ljava/lang/String;I)V;
 */
-JNIEXPORT jobject JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path, jint baudrate,
-                                            jint flags) {
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path, jint baudrate) {
     speed_t speed;
-    jobject mFileDescriptor;
 
     /* Check arguments */
     {
@@ -186,7 +186,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
         if (speed == -1) {
             /* TODO: throw an exception */
             LOGE("Invalid baudrate");
-            return NULL;
+            return false;
         }
     }
 
@@ -194,15 +194,15 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
     {
         jboolean iscopy;
         const char *path_utf = env->GetStringUTFChars(path, &iscopy);
-        LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | flags);
-        fd = open(path_utf, O_RDWR | flags);
+        LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | 0);
+        fd = open(path_utf, O_RDWR | 0);
         LOGE("open() fd = %d", fd);
         env->ReleaseStringUTFChars(path, path_utf);
         if (fd == -1) {
             /* Throw an exception */
             LOGE("Cannot open port");
             /* TODO: throw an exception */
-            return NULL;
+            return false;
         }
     }
 
@@ -214,7 +214,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
             LOGE("tcgetattr() failed");
             close(fd);
             /* TODO: throw an exception */
-            return NULL;
+            return false;
         }
 
         cfmakeraw(&cfg);
@@ -225,19 +225,11 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
             LOGE("tcsetattr() failed");
             close(fd);
             /* TODO: throw an exception */
-            return NULL;
+            return false;
         }
     }
 
-    /* Create a corresponding file descriptor */
-    {
-        jclass cFileDescriptor = env->FindClass("java/io/FileDescriptor");
-        jmethodID iFileDescriptor = env->GetMethodID(cFileDescriptor, "<init>", "()V");
-        jfieldID descriptorID = env->GetFieldID(cFileDescriptor, "descriptor", "I");
-        mFileDescriptor = env->NewObject(cFileDescriptor, iFileDescriptor);
-        env->SetIntField(mFileDescriptor, descriptorID, (jint) fd);
-    }
-    return mFileDescriptor;
+    return true;
 }
 
 /*

@@ -86,7 +86,7 @@ public class PanelActivity extends AppCompatActivity {
                     handler.sendMessageDelayed(msg, 0);
                 }
             }
-        }, 0, 1500);
+        }, 0, 1000);
     }
 
     @Override
