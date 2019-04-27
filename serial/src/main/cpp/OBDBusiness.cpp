@@ -327,17 +327,8 @@ bool isValid(char *result, int len) {
 * Signature: ()V
 */
 JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv *env, jobject jobj) {
-    jclass SerialPortClass = env->GetObjectClass(jobj);
-    jclass FileDescriptorClass = env->FindClass("java/io/FileDescriptor");
-
-    jfieldID mFdID = env->GetFieldID(SerialPortClass, "mFd", "Ljava/io/FileDescriptor;");
-    jfieldID descriptorID = env->GetFieldID(FileDescriptorClass, "descriptor", "I");
-
-    jobject mFd = env->GetObjectField(jobj, mFdID);
-    jint descriptor = env->GetIntField(mFd, descriptorID);
-
-    LOGE("close(fd = %d)", descriptor);
-    close(descriptor);
+    LOGE("close(fd = %d)", fd);
+    close(fd);
 }
 
 /*
