@@ -82,7 +82,7 @@ typedef int (*X509_STORE_CTX_cleanup_fn)(X509_STORE_CTX *ctx);
 
 void X509_STORE_CTX_set_depth(X509_STORE_CTX *ctx, int depth);
 
-# define X509_STORE_CTX_set_app_data(ctx, data) \
+# define X509_STORE_CTX_set_app_data(ctx,data) \
         X509_STORE_CTX_set_ex_data(ctx,0,data)
 # define X509_STORE_CTX_get_app_data(ctx) \
         X509_STORE_CTX_get_ex_data(ctx,0)
@@ -90,10 +90,10 @@ void X509_STORE_CTX_set_depth(X509_STORE_CTX *ctx, int depth);
 # define X509_L_FILE_LOAD        1
 # define X509_L_ADD_DIR          2
 
-# define X509_LOOKUP_load_file(x, name, type) \
+# define X509_LOOKUP_load_file(x,name,type) \
                 X509_LOOKUP_ctrl((x),X509_L_FILE_LOAD,(name),(long)(type),NULL)
 
-# define X509_LOOKUP_add_dir(x, name, type) \
+# define X509_LOOKUP_add_dir(x,name,type) \
                 X509_LOOKUP_ctrl((x),X509_L_ADD_DIR,(name),(long)(type),NULL)
 
 # define         X509_V_OK                                       0
@@ -281,7 +281,7 @@ void X509_STORE_CTX_set_verify(X509_STORE_CTX *ctx,
 X509_STORE_CTX_verify_fn X509_STORE_get_verify(X509_STORE *ctx);
 void X509_STORE_set_verify_cb(X509_STORE *ctx,
                               X509_STORE_CTX_verify_cb verify_cb);
-# define X509_STORE_set_verify_cb_func(ctx, func) \
+# define X509_STORE_set_verify_cb_func(ctx,func) \
             X509_STORE_set_verify_cb((ctx),(func))
 X509_STORE_CTX_verify_cb X509_STORE_get_verify_cb(X509_STORE *ctx);
 void X509_STORE_set_get_issuer(X509_STORE *ctx,
@@ -334,7 +334,7 @@ void X509_STORE_CTX_cleanup(X509_STORE_CTX *ctx);
 
 X509_STORE *X509_STORE_CTX_get0_store(X509_STORE_CTX *ctx);
 X509 *X509_STORE_CTX_get0_cert(X509_STORE_CTX *ctx);
-STACK_OF(X509) *X509_STORE_CTX_get0_untrusted(X509_STORE_CTX *ctx);
+STACK_OF(X509)* X509_STORE_CTX_get0_untrusted(X509_STORE_CTX *ctx);
 void X509_STORE_CTX_set0_untrusted(X509_STORE_CTX *ctx, STACK_OF(X509) *sk);
 void X509_STORE_CTX_set_verify_cb(X509_STORE_CTX *ctx,
                                   X509_STORE_CTX_verify_cb verify);

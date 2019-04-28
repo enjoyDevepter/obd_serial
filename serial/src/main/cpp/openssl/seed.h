@@ -38,7 +38,6 @@
 # include <openssl/opensslconf.h>
 
 # ifndef OPENSSL_NO_SEED
-
 # include <openssl/e_os2.h>
 # include <openssl/crypto.h>
 
@@ -54,9 +53,7 @@ extern "C" {
 # endif
 
 # if !defined(NO_SYS_TYPES_H)
-
 #  include <sys/types.h>
-
 # endif
 
 # define SEED_BLOCK_SIZE 16
@@ -76,23 +73,19 @@ void SEED_set_key(const unsigned char rawkey[SEED_KEY_LENGTH],
 void SEED_encrypt(const unsigned char s[SEED_BLOCK_SIZE],
                   unsigned char d[SEED_BLOCK_SIZE],
                   const SEED_KEY_SCHEDULE *ks);
-
 void SEED_decrypt(const unsigned char s[SEED_BLOCK_SIZE],
                   unsigned char d[SEED_BLOCK_SIZE],
                   const SEED_KEY_SCHEDULE *ks);
 
 void SEED_ecb_encrypt(const unsigned char *in, unsigned char *out,
                       const SEED_KEY_SCHEDULE *ks, int enc);
-
 void SEED_cbc_encrypt(const unsigned char *in, unsigned char *out, size_t len,
                       const SEED_KEY_SCHEDULE *ks,
                       unsigned char ivec[SEED_BLOCK_SIZE], int enc);
-
 void SEED_cfb128_encrypt(const unsigned char *in, unsigned char *out,
                          size_t len, const SEED_KEY_SCHEDULE *ks,
                          unsigned char ivec[SEED_BLOCK_SIZE], int *num,
                          int enc);
-
 void SEED_ofb128_encrypt(const unsigned char *in, unsigned char *out,
                          size_t len, const SEED_KEY_SCHEDULE *ks,
                          unsigned char ivec[SEED_BLOCK_SIZE], int *num);

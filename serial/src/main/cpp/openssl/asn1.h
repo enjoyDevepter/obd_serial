@@ -20,11 +20,8 @@
 # include <openssl/symhacks.h>
 
 # include <openssl/ossl_typ.h>
-
 # if OPENSSL_API_COMPAT < 0x10100000L
-
 #  include <openssl/bn.h>
-
 # endif
 
 # ifdef OPENSSL_BUILD_SHLIBCRYPTO
@@ -119,7 +116,7 @@ extern "C" {
 # define SMIME_OLDMIME           0x400
 # define SMIME_CRLFEOL           0x800
 # define SMIME_STREAM            0x1000
-struct X509_algor_st;
+    struct X509_algor_st;
 DEFINE_STACK_OF(X509_ALGOR)
 
 # define ASN1_STRING_FLAG_BITS_LEFT 0x08/* Set if 0x07 has bits left value */
@@ -544,10 +541,10 @@ int ASN1_STRING_copy(ASN1_STRING *dst, const ASN1_STRING *str);
 ASN1_STRING *ASN1_STRING_dup(const ASN1_STRING *a);
 ASN1_STRING *ASN1_STRING_type_new(int type);
 int ASN1_STRING_cmp(const ASN1_STRING *a, const ASN1_STRING *b);
-/*
- * Since this is used to store all sorts of things, via macros, for now,
- * make its data void *
- */
+  /*
+   * Since this is used to store all sorts of things, via macros, for now,
+   * make its data void *
+   */
 int ASN1_STRING_set(ASN1_STRING *str, const void *data, int len);
 void ASN1_STRING_set0(ASN1_STRING *str, void *data, int len);
 int ASN1_STRING_length(const ASN1_STRING *x);
@@ -683,12 +680,12 @@ int ASN1_object_size(int constructed, int length, int tag);
 /* Used to implement other functions */
 void *ASN1_dup(i2d_of_void *i2d, d2i_of_void *d2i, void *x);
 
-# define ASN1_dup_of(type, i2d, d2i, x) \
+# define ASN1_dup_of(type,i2d,d2i,x) \
     ((type*)ASN1_dup(CHECKED_I2D_OF(type, i2d), \
                      CHECKED_D2I_OF(type, d2i), \
                      CHECKED_PTR_OF(type, x)))
 
-# define ASN1_dup_of_const(type, i2d, d2i, x) \
+# define ASN1_dup_of_const(type,i2d,d2i,x) \
     ((type*)ASN1_dup(CHECKED_I2D_OF(const type, i2d), \
                      CHECKED_D2I_OF(type, d2i), \
                      CHECKED_PTR_OF(const type, x)))
@@ -702,9 +699,9 @@ void *ASN1_item_dup(const ASN1_ITEM *it, void *x);
                 ASN1_item_free(CHECKED_PTR_OF(type, x), ASN1_ITEM_rptr(type))
 
 # ifndef OPENSSL_NO_STDIO
-void *ASN1_d2i_fp(void *(*xnew)(void), d2i_of_void *d2i, FILE *in, void **x);
+void *ASN1_d2i_fp(void *(*xnew) (void), d2i_of_void *d2i, FILE *in, void **x);
 
-#  define ASN1_d2i_fp_of(type, xnew, d2i, in, x) \
+#  define ASN1_d2i_fp_of(type,xnew,d2i,in,x) \
     ((type*)ASN1_d2i_fp(CHECKED_NEW_OF(type, xnew), \
                         CHECKED_D2I_OF(type, d2i), \
                         in, \
@@ -713,12 +710,12 @@ void *ASN1_d2i_fp(void *(*xnew)(void), d2i_of_void *d2i, FILE *in, void **x);
 void *ASN1_item_d2i_fp(const ASN1_ITEM *it, FILE *in, void *x);
 int ASN1_i2d_fp(i2d_of_void *i2d, FILE *out, void *x);
 
-#  define ASN1_i2d_fp_of(type, i2d, out, x) \
+#  define ASN1_i2d_fp_of(type,i2d,out,x) \
     (ASN1_i2d_fp(CHECKED_I2D_OF(type, i2d), \
                  out, \
                  CHECKED_PTR_OF(type, x)))
 
-#  define ASN1_i2d_fp_of_const(type, i2d, out, x) \
+#  define ASN1_i2d_fp_of_const(type,i2d,out,x) \
     (ASN1_i2d_fp(CHECKED_I2D_OF(const type, i2d), \
                  out, \
                  CHECKED_PTR_OF(const type, x)))
@@ -729,9 +726,9 @@ int ASN1_STRING_print_ex_fp(FILE *fp, const ASN1_STRING *str, unsigned long flag
 
 int ASN1_STRING_to_UTF8(unsigned char **out, const ASN1_STRING *in);
 
-void *ASN1_d2i_bio(void *(*xnew)(void), d2i_of_void *d2i, BIO *in, void **x);
+void *ASN1_d2i_bio(void *(*xnew) (void), d2i_of_void *d2i, BIO *in, void **x);
 
-#  define ASN1_d2i_bio_of(type, xnew, d2i, in, x) \
+#  define ASN1_d2i_bio_of(type,xnew,d2i,in,x) \
     ((type*)ASN1_d2i_bio( CHECKED_NEW_OF(type, xnew), \
                           CHECKED_D2I_OF(type, d2i), \
                           in, \
@@ -740,12 +737,12 @@ void *ASN1_d2i_bio(void *(*xnew)(void), d2i_of_void *d2i, BIO *in, void **x);
 void *ASN1_item_d2i_bio(const ASN1_ITEM *it, BIO *in, void *x);
 int ASN1_i2d_bio(i2d_of_void *i2d, BIO *out, unsigned char *x);
 
-#  define ASN1_i2d_bio_of(type, i2d, out, x) \
+#  define ASN1_i2d_bio_of(type,i2d,out,x) \
     (ASN1_i2d_bio(CHECKED_I2D_OF(type, i2d), \
                   out, \
                   CHECKED_PTR_OF(type, x)))
 
-#  define ASN1_i2d_bio_of_const(type, i2d, out, x) \
+#  define ASN1_i2d_bio_of_const(type,i2d,out,x) \
     (ASN1_i2d_bio(CHECKED_I2D_OF(const type, i2d), \
                   out, \
                   CHECKED_PTR_OF(const type, x)))
@@ -850,7 +847,7 @@ void ASN1_PCTX_set_oid_flags(ASN1_PCTX *p, unsigned long flags);
 unsigned long ASN1_PCTX_get_str_flags(const ASN1_PCTX *p);
 void ASN1_PCTX_set_str_flags(ASN1_PCTX *p, unsigned long flags);
 
-ASN1_SCTX *ASN1_SCTX_new(int (*scan_cb)(ASN1_SCTX *ctx));
+ASN1_SCTX *ASN1_SCTX_new(int (*scan_cb) (ASN1_SCTX *ctx));
 void ASN1_SCTX_free(ASN1_SCTX *p);
 const ASN1_ITEM *ASN1_SCTX_get_item(ASN1_SCTX *p);
 const ASN1_TEMPLATE *ASN1_SCTX_get_template(ASN1_SCTX *p);

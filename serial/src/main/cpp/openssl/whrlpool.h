@@ -13,10 +13,8 @@
 #include <openssl/opensslconf.h>
 
 # ifndef OPENSSL_NO_WHIRLPOOL
-
 # include <openssl/e_os2.h>
 # include <stddef.h>
-
 # ifdef __cplusplus
 extern "C" {
 # endif
@@ -37,13 +35,9 @@ typedef struct {
 } WHIRLPOOL_CTX;
 
 int WHIRLPOOL_Init(WHIRLPOOL_CTX *c);
-
 int WHIRLPOOL_Update(WHIRLPOOL_CTX *c, const void *inp, size_t bytes);
-
 void WHIRLPOOL_BitUpdate(WHIRLPOOL_CTX *c, const void *inp, size_t bits);
-
 int WHIRLPOOL_Final(unsigned char *md, WHIRLPOOL_CTX *c);
-
 unsigned char *WHIRLPOOL(const void *inp, size_t bytes, unsigned char *md);
 
 # ifdef __cplusplus

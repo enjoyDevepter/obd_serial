@@ -158,7 +158,7 @@ DEFINE_STACK_OF(PKCS7)
 # define PKCS7_type_is_data(a)   (OBJ_obj2nid((a)->type) == NID_pkcs7_data)
 # define PKCS7_type_is_digest(a)   (OBJ_obj2nid((a)->type) == NID_pkcs7_digest)
 
-# define PKCS7_set_detached(p, v) \
+# define PKCS7_set_detached(p,v) \
                 PKCS7_ctrl(p,PKCS7_OP_SET_DETACHED_SIGNATURE,v,NULL)
 # define PKCS7_get_detached(p) \
                 PKCS7_ctrl(p,PKCS7_OP_GET_DETACHED_SIGNATURE,0,NULL)

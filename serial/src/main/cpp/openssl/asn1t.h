@@ -663,9 +663,7 @@ typedef int ASN1_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
 
 typedef int ASN1_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
                         const ASN1_ITEM *it, int tag, int aclass);
-
 typedef int ASN1_ex_new_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
-
 typedef void ASN1_ex_free_func(ASN1_VALUE **pval, const ASN1_ITEM *it);
 
 typedef int ASN1_ex_print_func(BIO *out, ASN1_VALUE **pval,
@@ -674,11 +672,9 @@ typedef int ASN1_ex_print_func(BIO *out, ASN1_VALUE **pval,
 
 typedef int ASN1_primitive_i2c(ASN1_VALUE **pval, unsigned char *cont,
                                int *putype, const ASN1_ITEM *it);
-
 typedef int ASN1_primitive_c2i(ASN1_VALUE **pval, const unsigned char *cont,
                                int len, int utype, char *free_cont,
                                const ASN1_ITEM *it);
-
 typedef int ASN1_primitive_print(BIO *out, ASN1_VALUE **pval,
                                  const ASN1_ITEM *it, int indent,
                                  const ASN1_PCTX *pctx);
@@ -917,28 +913,15 @@ DEFINE_STACK_OF(ASN1_VALUE)
 
 /* Functions used internally by the ASN1 code */
 
-int ASN1_item_ex_new(ASN1_VALUE * *pval,
-const ASN1_ITEM *it
-);
-void ASN1_item_ex_free(ASN1_VALUE * *pval,
-const ASN1_ITEM *it
-);
+int ASN1_item_ex_new(ASN1_VALUE **pval, const ASN1_ITEM *it);
+void ASN1_item_ex_free(ASN1_VALUE **pval, const ASN1_ITEM *it);
 
-int ASN1_item_ex_d2i(ASN1_VALUE * *pval,
-const unsigned char **in,
-long len,
-const ASN1_ITEM *it,
-int tag,
-int aclass,
-char opt,
-        ASN1_TLC
-*ctx);
+int ASN1_item_ex_d2i(ASN1_VALUE **pval, const unsigned char **in, long len,
+                     const ASN1_ITEM *it, int tag, int aclass, char opt,
+                     ASN1_TLC *ctx);
 
-int ASN1_item_ex_i2d(ASN1_VALUE * *pval, unsigned char * *out,
-const ASN1_ITEM *it,
-int tag,
-int aclass
-);
+int ASN1_item_ex_i2d(ASN1_VALUE **pval, unsigned char **out,
+                     const ASN1_ITEM *it, int tag, int aclass);
 
 #ifdef  __cplusplus
 }

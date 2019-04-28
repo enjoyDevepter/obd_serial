@@ -27,14 +27,10 @@
 # include <openssl/opensslconf.h>
 
 # ifndef OPENSSL_NO_EC
-
 # include <openssl/asn1.h>
 # include <openssl/symhacks.h>
-
 # if OPENSSL_API_COMPAT < 0x10100000L
-
 #  include <openssl/bn.h>
-
 # endif
 # ifdef  __cplusplus
 extern "C" {
@@ -47,14 +43,14 @@ extern "C" {
 /** Enum for the point conversion form as defined in X9.62 (ECDSA)
  *  for the encoding of a elliptic curve point (x,y) */
 typedef enum {
-    /** the point is encoded as z||x, where the octet z specifies
-     *  which solution of the quadratic equation y is  */
-            POINT_CONVERSION_COMPRESSED = 2,
-    /** the point is encoded as z||x||y, where z is the octet 0x04  */
-            POINT_CONVERSION_UNCOMPRESSED = 4,
-    /** the point is encoded as z||x||y, where the octet z specifies
-     *  which solution of the quadratic equation y is  */
-            POINT_CONVERSION_HYBRID = 6
+        /** the point is encoded as z||x, where the octet z specifies
+         *  which solution of the quadratic equation y is  */
+    POINT_CONVERSION_COMPRESSED = 2,
+        /** the point is encoded as z||x||y, where z is the octet 0x04  */
+    POINT_CONVERSION_UNCOMPRESSED = 4,
+        /** the point is encoded as z||x||y, where the octet z specifies
+         *  which solution of the quadratic equation y is  */
+    POINT_CONVERSION_HYBRID = 6
 } point_conversion_form_t;
 
 typedef struct ec_method_st EC_METHOD;
@@ -722,11 +718,11 @@ int EC_GROUP_get_pentanomial_basis(const EC_GROUP *, unsigned int *k1,
 EC_GROUP *d2i_ECPKParameters(EC_GROUP **, const unsigned char **in, long len);
 int i2d_ECPKParameters(const EC_GROUP *, unsigned char **out);
 
-# define d2i_ECPKParameters_bio(bp, x) ASN1_d2i_bio_of(EC_GROUP,NULL,d2i_ECPKParameters,bp,x)
-# define i2d_ECPKParameters_bio(bp, x) ASN1_i2d_bio_of_const(EC_GROUP,i2d_ECPKParameters,bp,x)
-# define d2i_ECPKParameters_fp(fp, x) (EC_GROUP *)ASN1_d2i_fp(NULL, \
+# define d2i_ECPKParameters_bio(bp,x) ASN1_d2i_bio_of(EC_GROUP,NULL,d2i_ECPKParameters,bp,x)
+# define i2d_ECPKParameters_bio(bp,x) ASN1_i2d_bio_of_const(EC_GROUP,i2d_ECPKParameters,bp,x)
+# define d2i_ECPKParameters_fp(fp,x) (EC_GROUP *)ASN1_d2i_fp(NULL, \
                 (char *(*)())d2i_ECPKParameters,(fp),(unsigned char **)(x))
-# define i2d_ECPKParameters_fp(fp, x) ASN1_i2d_fp(i2d_ECPKParameters,(fp), \
+# define i2d_ECPKParameters_fp(fp,x) ASN1_i2d_fp(i2d_ECPKParameters,(fp), \
                 (unsigned char *)(x))
 
 int ECPKParameters_print(BIO *bp, const EC_GROUP *x, int off);
@@ -1037,8 +1033,8 @@ int ECDH_KDF_X9_62(unsigned char *out, size_t outlen,
 
 int ECDH_compute_key(void *out, size_t outlen, const EC_POINT *pub_key,
                      const EC_KEY *ecdh,
-                     void *(*KDF)(const void *in, size_t inlen,
-                                  void *out, size_t *outlen));
+                     void *(*KDF) (const void *in, size_t inlen,
+                                   void *out, size_t *outlen));
 
 typedef struct ECDSA_SIG_st ECDSA_SIG;
 
@@ -1219,7 +1215,7 @@ void EC_KEY_METHOD_set_sign(EC_KEY_METHOD *meth,
 
 void EC_KEY_METHOD_set_verify(EC_KEY_METHOD *meth,
                               int (*verify)(int type, const unsigned
-                              char *dgst, int dgst_len,
+                                            char *dgst, int dgst_len,
                                             const unsigned char *sigbuf,
                                             int sig_len, EC_KEY *eckey),
                               int (*verify_sig)(const unsigned char *dgst,
@@ -1263,7 +1259,7 @@ void EC_KEY_METHOD_get_sign(EC_KEY_METHOD *meth,
 
 void EC_KEY_METHOD_get_verify(EC_KEY_METHOD *meth,
                               int (**pverify)(int type, const unsigned
-                              char *dgst, int dgst_len,
+                                              char *dgst, int dgst_len,
                                               const unsigned char *sigbuf,
                                               int sig_len, EC_KEY *eckey),
                               int (**pverify_sig)(const unsigned char *dgst,

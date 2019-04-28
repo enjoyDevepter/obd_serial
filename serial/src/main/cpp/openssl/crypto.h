@@ -22,9 +22,7 @@
 # include <openssl/e_os2.h>
 
 # ifndef OPENSSL_NO_STDIO
-
 #  include <stdio.h>
-
 # endif
 
 # include <openssl/stack.h>
@@ -44,9 +42,7 @@
 # include <openssl/symhacks.h>
 
 # if OPENSSL_API_COMPAT < 0x10100000L
-
 #  include <openssl/opensslv.h>
-
 # endif
 
 #ifdef  __cplusplus
@@ -173,15 +169,15 @@ const char *OpenSSL_version(int type);
 
 int OPENSSL_issetugid(void);
 
-typedef void CRYPTO_EX_new(void *parent, void *ptr, CRYPTO_EX_DATA *ad,
+typedef void CRYPTO_EX_new (void *parent, void *ptr, CRYPTO_EX_DATA *ad,
                            int idx, long argl, void *argp);
-typedef void CRYPTO_EX_free(void *parent, void *ptr, CRYPTO_EX_DATA *ad,
-                            int idx, long argl, void *argp);
-typedef int CRYPTO_EX_dup(CRYPTO_EX_DATA *to, const CRYPTO_EX_DATA *from,
-                          void *from_d, int idx, long argl, void *argp);
+typedef void CRYPTO_EX_free (void *parent, void *ptr, CRYPTO_EX_DATA *ad,
+                             int idx, long argl, void *argp);
+typedef int CRYPTO_EX_dup (CRYPTO_EX_DATA *to, const CRYPTO_EX_DATA *from,
+                           void *from_d, int idx, long argl, void *argp);
 __owur int CRYPTO_get_ex_new_index(int class_index, long argl, void *argp,
-                                   CRYPTO_EX_new *new_func, CRYPTO_EX_dup *dup_func,
-                                   CRYPTO_EX_free *free_func);
+                            CRYPTO_EX_new *new_func, CRYPTO_EX_dup *dup_func,
+                            CRYPTO_EX_free *free_func);
 /* No longer use an index. */
 int CRYPTO_free_ex_index(int class_index, int idx);
 
@@ -264,14 +260,14 @@ typedef struct crypto_threadid_st {
 # endif /* OPENSSL_API_COMPAT < 0x10100000L */
 
 int CRYPTO_set_mem_functions(
-        void *(*m)(size_t, const char *, int),
-        void *(*r)(void *, size_t, const char *, int),
-        void (*f)(void *, const char *, int));
+        void *(*m) (size_t, const char *, int),
+        void *(*r) (void *, size_t, const char *, int),
+        void (*f) (void *, const char *, int));
 int CRYPTO_set_mem_debug(int flag);
 void CRYPTO_get_mem_functions(
-        void *(**m)(size_t, const char *, int),
-        void *(**r)(void *, size_t, const char *, int),
-        void (**f)(void *, const char *, int));
+        void *(**m) (size_t, const char *, int),
+        void *(**r) (void *, size_t, const char *, int),
+        void (**f) (void *, const char *, int));
 
 void *CRYPTO_malloc(size_t num, const char *file, int line);
 void *CRYPTO_zalloc(size_t num, const char *file, int line);
@@ -326,7 +322,7 @@ int CRYPTO_mem_leaks(BIO *bio);
 /* die if we have to */
 ossl_noreturn void OPENSSL_die(const char *assertion, const char *file, int line);
 # if OPENSSL_API_COMPAT < 0x10100000L
-#  define OpenSSLDie(f, l, a) OPENSSL_die((a),(f),(l))
+#  define OpenSSLDie(f,l,a) OPENSSL_die((a),(f),(l))
 # endif
 # define OPENSSL_assert(e) \
     (void)((e) ? 0 : (OPENSSL_die("assertion failed: " #e, OPENSSL_FILE, OPENSSL_LINE), 1))
@@ -350,8 +346,8 @@ int OPENSSL_gmtime_diff(int *pday, int *psec,
  * into a defined order as the return value when a != b is undefined, other
  * than to be non-zero.
  */
-int CRYPTO_memcmp(const volatile void *volatile in_a,
-                  const volatile void *volatile in_b,
+int CRYPTO_memcmp(const volatile void * volatile in_a,
+                  const volatile void * volatile in_b,
                   size_t len);
 
 /* Standard initialisation options */

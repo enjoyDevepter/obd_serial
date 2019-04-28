@@ -25,13 +25,9 @@
 # define HEADER_BN_H
 
 # include <openssl/e_os2.h>
-
 # ifndef OPENSSL_NO_STDIO
-
 #  include <stdio.h>
-
 # endif
-
 # include <openssl/opensslconf.h>
 # include <openssl/ossl_typ.h>
 # include <openssl/crypto.h>
@@ -110,11 +106,11 @@ BN_GENCB *BN_GENCB_new(void);
 void BN_GENCB_free(BN_GENCB *cb);
 
 /* Populate a BN_GENCB structure with an "old"-style callback */
-void BN_GENCB_set_old(BN_GENCB *gencb, void (*callback)(int, int, void *),
+void BN_GENCB_set_old(BN_GENCB *gencb, void (*callback) (int, int, void *),
                       void *cb_arg);
 
 /* Populate a BN_GENCB structure with a "new"-style callback */
-void BN_GENCB_set(BN_GENCB *gencb, int (*callback)(int, int, BN_GENCB *),
+void BN_GENCB_set(BN_GENCB *gencb, int (*callback) (int, int, BN_GENCB *),
                   void *cb_arg);
 
 void *BN_GENCB_get_arg(BN_GENCB *cb);
@@ -207,7 +203,7 @@ int BN_is_negative(const BIGNUM *b);
 
 int BN_div(BIGNUM *dv, BIGNUM *rem, const BIGNUM *m, const BIGNUM *d,
            BN_CTX *ctx);
-# define BN_mod(rem, m, d, ctx) BN_div(NULL,(rem),(m),(d),(ctx))
+# define BN_mod(rem,m,d,ctx) BN_div(NULL,(rem),(m),(d),(ctx))
 int BN_nnmod(BIGNUM *r, const BIGNUM *m, const BIGNUM *d, BN_CTX *ctx);
 int BN_mod_add(BIGNUM *r, const BIGNUM *a, const BIGNUM *b, const BIGNUM *m,
                BN_CTX *ctx);
@@ -289,19 +285,18 @@ void BN_consttime_swap(BN_ULONG swap, BIGNUM *a, BIGNUM *b, int nwords);
 DEPRECATEDIN_0_9_8(BIGNUM *BN_generate_prime(BIGNUM *ret, int bits, int safe,
                                              const BIGNUM *add,
                                              const BIGNUM *rem,
-                                             void (*callback)(int, int,
-                                                              void *),
-                           void *cb_arg))
+                                             void (*callback) (int, int,
+                                                               void *),
+                                             void *cb_arg))
 DEPRECATEDIN_0_9_8(int
                    BN_is_prime(const BIGNUM *p, int nchecks,
-                               void (*callback)(int, int, void *),
-                           BN_CTX *ctx,
-                           void *cb_arg))
+                               void (*callback) (int, int, void *),
+                               BN_CTX *ctx, void *cb_arg))
 DEPRECATEDIN_0_9_8(int
                    BN_is_prime_fasttest(const BIGNUM *p, int nchecks,
-                                        void (*callback)(int, int, void *),
+                                        void (*callback) (int, int, void *),
                                         BN_CTX *ctx, void *cb_arg,
-                           int do_trial_division))
+                                        int do_trial_division))
 
 /* Newer versions */
 int BN_generate_prime_ex(BIGNUM *ret, int bits, int safe, const BIGNUM *add,
@@ -355,12 +350,12 @@ unsigned long BN_BLINDING_get_flags(const BN_BLINDING *);
 void BN_BLINDING_set_flags(BN_BLINDING *, unsigned long);
 BN_BLINDING *BN_BLINDING_create_param(BN_BLINDING *b,
                                       const BIGNUM *e, BIGNUM *m, BN_CTX *ctx,
-                                      int (*bn_mod_exp)(BIGNUM *r,
-                                                        const BIGNUM *a,
-                                                        const BIGNUM *p,
-                                                        const BIGNUM *m,
-                                                        BN_CTX *ctx,
-                                                        BN_MONT_CTX *m_ctx),
+                                      int (*bn_mod_exp) (BIGNUM *r,
+                                                         const BIGNUM *a,
+                                                         const BIGNUM *p,
+                                                         const BIGNUM *m,
+                                                         BN_CTX *ctx,
+                                                         BN_MONT_CTX *m_ctx),
                                       BN_MONT_CTX *m_ctx);
 
 DEPRECATEDIN_0_9_8(void BN_set_params(int mul, int high, int low, int mont))
@@ -464,8 +459,8 @@ const BIGNUM *BN_get0_nist_prime_256(void);
 const BIGNUM *BN_get0_nist_prime_384(void);
 const BIGNUM *BN_get0_nist_prime_521(void);
 
-int (*BN_nist_mod_func(const BIGNUM *p))(BIGNUM *r, const BIGNUM *a,
-                                         const BIGNUM *field, BN_CTX *ctx);
+int (*BN_nist_mod_func(const BIGNUM *p)) (BIGNUM *r, const BIGNUM *a,
+                                          const BIGNUM *field, BN_CTX *ctx);
 
 int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range,
                           const BIGNUM *priv, const unsigned char *message,

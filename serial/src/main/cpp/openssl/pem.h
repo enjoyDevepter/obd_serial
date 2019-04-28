@@ -95,9 +95,9 @@ typedef struct pem_ctx_st {
     EVP_CIPHER *dec;            /* date encryption cipher */
     int key_len;                /* key length */
     unsigned char *key;         /* key */
-    /*-
-      unused, and wrong size
-      unsigned char iv[8]; */
+  /*-
+    unused, and wrong size
+    unsigned char iv[8]; */
 
     int data_enc;               /* is the data encrypted */
     int data_len;
@@ -278,7 +278,7 @@ int PEM_write_bio_##name(BIO *bp, type *x, const EVP_CIPHER *enc, \
 # define DECLARE_PEM_rw_cb(name, type) \
         DECLARE_PEM_read(name, type) \
         DECLARE_PEM_write_cb(name, type)
-typedef int pem_password_cb(char *buf, int size, int rwflag, void *userdata);
+typedef int pem_password_cb (char *buf, int size, int rwflag, void *userdata);
 
 int PEM_get_EVP_CIPHER_INFO(char *header, EVP_CIPHER_INFO *cipher);
 int PEM_do_header(EVP_CIPHER_INFO *cipher, unsigned char *data, long *len,

@@ -97,12 +97,12 @@ find_library( # Sets the name of the path variable.
 
 
 # 链接头文件
-target_include_directories(
-        serial
-        PRIVATE
-        # serial 需要的头文件
-        ${CMAKE_SOURCE_DIR}/../jniLibs/include
-)
+#target_include_directories(
+#        serial
+#        PRIVATE
+#        # serial 需要的头文件
+#        ${CMAKE_SOURCE_DIR}/../jniLibs/include
+#)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this

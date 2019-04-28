@@ -175,26 +175,26 @@ int EVP_CIPHER_meth_set_iv_length(EVP_CIPHER *cipher, int iv_len);
 int EVP_CIPHER_meth_set_flags(EVP_CIPHER *cipher, unsigned long flags);
 int EVP_CIPHER_meth_set_impl_ctx_size(EVP_CIPHER *cipher, int ctx_size);
 int EVP_CIPHER_meth_set_init(EVP_CIPHER *cipher,
-                             int (*init)(EVP_CIPHER_CTX *ctx,
-                                         const unsigned char *key,
-                                         const unsigned char *iv,
-                                         int enc));
+                             int (*init) (EVP_CIPHER_CTX *ctx,
+                                          const unsigned char *key,
+                                          const unsigned char *iv,
+                                          int enc));
 int EVP_CIPHER_meth_set_do_cipher(EVP_CIPHER *cipher,
-                                  int (*do_cipher)(EVP_CIPHER_CTX *ctx,
-                                                   unsigned char *out,
-                                                   const unsigned char *in,
-                                                   size_t inl));
+                                  int (*do_cipher) (EVP_CIPHER_CTX *ctx,
+                                                    unsigned char *out,
+                                                    const unsigned char *in,
+                                                    size_t inl));
 int EVP_CIPHER_meth_set_cleanup(EVP_CIPHER *cipher,
-                                int (*cleanup)(EVP_CIPHER_CTX *));
+                                int (*cleanup) (EVP_CIPHER_CTX *));
 int EVP_CIPHER_meth_set_set_asn1_params(EVP_CIPHER *cipher,
-                                        int (*set_asn1_parameters)(EVP_CIPHER_CTX *,
-                                                                   ASN1_TYPE *));
+                                        int (*set_asn1_parameters) (EVP_CIPHER_CTX *,
+                                                                    ASN1_TYPE *));
 int EVP_CIPHER_meth_set_get_asn1_params(EVP_CIPHER *cipher,
-                                        int (*get_asn1_parameters)(EVP_CIPHER_CTX *,
-                                                                   ASN1_TYPE *));
+                                        int (*get_asn1_parameters) (EVP_CIPHER_CTX *,
+                                                                    ASN1_TYPE *));
 int EVP_CIPHER_meth_set_ctrl(EVP_CIPHER *cipher,
-                             int (*ctrl)(EVP_CIPHER_CTX *, int type,
-                                         int arg, void *ptr));
+                             int (*ctrl) (EVP_CIPHER_CTX *, int type,
+                                          int arg, void *ptr));
 
 int (*EVP_CIPHER_meth_get_init(const EVP_CIPHER *cipher))(EVP_CIPHER_CTX *ctx,
                                                           const unsigned char *key,
@@ -208,7 +208,7 @@ int (*EVP_CIPHER_meth_get_cleanup(const EVP_CIPHER *cipher))(EVP_CIPHER_CTX *);
 int (*EVP_CIPHER_meth_get_set_asn1_params(const EVP_CIPHER *cipher))(EVP_CIPHER_CTX *,
                                                                      ASN1_TYPE *);
 int (*EVP_CIPHER_meth_get_get_asn1_params(const EVP_CIPHER *cipher))(EVP_CIPHER_CTX *,
-                                                                     ASN1_TYPE *);
+                                                               ASN1_TYPE *);
 int (*EVP_CIPHER_meth_get_ctrl(const EVP_CIPHER *cipher))(EVP_CIPHER_CTX *,
                                                           int type, int arg,
                                                           void *ptr);
@@ -372,28 +372,28 @@ typedef struct evp_cipher_info_st {
 
 
 /* Password based encryption function */
-typedef int (EVP_PBE_KEYGEN)(EVP_CIPHER_CTX *ctx, const char *pass,
-                             int passlen, ASN1_TYPE *param,
-                             const EVP_CIPHER *cipher, const EVP_MD *md,
-                             int en_de);
+typedef int (EVP_PBE_KEYGEN) (EVP_CIPHER_CTX *ctx, const char *pass,
+                              int passlen, ASN1_TYPE *param,
+                              const EVP_CIPHER *cipher, const EVP_MD *md,
+                              int en_de);
 
 # ifndef OPENSSL_NO_RSA
-#  define EVP_PKEY_assign_RSA(pkey, rsa) EVP_PKEY_assign((pkey),EVP_PKEY_RSA,\
+#  define EVP_PKEY_assign_RSA(pkey,rsa) EVP_PKEY_assign((pkey),EVP_PKEY_RSA,\
                                         (char *)(rsa))
 # endif
 
 # ifndef OPENSSL_NO_DSA
-#  define EVP_PKEY_assign_DSA(pkey, dsa) EVP_PKEY_assign((pkey),EVP_PKEY_DSA,\
+#  define EVP_PKEY_assign_DSA(pkey,dsa) EVP_PKEY_assign((pkey),EVP_PKEY_DSA,\
                                         (char *)(dsa))
 # endif
 
 # ifndef OPENSSL_NO_DH
-#  define EVP_PKEY_assign_DH(pkey, dh) EVP_PKEY_assign((pkey),EVP_PKEY_DH,\
+#  define EVP_PKEY_assign_DH(pkey,dh) EVP_PKEY_assign((pkey),EVP_PKEY_DH,\
                                         (char *)(dh))
 # endif
 
 # ifndef OPENSSL_NO_EC
-#  define EVP_PKEY_assign_EC_KEY(pkey, eckey) EVP_PKEY_assign((pkey),EVP_PKEY_EC,\
+#  define EVP_PKEY_assign_EC_KEY(pkey,eckey) EVP_PKEY_assign((pkey),EVP_PKEY_EC,\
                                         (char *)(eckey))
 # endif
 
@@ -415,8 +415,8 @@ const EVP_MD *EVP_MD_CTX_md(const EVP_MD_CTX *ctx);
 int (*EVP_MD_CTX_update_fn(EVP_MD_CTX *ctx))(EVP_MD_CTX *ctx,
                                              const void *data, size_t count);
 void EVP_MD_CTX_set_update_fn(EVP_MD_CTX *ctx,
-                              int (*update)(EVP_MD_CTX *ctx,
-                                            const void *data, size_t count));
+                              int (*update) (EVP_MD_CTX *ctx,
+                                             const void *data, size_t count));
 # define EVP_MD_CTX_size(e)              EVP_MD_size(EVP_MD_CTX_md(e))
 # define EVP_MD_CTX_block_size(e)        EVP_MD_block_size(EVP_MD_CTX_md(e))
 # define EVP_MD_CTX_type(e)              EVP_MD_type(EVP_MD_CTX_md(e))
@@ -458,35 +458,35 @@ void *EVP_CIPHER_CTX_set_cipher_data(EVP_CIPHER_CTX *ctx, void *cipher_data);
 # define EVP_ENCODE_LENGTH(l)    (((l+2)/3*4)+(l/48+1)*2+80)
 # define EVP_DECODE_LENGTH(l)    ((l+3)/4*3+80)
 
-# define EVP_SignInit_ex(a, b, c)          EVP_DigestInit_ex(a,b,c)
-# define EVP_SignInit(a, b)               EVP_DigestInit(a,b)
-# define EVP_SignUpdate(a, b, c)           EVP_DigestUpdate(a,b,c)
-# define EVP_VerifyInit_ex(a, b, c)        EVP_DigestInit_ex(a,b,c)
-# define EVP_VerifyInit(a, b)             EVP_DigestInit(a,b)
-# define EVP_VerifyUpdate(a, b, c)         EVP_DigestUpdate(a,b,c)
-# define EVP_OpenUpdate(a, b, c, d, e)       EVP_DecryptUpdate(a,b,c,d,e)
-# define EVP_SealUpdate(a, b, c, d, e)       EVP_EncryptUpdate(a,b,c,d,e)
-# define EVP_DigestSignUpdate(a, b, c)     EVP_DigestUpdate(a,b,c)
-# define EVP_DigestVerifyUpdate(a, b, c)   EVP_DigestUpdate(a,b,c)
+# define EVP_SignInit_ex(a,b,c)          EVP_DigestInit_ex(a,b,c)
+# define EVP_SignInit(a,b)               EVP_DigestInit(a,b)
+# define EVP_SignUpdate(a,b,c)           EVP_DigestUpdate(a,b,c)
+# define EVP_VerifyInit_ex(a,b,c)        EVP_DigestInit_ex(a,b,c)
+# define EVP_VerifyInit(a,b)             EVP_DigestInit(a,b)
+# define EVP_VerifyUpdate(a,b,c)         EVP_DigestUpdate(a,b,c)
+# define EVP_OpenUpdate(a,b,c,d,e)       EVP_DecryptUpdate(a,b,c,d,e)
+# define EVP_SealUpdate(a,b,c,d,e)       EVP_EncryptUpdate(a,b,c,d,e)
+# define EVP_DigestSignUpdate(a,b,c)     EVP_DigestUpdate(a,b,c)
+# define EVP_DigestVerifyUpdate(a,b,c)   EVP_DigestUpdate(a,b,c)
 
 # ifdef CONST_STRICT
 void BIO_set_md(BIO *, const EVP_MD *md);
 # else
-#  define BIO_set_md(b, md)               BIO_ctrl(b,BIO_C_SET_MD,0,(char *)md)
+#  define BIO_set_md(b,md)               BIO_ctrl(b,BIO_C_SET_MD,0,(char *)md)
 # endif
-# define BIO_get_md(b, mdp)               BIO_ctrl(b,BIO_C_GET_MD,0,(char *)mdp)
-# define BIO_get_md_ctx(b, mdcp)     BIO_ctrl(b,BIO_C_GET_MD_CTX,0,(char *)mdcp)
-# define BIO_set_md_ctx(b, mdcp)     BIO_ctrl(b,BIO_C_SET_MD_CTX,0,(char *)mdcp)
+# define BIO_get_md(b,mdp)               BIO_ctrl(b,BIO_C_GET_MD,0,(char *)mdp)
+# define BIO_get_md_ctx(b,mdcp)     BIO_ctrl(b,BIO_C_GET_MD_CTX,0,(char *)mdcp)
+# define BIO_set_md_ctx(b,mdcp)     BIO_ctrl(b,BIO_C_SET_MD_CTX,0,(char *)mdcp)
 # define BIO_get_cipher_status(b)        BIO_ctrl(b,BIO_C_GET_CIPHER_STATUS,0,NULL)
-# define BIO_get_cipher_ctx(b, c_pp)      BIO_ctrl(b,BIO_C_GET_CIPHER_CTX,0,(char *)c_pp)
+# define BIO_get_cipher_ctx(b,c_pp)      BIO_ctrl(b,BIO_C_GET_CIPHER_CTX,0,(char *)c_pp)
 
 /*__owur*/ int EVP_Cipher(EVP_CIPHER_CTX *c,
                           unsigned char *out,
                           const unsigned char *in, unsigned int inl);
 
-# define EVP_add_cipher_alias(n, alias) \
+# define EVP_add_cipher_alias(n,alias) \
         OBJ_NAME_add((alias),OBJ_NAME_TYPE_CIPHER_METH|OBJ_NAME_ALIAS,(n))
-# define EVP_add_digest_alias(n, alias) \
+# define EVP_add_digest_alias(n,alias) \
         OBJ_NAME_add((alias),OBJ_NAME_TYPE_MD_METH|OBJ_NAME_ALIAS,(n))
 # define EVP_delete_cipher_alias(alias) \
         OBJ_NAME_remove(alias,OBJ_NAME_TYPE_CIPHER_METH|OBJ_NAME_ALIAS);
@@ -505,14 +505,14 @@ void EVP_MD_CTX_set_flags(EVP_MD_CTX *ctx, int flags);
 void EVP_MD_CTX_clear_flags(EVP_MD_CTX *ctx, int flags);
 int EVP_MD_CTX_test_flags(const EVP_MD_CTX *ctx, int flags);
 __owur int EVP_DigestInit_ex(EVP_MD_CTX *ctx, const EVP_MD *type,
-                             ENGINE *impl);
+                                 ENGINE *impl);
 __owur int EVP_DigestUpdate(EVP_MD_CTX *ctx, const void *d,
-                            size_t cnt);
+                                size_t cnt);
 __owur int EVP_DigestFinal_ex(EVP_MD_CTX *ctx, unsigned char *md,
-                              unsigned int *s);
+                                  unsigned int *s);
 __owur int EVP_Digest(const void *data, size_t count,
-                      unsigned char *md, unsigned int *size,
-                      const EVP_MD *type, ENGINE *impl);
+                          unsigned char *md, unsigned int *size,
+                          const EVP_MD *type, ENGINE *impl);
 
 __owur int EVP_MD_CTX_copy(EVP_MD_CTX *out, const EVP_MD_CTX *in);
 __owur int EVP_DigestInit(EVP_MD_CTX *ctx, const EVP_MD *type);
@@ -620,7 +620,7 @@ void EVP_DecodeInit(EVP_ENCODE_CTX *ctx);
 int EVP_DecodeUpdate(EVP_ENCODE_CTX *ctx, unsigned char *out, int *outl,
                      const unsigned char *in, int inl);
 int EVP_DecodeFinal(EVP_ENCODE_CTX *ctx, unsigned
-char *out, int *outl);
+                    char *out, int *outl);
 int EVP_DecodeBlock(unsigned char *t, const unsigned char *f, int n);
 
 # if OPENSSL_API_COMPAT < 0x10100000L
@@ -872,19 +872,19 @@ int EVP_add_digest(const EVP_MD *digest);
 const EVP_CIPHER *EVP_get_cipherbyname(const char *name);
 const EVP_MD *EVP_get_digestbyname(const char *name);
 
-void EVP_CIPHER_do_all(void (*fn)(const EVP_CIPHER *ciph,
-                                  const char *from, const char *to, void *x),
+void EVP_CIPHER_do_all(void (*fn) (const EVP_CIPHER *ciph,
+                                   const char *from, const char *to, void *x),
                        void *arg);
 void EVP_CIPHER_do_all_sorted(void (*fn)
-        (const EVP_CIPHER *ciph, const char *from,
-         const char *to, void *x), void *arg);
+                               (const EVP_CIPHER *ciph, const char *from,
+                                const char *to, void *x), void *arg);
 
-void EVP_MD_do_all(void (*fn)(const EVP_MD *ciph,
-                              const char *from, const char *to, void *x),
+void EVP_MD_do_all(void (*fn) (const EVP_MD *ciph,
+                               const char *from, const char *to, void *x),
                    void *arg);
 void EVP_MD_do_all_sorted(void (*fn)
-        (const EVP_MD *ciph, const char *from,
-         const char *to, void *x), void *arg);
+                           (const EVP_MD *ciph, const char *from,
+                            const char *to, void *x), void *arg);
 
 int EVP_PKEY_decrypt_old(unsigned char *dec_key,
                          const unsigned char *enc_key, int enc_key_len,
@@ -1055,65 +1055,65 @@ void EVP_PKEY_asn1_copy(EVP_PKEY_ASN1_METHOD *dst,
                         const EVP_PKEY_ASN1_METHOD *src);
 void EVP_PKEY_asn1_free(EVP_PKEY_ASN1_METHOD *ameth);
 void EVP_PKEY_asn1_set_public(EVP_PKEY_ASN1_METHOD *ameth,
-                              int (*pub_decode)(EVP_PKEY *pk,
-                                                X509_PUBKEY *pub),
-                              int (*pub_encode)(X509_PUBKEY *pub,
-                                                const EVP_PKEY *pk),
-                              int (*pub_cmp)(const EVP_PKEY *a,
-                                             const EVP_PKEY *b),
-                              int (*pub_print)(BIO *out,
-                                               const EVP_PKEY *pkey,
-                                               int indent, ASN1_PCTX *pctx),
-                              int (*pkey_size)(const EVP_PKEY *pk),
-                              int (*pkey_bits)(const EVP_PKEY *pk));
+                              int (*pub_decode) (EVP_PKEY *pk,
+                                                 X509_PUBKEY *pub),
+                              int (*pub_encode) (X509_PUBKEY *pub,
+                                                 const EVP_PKEY *pk),
+                              int (*pub_cmp) (const EVP_PKEY *a,
+                                              const EVP_PKEY *b),
+                              int (*pub_print) (BIO *out,
+                                                const EVP_PKEY *pkey,
+                                                int indent, ASN1_PCTX *pctx),
+                              int (*pkey_size) (const EVP_PKEY *pk),
+                              int (*pkey_bits) (const EVP_PKEY *pk));
 void EVP_PKEY_asn1_set_private(EVP_PKEY_ASN1_METHOD *ameth,
-                               int (*priv_decode)(EVP_PKEY *pk,
-                                                  const PKCS8_PRIV_KEY_INFO
-                                                  *p8inf),
-                               int (*priv_encode)(PKCS8_PRIV_KEY_INFO *p8,
-                                                  const EVP_PKEY *pk),
-                               int (*priv_print)(BIO *out,
+                               int (*priv_decode) (EVP_PKEY *pk,
+                                                   const PKCS8_PRIV_KEY_INFO
+                                                   *p8inf),
+                               int (*priv_encode) (PKCS8_PRIV_KEY_INFO *p8,
+                                                   const EVP_PKEY *pk),
+                               int (*priv_print) (BIO *out,
+                                                  const EVP_PKEY *pkey,
+                                                  int indent,
+                                                  ASN1_PCTX *pctx));
+void EVP_PKEY_asn1_set_param(EVP_PKEY_ASN1_METHOD *ameth,
+                             int (*param_decode) (EVP_PKEY *pkey,
+                                                  const unsigned char **pder,
+                                                  int derlen),
+                             int (*param_encode) (const EVP_PKEY *pkey,
+                                                  unsigned char **pder),
+                             int (*param_missing) (const EVP_PKEY *pk),
+                             int (*param_copy) (EVP_PKEY *to,
+                                                const EVP_PKEY *from),
+                             int (*param_cmp) (const EVP_PKEY *a,
+                                               const EVP_PKEY *b),
+                             int (*param_print) (BIO *out,
                                                  const EVP_PKEY *pkey,
                                                  int indent,
                                                  ASN1_PCTX *pctx));
-void EVP_PKEY_asn1_set_param(EVP_PKEY_ASN1_METHOD *ameth,
-                             int (*param_decode)(EVP_PKEY *pkey,
-                                                 const unsigned char **pder,
-                                                 int derlen),
-                             int (*param_encode)(const EVP_PKEY *pkey,
-                                                 unsigned char **pder),
-                             int (*param_missing)(const EVP_PKEY *pk),
-                             int (*param_copy)(EVP_PKEY *to,
-                                               const EVP_PKEY *from),
-                             int (*param_cmp)(const EVP_PKEY *a,
-                                              const EVP_PKEY *b),
-                             int (*param_print)(BIO *out,
-                                                const EVP_PKEY *pkey,
-                                                int indent,
-                                                ASN1_PCTX *pctx));
 
 void EVP_PKEY_asn1_set_free(EVP_PKEY_ASN1_METHOD *ameth,
-                            void (*pkey_free)(EVP_PKEY *pkey));
+                            void (*pkey_free) (EVP_PKEY *pkey));
 void EVP_PKEY_asn1_set_ctrl(EVP_PKEY_ASN1_METHOD *ameth,
-                            int (*pkey_ctrl)(EVP_PKEY *pkey, int op,
-                                             long arg1, void *arg2));
+                            int (*pkey_ctrl) (EVP_PKEY *pkey, int op,
+                                              long arg1, void *arg2));
 void EVP_PKEY_asn1_set_item(EVP_PKEY_ASN1_METHOD *ameth,
-                            int (*item_verify)(EVP_MD_CTX *ctx,
-                                               const ASN1_ITEM *it,
-                                               void *asn,
-                                               X509_ALGOR *a,
-                                               ASN1_BIT_STRING *sig,
-                                               EVP_PKEY *pkey),
-                            int (*item_sign)(EVP_MD_CTX *ctx,
-                                             const ASN1_ITEM *it,
-                                             void *asn,
-                                             X509_ALGOR *alg1,
-                                             X509_ALGOR *alg2,
-                                             ASN1_BIT_STRING *sig));
+                            int (*item_verify) (EVP_MD_CTX *ctx,
+                                                const ASN1_ITEM *it,
+                                                void *asn,
+                                                X509_ALGOR *a,
+                                                ASN1_BIT_STRING *sig,
+                                                EVP_PKEY *pkey),
+                            int (*item_sign) (EVP_MD_CTX *ctx,
+                                              const ASN1_ITEM *it,
+                                              void *asn,
+                                              X509_ALGOR *alg1,
+                                              X509_ALGOR *alg2,
+                                              ASN1_BIT_STRING *sig));
 
 void EVP_PKEY_asn1_set_security_bits(EVP_PKEY_ASN1_METHOD *ameth,
-                                     int (*pkey_security_bits)(const EVP_PKEY
-                                                               *pk));
+                                     int (*pkey_security_bits) (const EVP_PKEY
+                                                                *pk));
 
 # define EVP_PKEY_OP_UNDEFINED           0
 # define EVP_PKEY_OP_PARAMGEN            (1<<1)
@@ -1257,188 +1257,188 @@ EVP_PKEY_gen_cb *EVP_PKEY_CTX_get_cb(EVP_PKEY_CTX *ctx);
 int EVP_PKEY_CTX_get_keygen_info(EVP_PKEY_CTX *ctx, int idx);
 
 void EVP_PKEY_meth_set_init(EVP_PKEY_METHOD *pmeth,
-                            int (*init)(EVP_PKEY_CTX *ctx));
+                            int (*init) (EVP_PKEY_CTX *ctx));
 
 void EVP_PKEY_meth_set_copy(EVP_PKEY_METHOD *pmeth,
-                            int (*copy)(EVP_PKEY_CTX *dst,
-                                        EVP_PKEY_CTX *src));
+                            int (*copy) (EVP_PKEY_CTX *dst,
+                                         EVP_PKEY_CTX *src));
 
 void EVP_PKEY_meth_set_cleanup(EVP_PKEY_METHOD *pmeth,
-                               void (*cleanup)(EVP_PKEY_CTX *ctx));
+                               void (*cleanup) (EVP_PKEY_CTX *ctx));
 
 void EVP_PKEY_meth_set_paramgen(EVP_PKEY_METHOD *pmeth,
-                                int (*paramgen_init)(EVP_PKEY_CTX *ctx),
-                                int (*paramgen)(EVP_PKEY_CTX *ctx,
-                                                EVP_PKEY *pkey));
+                                int (*paramgen_init) (EVP_PKEY_CTX *ctx),
+                                int (*paramgen) (EVP_PKEY_CTX *ctx,
+                                                 EVP_PKEY *pkey));
 
 void EVP_PKEY_meth_set_keygen(EVP_PKEY_METHOD *pmeth,
-                              int (*keygen_init)(EVP_PKEY_CTX *ctx),
-                              int (*keygen)(EVP_PKEY_CTX *ctx,
-                                            EVP_PKEY *pkey));
+                              int (*keygen_init) (EVP_PKEY_CTX *ctx),
+                              int (*keygen) (EVP_PKEY_CTX *ctx,
+                                             EVP_PKEY *pkey));
 
 void EVP_PKEY_meth_set_sign(EVP_PKEY_METHOD *pmeth,
-                            int (*sign_init)(EVP_PKEY_CTX *ctx),
-                            int (*sign)(EVP_PKEY_CTX *ctx,
-                                        unsigned char *sig, size_t *siglen,
-                                        const unsigned char *tbs,
-                                        size_t tbslen));
+                            int (*sign_init) (EVP_PKEY_CTX *ctx),
+                            int (*sign) (EVP_PKEY_CTX *ctx,
+                                         unsigned char *sig, size_t *siglen,
+                                         const unsigned char *tbs,
+                                         size_t tbslen));
 
 void EVP_PKEY_meth_set_verify(EVP_PKEY_METHOD *pmeth,
-                              int (*verify_init)(EVP_PKEY_CTX *ctx),
-                              int (*verify)(EVP_PKEY_CTX *ctx,
-                                            const unsigned char *sig,
-                                            size_t siglen,
-                                            const unsigned char *tbs,
-                                            size_t tbslen));
+                              int (*verify_init) (EVP_PKEY_CTX *ctx),
+                              int (*verify) (EVP_PKEY_CTX *ctx,
+                                             const unsigned char *sig,
+                                             size_t siglen,
+                                             const unsigned char *tbs,
+                                             size_t tbslen));
 
 void EVP_PKEY_meth_set_verify_recover(EVP_PKEY_METHOD *pmeth,
-                                      int (*verify_recover_init)(EVP_PKEY_CTX
-                                                                 *ctx),
-                                      int (*verify_recover)(EVP_PKEY_CTX
-                                                            *ctx,
-                                                            unsigned char
-                                                            *sig,
-                                                            size_t *siglen,
-                                                            const unsigned
-                                                            char *tbs,
-                                                            size_t tbslen));
+                                      int (*verify_recover_init) (EVP_PKEY_CTX
+                                                                  *ctx),
+                                      int (*verify_recover) (EVP_PKEY_CTX
+                                                             *ctx,
+                                                             unsigned char
+                                                             *sig,
+                                                             size_t *siglen,
+                                                             const unsigned
+                                                             char *tbs,
+                                                             size_t tbslen));
 
 void EVP_PKEY_meth_set_signctx(EVP_PKEY_METHOD *pmeth,
-                               int (*signctx_init)(EVP_PKEY_CTX *ctx,
-                                                   EVP_MD_CTX *mctx),
-                               int (*signctx)(EVP_PKEY_CTX *ctx,
-                                              unsigned char *sig,
-                                              size_t *siglen,
-                                              EVP_MD_CTX *mctx));
+                               int (*signctx_init) (EVP_PKEY_CTX *ctx,
+                                                    EVP_MD_CTX *mctx),
+                               int (*signctx) (EVP_PKEY_CTX *ctx,
+                                               unsigned char *sig,
+                                               size_t *siglen,
+                                               EVP_MD_CTX *mctx));
 
 void EVP_PKEY_meth_set_verifyctx(EVP_PKEY_METHOD *pmeth,
-                                 int (*verifyctx_init)(EVP_PKEY_CTX *ctx,
-                                                       EVP_MD_CTX *mctx),
-                                 int (*verifyctx)(EVP_PKEY_CTX *ctx,
-                                                  const unsigned char *sig,
-                                                  int siglen,
-                                                  EVP_MD_CTX *mctx));
+                                 int (*verifyctx_init) (EVP_PKEY_CTX *ctx,
+                                                        EVP_MD_CTX *mctx),
+                                 int (*verifyctx) (EVP_PKEY_CTX *ctx,
+                                                   const unsigned char *sig,
+                                                   int siglen,
+                                                   EVP_MD_CTX *mctx));
 
 void EVP_PKEY_meth_set_encrypt(EVP_PKEY_METHOD *pmeth,
-                               int (*encrypt_init)(EVP_PKEY_CTX *ctx),
-                               int (*encryptfn)(EVP_PKEY_CTX *ctx,
-                                                unsigned char *out,
-                                                size_t *outlen,
-                                                const unsigned char *in,
-                                                size_t inlen));
+                               int (*encrypt_init) (EVP_PKEY_CTX *ctx),
+                               int (*encryptfn) (EVP_PKEY_CTX *ctx,
+                                                 unsigned char *out,
+                                                 size_t *outlen,
+                                                 const unsigned char *in,
+                                                 size_t inlen));
 
 void EVP_PKEY_meth_set_decrypt(EVP_PKEY_METHOD *pmeth,
-                               int (*decrypt_init)(EVP_PKEY_CTX *ctx),
-                               int (*decrypt)(EVP_PKEY_CTX *ctx,
-                                              unsigned char *out,
-                                              size_t *outlen,
-                                              const unsigned char *in,
-                                              size_t inlen));
+                               int (*decrypt_init) (EVP_PKEY_CTX *ctx),
+                               int (*decrypt) (EVP_PKEY_CTX *ctx,
+                                               unsigned char *out,
+                                               size_t *outlen,
+                                               const unsigned char *in,
+                                               size_t inlen));
 
 void EVP_PKEY_meth_set_derive(EVP_PKEY_METHOD *pmeth,
-                              int (*derive_init)(EVP_PKEY_CTX *ctx),
-                              int (*derive)(EVP_PKEY_CTX *ctx,
-                                            unsigned char *key,
-                                            size_t *keylen));
+                              int (*derive_init) (EVP_PKEY_CTX *ctx),
+                              int (*derive) (EVP_PKEY_CTX *ctx,
+                                             unsigned char *key,
+                                             size_t *keylen));
 
 void EVP_PKEY_meth_set_ctrl(EVP_PKEY_METHOD *pmeth,
-                            int (*ctrl)(EVP_PKEY_CTX *ctx, int type, int p1,
-                                        void *p2),
-                            int (*ctrl_str)(EVP_PKEY_CTX *ctx,
-                                            const char *type,
-                                            const char *value));
+                            int (*ctrl) (EVP_PKEY_CTX *ctx, int type, int p1,
+                                         void *p2),
+                            int (*ctrl_str) (EVP_PKEY_CTX *ctx,
+                                             const char *type,
+                                             const char *value));
 
 void EVP_PKEY_meth_get_init(EVP_PKEY_METHOD *pmeth,
-                            int (**pinit)(EVP_PKEY_CTX *ctx));
+                            int (**pinit) (EVP_PKEY_CTX *ctx));
 
 void EVP_PKEY_meth_get_copy(EVP_PKEY_METHOD *pmeth,
-                            int (**pcopy)(EVP_PKEY_CTX *dst,
-                                          EVP_PKEY_CTX *src));
+                            int (**pcopy) (EVP_PKEY_CTX *dst,
+                                           EVP_PKEY_CTX *src));
 
 void EVP_PKEY_meth_get_cleanup(EVP_PKEY_METHOD *pmeth,
-                               void (**pcleanup)(EVP_PKEY_CTX *ctx));
+                               void (**pcleanup) (EVP_PKEY_CTX *ctx));
 
 void EVP_PKEY_meth_get_paramgen(EVP_PKEY_METHOD *pmeth,
-                                int (**pparamgen_init)(EVP_PKEY_CTX *ctx),
-                                int (**pparamgen)(EVP_PKEY_CTX *ctx,
-                                                  EVP_PKEY *pkey));
+                                int (**pparamgen_init) (EVP_PKEY_CTX *ctx),
+                                int (**pparamgen) (EVP_PKEY_CTX *ctx,
+                                                   EVP_PKEY *pkey));
 
 void EVP_PKEY_meth_get_keygen(EVP_PKEY_METHOD *pmeth,
-                              int (**pkeygen_init)(EVP_PKEY_CTX *ctx),
-                              int (**pkeygen)(EVP_PKEY_CTX *ctx,
-                                              EVP_PKEY *pkey));
+                              int (**pkeygen_init) (EVP_PKEY_CTX *ctx),
+                              int (**pkeygen) (EVP_PKEY_CTX *ctx,
+                                               EVP_PKEY *pkey));
 
 void EVP_PKEY_meth_get_sign(EVP_PKEY_METHOD *pmeth,
-                            int (**psign_init)(EVP_PKEY_CTX *ctx),
-                            int (**psign)(EVP_PKEY_CTX *ctx,
-                                          unsigned char *sig, size_t *siglen,
-                                          const unsigned char *tbs,
-                                          size_t tbslen));
+                            int (**psign_init) (EVP_PKEY_CTX *ctx),
+                            int (**psign) (EVP_PKEY_CTX *ctx,
+                                           unsigned char *sig, size_t *siglen,
+                                           const unsigned char *tbs,
+                                           size_t tbslen));
 
 void EVP_PKEY_meth_get_verify(EVP_PKEY_METHOD *pmeth,
-                              int (**pverify_init)(EVP_PKEY_CTX *ctx),
-                              int (**pverify)(EVP_PKEY_CTX *ctx,
-                                              const unsigned char *sig,
-                                              size_t siglen,
-                                              const unsigned char *tbs,
-                                              size_t tbslen));
+                              int (**pverify_init) (EVP_PKEY_CTX *ctx),
+                              int (**pverify) (EVP_PKEY_CTX *ctx,
+                                               const unsigned char *sig,
+                                               size_t siglen,
+                                               const unsigned char *tbs,
+                                               size_t tbslen));
 
 void EVP_PKEY_meth_get_verify_recover(EVP_PKEY_METHOD *pmeth,
-                                      int (**pverify_recover_init)(EVP_PKEY_CTX
-                                                                   *ctx),
-                                      int (**pverify_recover)(EVP_PKEY_CTX
-                                                              *ctx,
-                                                              unsigned char
-                                                              *sig,
-                                                              size_t *siglen,
-                                                              const unsigned
-                                                              char *tbs,
-                                                              size_t tbslen));
+                                      int (**pverify_recover_init) (EVP_PKEY_CTX
+                                                                    *ctx),
+                                      int (**pverify_recover) (EVP_PKEY_CTX
+                                                               *ctx,
+                                                               unsigned char
+                                                               *sig,
+                                                               size_t *siglen,
+                                                               const unsigned
+                                                               char *tbs,
+                                                               size_t tbslen));
 
 void EVP_PKEY_meth_get_signctx(EVP_PKEY_METHOD *pmeth,
-                               int (**psignctx_init)(EVP_PKEY_CTX *ctx,
-                                                     EVP_MD_CTX *mctx),
-                               int (**psignctx)(EVP_PKEY_CTX *ctx,
-                                                unsigned char *sig,
-                                                size_t *siglen,
-                                                EVP_MD_CTX *mctx));
+                               int (**psignctx_init) (EVP_PKEY_CTX *ctx,
+                                                      EVP_MD_CTX *mctx),
+                               int (**psignctx) (EVP_PKEY_CTX *ctx,
+                                                 unsigned char *sig,
+                                                 size_t *siglen,
+                                                 EVP_MD_CTX *mctx));
 
 void EVP_PKEY_meth_get_verifyctx(EVP_PKEY_METHOD *pmeth,
-                                 int (**pverifyctx_init)(EVP_PKEY_CTX *ctx,
-                                                         EVP_MD_CTX *mctx),
-                                 int (**pverifyctx)(EVP_PKEY_CTX *ctx,
-                                                    const unsigned char *sig,
-                                                    int siglen,
-                                                    EVP_MD_CTX *mctx));
+                                 int (**pverifyctx_init) (EVP_PKEY_CTX *ctx,
+                                                          EVP_MD_CTX *mctx),
+                                 int (**pverifyctx) (EVP_PKEY_CTX *ctx,
+                                                     const unsigned char *sig,
+                                                     int siglen,
+                                                     EVP_MD_CTX *mctx));
 
 void EVP_PKEY_meth_get_encrypt(EVP_PKEY_METHOD *pmeth,
-                               int (**pencrypt_init)(EVP_PKEY_CTX *ctx),
-                               int (**pencryptfn)(EVP_PKEY_CTX *ctx,
-                                                  unsigned char *out,
-                                                  size_t *outlen,
-                                                  const unsigned char *in,
-                                                  size_t inlen));
+                               int (**pencrypt_init) (EVP_PKEY_CTX *ctx),
+                               int (**pencryptfn) (EVP_PKEY_CTX *ctx,
+                                                   unsigned char *out,
+                                                   size_t *outlen,
+                                                   const unsigned char *in,
+                                                   size_t inlen));
 
 void EVP_PKEY_meth_get_decrypt(EVP_PKEY_METHOD *pmeth,
-                               int (**pdecrypt_init)(EVP_PKEY_CTX *ctx),
-                               int (**pdecrypt)(EVP_PKEY_CTX *ctx,
-                                                unsigned char *out,
-                                                size_t *outlen,
-                                                const unsigned char *in,
-                                                size_t inlen));
+                               int (**pdecrypt_init) (EVP_PKEY_CTX *ctx),
+                               int (**pdecrypt) (EVP_PKEY_CTX *ctx,
+                                                 unsigned char *out,
+                                                 size_t *outlen,
+                                                 const unsigned char *in,
+                                                 size_t inlen));
 
 void EVP_PKEY_meth_get_derive(EVP_PKEY_METHOD *pmeth,
-                              int (**pderive_init)(EVP_PKEY_CTX *ctx),
-                              int (**pderive)(EVP_PKEY_CTX *ctx,
-                                              unsigned char *key,
-                                              size_t *keylen));
+                              int (**pderive_init) (EVP_PKEY_CTX *ctx),
+                              int (**pderive) (EVP_PKEY_CTX *ctx,
+                                               unsigned char *key,
+                                               size_t *keylen));
 
 void EVP_PKEY_meth_get_ctrl(EVP_PKEY_METHOD *pmeth,
-                            int (**pctrl)(EVP_PKEY_CTX *ctx, int type, int p1,
-                                          void *p2),
-                            int (**pctrl_str)(EVP_PKEY_CTX *ctx,
-                                              const char *type,
-                                              const char *value));
+                            int (**pctrl) (EVP_PKEY_CTX *ctx, int type, int p1,
+                                           void *p2),
+                            int (**pctrl_str) (EVP_PKEY_CTX *ctx,
+                                               const char *type,
+                                               const char *value));
 
 void EVP_add_alg_module(void);
 
