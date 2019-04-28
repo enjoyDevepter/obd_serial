@@ -50,11 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 StringBuilder sb = new StringBuilder();
                 File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "physical.db");
                 List<FaultCode> codes = OBDCore.getInstance(this).getFaultCode(file.getPath());
-                for (FaultCode code : codes) {
-                    sb.append(code.toString())
-                            .append("\r\n");
+                if (codes != null) {
+                    for (FaultCode code : codes) {
+                        sb.append(code.toString())
+                                .append("\r\n");
+                    }
+                    sample_text.setText(sb.toString());
                 }
-                sample_text.setText(sb.toString());
                 break;
             case R.id.cleanFaultCode:
                 sample_text.setText(String.valueOf(OBDCore.getInstance(this).cleanFaultCode()));

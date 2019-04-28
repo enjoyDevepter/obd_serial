@@ -9,15 +9,16 @@
 #include <fcntl.h>
 #include <vector>
 #include "android/log.h"
-// #include <sqlite3.h>
-//#include <openssl/crypto.h>
-//#include <openssl/des.h>
-//#include <openssl/pem.h>
-//#include <openssl/bio.h>
-//#include <openssl/evp.h>
-//#include <openssl/ossl_typ.h>
-//#include <openssl/buffer.h>
+#include <sqlite3.h>
+#include <openssl/crypto.h>
+#include <openssl/des.h>
+#include <openssl/pem.h>
+#include <openssl/bio.h>
+#include <openssl/evp.h>
+#include <openssl/ossl_typ.h>
+#include <openssl/buffer.h>
 
+using namespace std;
 static const char *TAG = "obd_core";
 #define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, TAG, fmt, ##args)
 #define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
@@ -31,7 +32,7 @@ extern "C"
 {
 #endif
 
-std::string KEY = "MIYUAN_0BD";
+string KEY = "MIYUAN_0BD";
 
 int fd;
 
@@ -39,12 +40,12 @@ int fd;
 * 故障码信息
 */
 typedef struct {
-    std::string id;
-    std::string suit;
-    std::string desc_ch;
-    std::string desc_en;
-    std::string system;
-    std::string detail;
+    char id[10];
+    char suit[64];
+    char desc_ch[1024];
+    char desc_en[1024];
+    char system[64];
+    char detail[20224];
 } FaultCode;
 
 /*
@@ -65,6 +66,8 @@ typedef struct {
     char engineLoad[20];
     char residualFuel[20];
 } PanelBoard;
+
+vector<FaultCode> codes;
 
 void formatStr(char *buf, char *data, int len) {
     if (buf == NULL || data == NULL) {
@@ -367,96 +370,87 @@ char *jstring2str(JNIEnv *env, jstring jstr) {
 /*
 * 解密
 */
-// char *base64_decode(const char *input, int length)
-// {
-// 	BIO *b64 = NULL;
-// 	BIO *bmem = NULL;
-// 	char *buffer = (char *)malloc(length);
-// 	memset(buffer, 0, length);
+char *base64_decode(const char *input, int length) {
+    BIO *b64 = NULL;
+    BIO *bmem = NULL;
+    char *buffer = (char *) malloc(length);
+    memset(buffer, 0, length);
 
-// 	b64 = BIO_new(BIO_f_base64());
-// 	BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
-// 	bmem = BIO_new_mem_buf(input, length);
-// 	bmem = BIO_push(b64, bmem);
-// 	BIO_read(bmem, buffer, length);
+    b64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+    bmem = BIO_new_mem_buf(input, length);
+    bmem = BIO_push(b64, bmem);
+    BIO_read(bmem, buffer, length);
 
-// 	BIO_free_all(bmem);
+    BIO_free_all(bmem);
 
-// 	return buffer;
-// }
+    return buffer;
+}
 
-// static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName)
-// {
-// 	int i = 0;
-// 	FaultCode code;
-// 	for (i = 0; i < argc; i++)
-// 	{
-// 		char* decode = base64_decode(argv[i], strlen(argv[i]));
-// 		if (!strcmp(azColName[i], "suit")) {
-// 			strcpy_s(code.suit, decode);
-// 		}
-// 		if (!strcmp(azColName[i], "desc_ch")) {
-// 			strcpy_s(code.desc_ch, decode);
-// 		}
-// 		if (!strcmp(azColName[i], "desc_en")) {
-// 			strcpy_s(code.desc_en, decode);
-// 		}
-// 		if (!strcmp(azColName[i], "system")) {
-// 			strcpy_s(code.system, decode);
-// 		}
-// 		if (!strcmp(azColName[i], "detail")) {
-// 			strcpy_s(code.detail, decode);
-// 		}
-// 	}
-// 	codes.push_back(code);
-// 	return 0;
-// }
+static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName) {
+    int i = 0;
+    FaultCode code;
+    for (i = 0; i < argc; i++) {
+        char *decode = base64_decode(argv[i], strlen(argv[i]));
+        if (!strcmp(azColName[i], "id")) {
+            strcpy(code.id, decode);
+        }
+        if (!strcmp(azColName[i], "suit")) {
+            strcpy(code.suit, decode);
+        }
+        if (!strcmp(azColName[i], "desc_ch")) {
+            strcpy(code.desc_ch, decode);
+        }
+        if (!strcmp(azColName[i], "desc_en")) {
+            strcpy(code.desc_en, decode);
+        }
+        if (!strcmp(azColName[i], "system")) {
+            strcpy(code.system, decode);
+        }
+        if (!strcmp(azColName[i], "detail")) {
+            strcpy(code.detail, decode);
+        }
+    }
+    codes.push_back(code);
+    return 0;
+}
 
 
-// void getFaultCodeInfo(FaultCode* faultCode,vector<string> ids)
-// {
-// 	char sql[1024] = { 0 };
-// 	sqlite3 *db;
-// 	char *zErrMsg = 0;
-// 	const char *data = "Callback function called";
-// 	int rc;
-// 	rc = sqlite3_open_v2("physical.db", &db, SQLITE_OPEN_READONLY, NULL);
-// 	if (rc != SQLITE_OK)
-// 	{
-// 		printf("Can't open database: %s \n", sqlite3_errmsg(db));
-// 		return;
-// 	}
+void getFaultCodeInfo(vector<string> ids) {
+    char sql[1024] = {0};
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    const char *data = "Callback function called";
+    int rc;
+    rc = sqlite3_open_v2("physical.db", &db, SQLITE_OPEN_READONLY, NULL);
+    if (rc != SQLITE_OK) {
+        printf("Can't open database: %s \n", sqlite3_errmsg(db));
+        return;
+    }
 
-// 	strcat_s(sql, "SELECT suit,desc_ch,desc_en,system,detail from code where id in(");
-// 	int i = 0;
-// 	for (i = 0; i < ids.size(); i++)
-// 	{
-// 		char temp[10] = { 0 };
-// 		if (i != ids.size() - 1)
-// 		{
-// 			sprintf_s(temp, "'%s',", ids[i].c_str());
-// 		}
-// 		else
-// 		{
-// 			sprintf_s(temp, "'%s');", ids[i].c_str());
-// 		}
-// 		strcat_s(sql, temp);
-// 	}
+    strcat(sql, "SELECT id,suit,desc_ch,desc_en,system,detail from code where id in(");
+    int i = 0;
+    for (i = 0; i < ids.size(); i++) {
+        char temp[10] = {0};
+        if (i != ids.size() - 1) {
+            sprintf(temp, "'%s',", ids[i].c_str());
+        } else {
+            sprintf(temp, "'%s');", ids[i].c_str());
+        }
+        strcat(sql, temp);
+    }
 
-// 	//printf("SQL  %s\n", sql);
+    //printf("SQL  %s\n", sql);
 
-// 	rc = sqlite3_exec(db, sql, callback_fault, (void *)data, &zErrMsg);
-// 	if (rc != SQLITE_OK)
-// 	{
-// 		printf("SQL error: %s\n", zErrMsg);
-// 		sqlite3_free(zErrMsg);
-// 		return;
-// 	}
-// 	else
-// 	{
-// 		sqlite3_close(db);
-// 	}
-// }
+    rc = sqlite3_exec(db, sql, callback_fault, (void *) data, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        printf("SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return;
+    } else {
+        sqlite3_close(db);
+    }
+}
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
@@ -464,8 +458,7 @@ char *jstring2str(JNIEnv *env, jstring jstr) {
 * Signature: ()Ljava/util/List;
 */
 JNIEXPORT jobject JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj,
-                                                    jstring path) {
+Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj, jstring path) {
     char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
     input[4] = input[1] ^ input[2] ^ input[3];
 
@@ -493,8 +486,8 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj,
         jmethodID fault_code_init = env->GetMethodID(fault_code_cls, "<init>",
                                                      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
+        vector<string> ids;
         for (i = 0; i < count; i++) {
-            FaultCode faultCode;
             char item[3] = {0};
             char code[8] = {0};
             memcpy(item, buf + 6 + i * 3, 3);
@@ -518,16 +511,23 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj,
             strcat(code, temp);
             sprintf(temp, "%02X", item[2]);
             strcat(code, temp);
-            faultCode.id = code;
-            jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
-                                                    env->NewStringUTF(faultCode.id.c_str()),
-                                                    env->NewStringUTF(faultCode.suit.c_str()),
-                                                    env->NewStringUTF(faultCode.desc_ch.c_str()),
-                                                    env->NewStringUTF(faultCode.desc_en.c_str()),
-                                                    env->NewStringUTF(faultCode.system.c_str()),
-                                                    env->NewStringUTF(faultCode.detail.c_str()));
-            env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
             LOGE("CODE %s", code);
+            ids.push_back(code);
+        }
+
+        // 查询故障码详细信息
+        getFaultCodeInfo(ids);
+
+        for (i = 0; i < codes.size(); i++) {
+            FaultCode faultCode = codes[i];
+            jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
+                                                    env->NewStringUTF(faultCode.id),
+                                                    env->NewStringUTF(faultCode.suit),
+                                                    env->NewStringUTF(faultCode.desc_ch),
+                                                    env->NewStringUTF(faultCode.desc_en),
+                                                    env->NewStringUTF(faultCode.system),
+                                                    env->NewStringUTF(faultCode.detail));
+            env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
         }
         return list_obj;
     }

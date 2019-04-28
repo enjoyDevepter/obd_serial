@@ -14,64 +14,64 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 # Gradle automatically packages shared libraries with your APK.
 
 # 添加.so动态库
-#add_library(sqlite
-#        SHARED
-#        IMPORTED)
-#add_library(utils
-#        SHARED
-#        IMPORTED)
-#add_library(c++
-#        SHARED
-#        IMPORTED)
-#add_library(cutils
-#        SHARED
-#        IMPORTED)
-#add_library(vndksupport
-#        SHARED
-#        IMPORTED)
-#
-#set_target_properties(
-#        vndksupport
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libvndksupport.so)
-#
-#
-#set_target_properties(
-#        cutils
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
-#
-#set_target_properties(
-#        sqlite
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
-#
-#set_target_properties(
-#        utils
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libutils.so)
-#
-#set_target_properties(
-#        c++
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
+add_library(sqlite
+        SHARED
+        IMPORTED)
+add_library(utils
+        SHARED
+        IMPORTED)
+add_library(c++
+        SHARED
+        IMPORTED)
+add_library(cutils
+        SHARED
+        IMPORTED)
+add_library(vndksupport
+        SHARED
+        IMPORTED)
 
-# 添加两个预编译库
-#add_library(openssl-crypto
-#        STATIC
-#        IMPORTED)
-#
-#set_target_properties(openssl-crypto
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
-#
-#add_library(openssl-ssl
-#        STATIC
-#        IMPORTED)
-#
-#set_target_properties(openssl-ssl
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
+set_target_properties(
+        vndksupport
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libvndksupport.so)
+
+
+set_target_properties(
+        cutils
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
+
+set_target_properties(
+        sqlite
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
+
+set_target_properties(
+        utils
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libutils.so)
+
+set_target_properties(
+        c++
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
+
+#添加两个预编译库
+add_library(openssl-crypto
+        STATIC
+        IMPORTED)
+
+set_target_properties(openssl-crypto
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
+
+add_library(openssl-ssl
+        STATIC
+        IMPORTED)
+
+set_target_properties(openssl-ssl
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
 
 add_library( # Sets the name of the library.
         serial
@@ -97,12 +97,12 @@ find_library( # Sets the name of the path variable.
 
 
 # 链接头文件
-#target_include_directories(
-#        serial
-#        PRIVATE
-#        # serial 需要的头文件
-#        ${CMAKE_SOURCE_DIR}/../jniLibs/include
-#)
+target_include_directories(
+        serial
+        PRIVATE
+        # serial 需要的头文件
+        ${CMAKE_SOURCE_DIR}/../jniLibs/include
+)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
@@ -110,8 +110,7 @@ find_library( # Sets the name of the path variable.
 
 target_link_libraries( # Specifies the target library.
         serial
-#        sqlite
         # Links the target library to the log library
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
-        ${log-lib})
+        ${log-lib} openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport)
