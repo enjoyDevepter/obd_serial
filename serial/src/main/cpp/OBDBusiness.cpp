@@ -34,6 +34,8 @@ extern "C"
 
 string KEY = "MIYUAN_0BD";
 
+char *db_path;
+
 int fd;
 
 /*
@@ -68,6 +70,29 @@ typedef struct {
 } PanelBoard;
 
 vector<FaultCode> codes;
+
+
+char *jstring2str(JNIEnv *env, jstring jstr) {
+    if (jstr == NULL || env->GetStringLength(jstr) == 0) {
+        return "";
+    }
+    char *rtn = NULL;
+    jclass clsstring = env->FindClass("java/lang/String");
+    jstring strencode = env->NewStringUTF("UTF-8");
+    jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
+    jbyteArray barr = (jbyteArray) env->CallObjectMethod(jstr, mid, strencode);
+    jsize alen = env->GetArrayLength(barr);
+    jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
+    if (alen > 0) {
+        rtn = (char *) malloc(alen + 1);
+        memcpy(rtn, ba, alen);
+        rtn[alen] = 0;
+    }
+
+    env->ReleaseByteArrayElements(barr, ba,
+                                  0);
+    return rtn;
+}
 
 void formatStr(char *buf, char *data, int len) {
     if (buf == NULL || data == NULL) {
@@ -173,6 +198,17 @@ static speed_t getBaudrate(jint baudrate) {
             return -1;
     }
 }
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    initDBPath
+* Signature: (Ljava/lang/String;)V;
+*/
+JNIEXPORT void JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass thiz, jstring path) {
+    db_path = jstring2str(env, path);
+}
+
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
@@ -289,12 +325,13 @@ int readFormBox(char *buffer, int timeOut) {
                         memset(buffer, 0, sizeof(char) * 100);
                         bool start = false;
                         int k = 1;
+                        int len, begin = 0;
                         LOGE("nread[%d]", nread);
                         for (int i = 0; i < nread; i++) {
                             if (start) {
                                 buffer[k] = tempBuff[i];
                                 k++;
-                                if (tempBuff[i] == 0x7e) {
+                                if (tempBuff[i] == 0x7e && (i == begin + len + 6)) {
                                     LOGE_HEX("deal OBD-APP ", buffer, k);
                                     return k;
                                 }
@@ -302,6 +339,8 @@ int readFormBox(char *buffer, int timeOut) {
                             if (!start && tempBuff[i] == 0x7e) {
                                 start = true;
                                 buffer[0] = 0x7e;
+                                begin = i;
+                                len = (tempBuff[i + 3] << 8) + (tempBuff[i + 4]);
                             }
                         }
                         return -1;
@@ -345,28 +384,6 @@ Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
     return env->NewStringUTF((version).c_str());
 }
 
-char *jstring2str(JNIEnv *env, jstring jstr) {
-    if (jstr == NULL || env->GetStringLength(jstr) == 0) {
-        return "";
-    }
-    char *rtn = NULL;
-    jclass clsstring = env->FindClass("java/lang/String");
-    jstring strencode = env->NewStringUTF("UTF-8");
-    jmethodID mid = env->GetMethodID(clsstring, "getBytes", "(Ljava/lang/String;)[B");
-    jbyteArray barr = (jbyteArray) env->CallObjectMethod(jstr, mid, strencode);
-    jsize alen = env->GetArrayLength(barr);
-    jbyte *ba = env->GetByteArrayElements(barr, JNI_FALSE);
-    if (alen > 0) {
-        rtn = (char *) malloc(alen + 1);
-        memcpy(rtn, ba, alen);
-        rtn[alen] = 0;
-    }
-
-    env->ReleaseByteArrayElements(barr, ba,
-                                  0);
-    return rtn;
-}
-
 /*
 * 解密
 */
@@ -393,7 +410,7 @@ static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName
     for (i = 0; i < argc; i++) {
         char *decode = base64_decode(argv[i], strlen(argv[i]));
         if (!strcmp(azColName[i], "id")) {
-            strcpy(code.id, decode);
+            strcpy(code.id, argv[i]);
         }
         if (!strcmp(azColName[i], "suit")) {
             strcpy(code.suit, decode);
@@ -410,6 +427,7 @@ static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName
         if (!strcmp(azColName[i], "detail")) {
             strcpy(code.detail, decode);
         }
+        LOGE("azColName[i] == %s", decode);
     }
     codes.push_back(code);
     return 0;
@@ -422,7 +440,7 @@ void getFaultCodeInfo(vector<string> ids) {
     char *zErrMsg = 0;
     const char *data = "Callback function called";
     int rc;
-    rc = sqlite3_open_v2("physical.db", &db, SQLITE_OPEN_READONLY, NULL);
+    rc = sqlite3_open_v2(db_path, &db, SQLITE_OPEN_READONLY, NULL);
     if (rc != SQLITE_OK) {
         printf("Can't open database: %s \n", sqlite3_errmsg(db));
         return;
@@ -440,11 +458,11 @@ void getFaultCodeInfo(vector<string> ids) {
         strcat(sql, temp);
     }
 
-    //printf("SQL  %s\n", sql);
+    LOGE("SQL  %s\n", sql);
 
     rc = sqlite3_exec(db, sql, callback_fault, (void *) data, &zErrMsg);
     if (rc != SQLITE_OK) {
-        printf("SQL error: %s\n", zErrMsg);
+        LOGE("SQL error: %s\n", zErrMsg);
         sqlite3_free(zErrMsg);
         return;
     } else {
@@ -452,13 +470,65 @@ void getFaultCodeInfo(vector<string> ids) {
     }
 }
 
+void correctUtfBytes(char *bytes) {
+    char three = 0;
+    while (*bytes != '\0') {
+        unsigned char utf8 = *(bytes++);
+        three = 0;
+        // Switch on the high four bits.
+        switch (utf8 >> 4) {
+            case 0x00:
+            case 0x01:
+            case 0x02:
+            case 0x03:
+            case 0x04:
+            case 0x05:
+            case 0x06:
+            case 0x07:
+                // Bit pattern 0xxx. No need for any extra bytes.
+                break;
+            case 0x08:
+            case 0x09:
+            case 0x0a:
+            case 0x0b:
+            case 0x0f:
+                /*
+                 * Bit pattern 10xx or 1111, which are illegal start bytes.
+                 * Note: 1111 is valid for normal UTF-8, but not the
+                 * modified UTF-8 used here.
+                 */
+                *(bytes - 1) = '?';
+                break;
+            case 0x0e:
+                // Bit pattern 1110, so there are two additional bytes.
+                utf8 = *(bytes++);
+                if ((utf8 & 0xc0) != 0x80) {
+                    --bytes;
+                    *(bytes - 1) = '?';
+                    break;
+                }
+                three = 1;
+                // Fall through to take care of the final byte.
+            case 0x0c:
+            case 0x0d:
+                // Bit pattern 110x, so there is one additional byte.
+                utf8 = *(bytes++);
+                if ((utf8 & 0xc0) != 0x80) {
+                    --bytes;
+                    if (three)--bytes;
+                    *(bytes - 1) = '?';
+                }
+                break;
+        }
+    }
+}
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    getFaultCode
 * Signature: ()Ljava/util/List;
 */
 JNIEXPORT jobject JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj, jstring path) {
+Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
     char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
     input[4] = input[1] ^ input[2] ^ input[3];
 
@@ -487,49 +557,55 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj, j
                                                      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
         vector<string> ids;
-        for (i = 0; i < count; i++) {
-            char item[3] = {0};
-            char code[8] = {0};
-            memcpy(item, buf + 6 + i * 3, 3);
-            LOGE_HEX(" item ", item, 3);
-            switch ((item[1] & 0xFF) >> 6) {
-                case 0:
-                    strcat(code, "P");
-                    break;
-                case 1:
-                    strcat(code, "C");
-                    break;
-                case 2:
-                    strcat(code, "B");
-                    break;
-                case 3:
-                    strcat(code, "U");
-                    break;
+        if (count > 0) {
+            for (i = 0; i < count; i++) {
+                char item[3] = {0};
+                char code[8] = {0};
+                memcpy(item, buf + 6 + i * 3, 3);
+                switch ((item[1] & 0xFF) >> 6) {
+                    case 0:
+                        strcat(code, "P");
+                        break;
+                    case 1:
+                        strcat(code, "C");
+                        break;
+                    case 2:
+                        strcat(code, "B");
+                        break;
+                    case 3:
+                        strcat(code, "U");
+                        break;
+                }
+                char temp[4] = {0};
+                sprintf(temp, "%02X", item[1] & 0x3F);
+                strcat(code, temp);
+                sprintf(temp, "%02X", item[2]);
+                strcat(code, temp);
+                ids.push_back(code);
             }
-            char temp[4] = {0};
-            sprintf(temp, "%02X", item[1] & 0x3F);
-            strcat(code, temp);
-            sprintf(temp, "%02X", item[2]);
-            strcat(code, temp);
-            LOGE("CODE %s", code);
-            ids.push_back(code);
-        }
+            // [7E 08 01 00 19 08 03 10 05 03 01 09 03 81 23 03 41 56 07 91 05 07 41 19 07 C8 12 07 41 18 FF 7E]
+            // 查询故障码详细信息
+            getFaultCodeInfo(ids);
 
-        // 查询故障码详细信息
-        getFaultCodeInfo(ids);
-
-        for (i = 0; i < codes.size(); i++) {
-            FaultCode faultCode = codes[i];
-            jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
-                                                    env->NewStringUTF(faultCode.id),
-                                                    env->NewStringUTF(faultCode.suit),
-                                                    env->NewStringUTF(faultCode.desc_ch),
-                                                    env->NewStringUTF(faultCode.desc_en),
-                                                    env->NewStringUTF(faultCode.system),
-                                                    env->NewStringUTF(faultCode.detail));
-            env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
+            for (i = 0; i < codes.size(); i++) {
+                FaultCode faultCode = codes[i];
+                correctUtfBytes(faultCode.id);
+                correctUtfBytes(faultCode.suit);
+                correctUtfBytes(faultCode.desc_ch);
+                correctUtfBytes(faultCode.desc_en);
+                correctUtfBytes(faultCode.system);
+                correctUtfBytes(faultCode.detail);
+                jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
+                                                        env->NewStringUTF(faultCode.id),
+                                                        env->NewStringUTF(faultCode.suit),
+                                                        env->NewStringUTF(faultCode.desc_ch),
+                                                        env->NewStringUTF(faultCode.desc_en),
+                                                        env->NewStringUTF(faultCode.system),
+                                                        env->NewStringUTF(faultCode.detail));
+                env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
+            }
+            return list_obj;
         }
-        return list_obj;
     }
     return NULL;
 }

@@ -31,20 +31,21 @@ public class PanelActivity extends AppCompatActivity {
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            PanelBoardInfo panelBoardInfo = (PanelBoardInfo) msg.obj;
-            voltage.setText(String.valueOf(panelBoardInfo.getVoltage()) + "V");
-            instantaneousFuelConsumption.setText(String.valueOf(panelBoardInfo.getInstantaneousFuelConsumption()) + "L/HOUR");
-            averageFuelConsumption.setText(String.valueOf(panelBoardInfo.getAverageFuelConsumption()) + "L/100KM");
-            totalFuelConsumptionDuringThisTrip.setText(String.valueOf(panelBoardInfo.getTotalFuelConsumptionDuringThisTrip()) + "L");
-            mileageOfTrip.setText(String.valueOf(panelBoardInfo.getMileageOfTrip()) + "KM");
-            totalMileage.setText(String.valueOf(panelBoardInfo.getTotalMileage()) + "KM");
-            drivingTimeOfTrip.setText(String.valueOf(panelBoardInfo.getDrivingTimeOfTrip()) + "秒");
-            totalDrivingTime.setText(String.valueOf(panelBoardInfo.getTotalDrivingTime()) + "秒");
-            rotationRate.setText(String.valueOf(panelBoardInfo.getRotationRate()) + "RPM");
-            speed.setText(String.valueOf(panelBoardInfo.getSpeed()) + "KM/H");
-            temperature.setText(String.valueOf(panelBoardInfo.getTemperature()) + "℃");
-            engineLoad.setText(String.valueOf(panelBoardInfo.getEngineLoad()) + "%");
-            residualFuel.setText(String.valueOf(panelBoardInfo.getResidualFuel()) + "%");
+            if (null != panelBoardInfo) {
+                voltage.setText(String.valueOf(panelBoardInfo.getVoltage()) + "V");
+                instantaneousFuelConsumption.setText(String.valueOf(panelBoardInfo.getInstantaneousFuelConsumption()) + "L/HOUR");
+                averageFuelConsumption.setText(String.valueOf(panelBoardInfo.getAverageFuelConsumption()) + "L/100KM");
+                totalFuelConsumptionDuringThisTrip.setText(String.valueOf(panelBoardInfo.getTotalFuelConsumptionDuringThisTrip()) + "L");
+                mileageOfTrip.setText(String.valueOf(panelBoardInfo.getMileageOfTrip()) + "KM");
+                totalMileage.setText(String.valueOf(panelBoardInfo.getTotalMileage()) + "KM");
+                drivingTimeOfTrip.setText(String.valueOf(panelBoardInfo.getDrivingTimeOfTrip()) + "秒");
+                totalDrivingTime.setText(String.valueOf(panelBoardInfo.getTotalDrivingTime()) + "秒");
+                rotationRate.setText(String.valueOf(panelBoardInfo.getRotationRate()) + "RPM");
+                speed.setText(String.valueOf(panelBoardInfo.getSpeed()) + "KM/H");
+                temperature.setText(String.valueOf(panelBoardInfo.getTemperature()) + "℃");
+                engineLoad.setText(String.valueOf(panelBoardInfo.getEngineLoad()) + "%");
+                residualFuel.setText(String.valueOf(panelBoardInfo.getResidualFuel()) + "%");
+            }
         }
     };
     private Timer timer;
@@ -71,7 +72,7 @@ public class PanelActivity extends AppCompatActivity {
 
     }
 
-
+    PanelBoardInfo panelBoardInfo;
     @Override
     protected void onResume() {
         super.onResume();
@@ -79,12 +80,8 @@ public class PanelActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                Message msg = new Message();
-                PanelBoardInfo panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
-                if (panelBoardInfo != null) {
-                    msg.obj = OBDCore.getInstance(PanelActivity.this).getFixedData();
-                    handler.sendMessageDelayed(msg, 0);
-                }
+                 panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
+                 handler.sendEmptyMessage(0);
             }
         }, 0, 1000);
     }

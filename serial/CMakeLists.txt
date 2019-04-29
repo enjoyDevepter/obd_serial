@@ -17,44 +17,44 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 add_library(sqlite
         SHARED
         IMPORTED)
-add_library(utils
-        SHARED
-        IMPORTED)
-add_library(c++
-        SHARED
-        IMPORTED)
-add_library(cutils
-        SHARED
-        IMPORTED)
-add_library(vndksupport
-        SHARED
-        IMPORTED)
+#add_library(utils
+#        SHARED
+#        IMPORTED)
+#add_library(c++
+#        SHARED
+#        IMPORTED)
+#add_library(cutils
+#        SHARED
+#        IMPORTED)
+#add_library(vndksupport
+#        SHARED
+#        IMPORTED)
 
-set_target_properties(
-        vndksupport
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libvndksupport.so)
-
-
-set_target_properties(
-        cutils
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
+#set_target_properties(
+#        vndksupport
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libvndksupport.so)
+#
+#
+#set_target_properties(
+#        cutils
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
 
 set_target_properties(
         sqlite
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
 
-set_target_properties(
-        utils
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libutils.so)
-
-set_target_properties(
-        c++
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
+#set_target_properties(
+#        utils
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libutils.so)
+#
+#set_target_properties(
+#        c++
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
 
 #添加两个预编译库
 add_library(openssl-crypto
@@ -113,4 +113,4 @@ target_link_libraries( # Specifies the target library.
         # Links the target library to the log library
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
-        ${log-lib} openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport)
+        ${log-lib} openssl-ssl openssl-crypto sqlite)

@@ -14,13 +14,12 @@ import java.util.List;
  */
 public class OBDCore {
 
-    private OBDBusiness obdBusiness;
+    private static OBDBusiness obdBusiness;
 
     /**
      * 禁止构造
      */
     private OBDCore() {
-        obdBusiness = new OBDBusiness();
     }
 
     /**
@@ -29,6 +28,7 @@ public class OBDCore {
      * @return {@link OBDCore}
      */
     public static OBDCore getInstance(final Context context) {
+        obdBusiness = new OBDBusiness();
         final File db = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "physical.db");
         if (!db.exists()) {
             new Thread(new Runnable() {
@@ -51,6 +51,7 @@ public class OBDCore {
                 }
             }).start();
         }
+        obdBusiness.initDBPath(db.getPath());
         return InstanceHolder.INSTANCE;
     }
 
@@ -94,8 +95,8 @@ public class OBDCore {
      *
      * @return 故障码集合
      */
-    public synchronized List<FaultCode> getFaultCode(String path) {
-        return obdBusiness.getFaultCode(path);
+    public synchronized List<FaultCode> getFaultCode() {
+        return obdBusiness.getFaultCode();
     }
 
     /**

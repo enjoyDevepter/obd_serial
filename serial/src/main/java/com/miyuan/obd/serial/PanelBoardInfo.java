@@ -1,9 +1,11 @@
 package com.miyuan.obd.serial;
 
+import java.io.Serializable;
+
 /**
  * 仪表盘信息实体类
  */
-public class PanelBoardInfo {
+public class PanelBoardInfo implements Serializable {
     private String voltage;
     private String instantaneousFuelConsumption;
     private String averageFuelConsumption;

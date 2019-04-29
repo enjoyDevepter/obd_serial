@@ -11,13 +11,15 @@ class OBDBusiness {
     public OBDBusiness() {
     }
 
+    native void initDBPath(String dbPath);
+
     native boolean open(String path, int baudrate);
 
     native void close();
 
     native String getVersion();
 
-    native List<FaultCode> getFaultCode(String path);
+    native List<FaultCode> getFaultCode();
 
     native boolean cleanFaultCode();
 

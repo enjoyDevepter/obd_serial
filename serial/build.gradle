@@ -29,8 +29,20 @@ android {
             path "CMakeLists.txt"
         }
     }
-
 }
+
+
+task createJar(type: Jar, dependsOn: ['compileDebugJavaWithJavac']) {
+    archiveName = 'com.miyuan.obd.serial.jar'
+    manifest {
+        attributes 'Main-Clas': 'com.miyuan.obd.serial.OBDCore'
+        attributes 'Class-Path': ''//添加所有依赖，用空格隔开<br>    }
+    }
+    from('build/intermediates/javac/debug/compileDebugJavaWithJavac/classes', 'resources')
+    destinationDir = file('libs')
+    exclude('**/BuildConfig.class')
+}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -117,38 +117,7 @@ public class FaultCode {
     public String toString() {
         return "FaultCode{" +
                 "id='" + id + '\'' +
-                ", suit='" + suit + '\'' +
-                ", desc_ch='" + desc_ch + '\'' +
-                ", desc_en='" + desc_en + '\'' +
-                ", system='" + system + '\'' +
-                ", detail='" + detail + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FaultCode code = (FaultCode) o;
-
-        if (id != null ? !id.equals(code.id) : code.id != null) return false;
-        if (suit != null ? !suit.equals(code.suit) : code.suit != null) return false;
-        if (desc_ch != null ? !desc_ch.equals(code.desc_ch) : code.desc_ch != null) return false;
-        if (desc_en != null ? !desc_en.equals(code.desc_en) : code.desc_en != null) return false;
-        if (system != null ? !system.equals(code.system) : code.system != null) return false;
-        return detail != null ? detail.equals(code.detail) : code.detail == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (suit != null ? suit.hashCode() : 0);
-        result = 31 * result + (desc_ch != null ? desc_ch.hashCode() : 0);
-        result = 31 * result + (desc_en != null ? desc_en.hashCode() : 0);
-        result = 31 * result + (system != null ? system.hashCode() : 0);
-        result = 31 * result + (detail != null ? detail.hashCode() : 0);
-        return result;
     }
 }
 

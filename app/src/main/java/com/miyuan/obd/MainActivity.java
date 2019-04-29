@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.getFaultCode:
                 StringBuilder sb = new StringBuilder();
-                File file = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "physical.db");
-                List<FaultCode> codes = OBDCore.getInstance(this).getFaultCode(file.getPath());
+                List<FaultCode> codes = OBDCore.getInstance(this).getFaultCode();
+                sample_text.setText("");
                 if (codes != null) {
                     for (FaultCode code : codes) {
                         sb.append(code.toString())

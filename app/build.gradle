@@ -18,6 +18,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+//    sourceSets { // 工程结构配置
+//        main {
+//            assets.srcDirs = ['assets']
+//            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
+//
+//        }
+//    }
+
 }
 
 
