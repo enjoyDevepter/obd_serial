@@ -213,15 +213,15 @@ Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass thiz, jstr
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    open
-* Signature: (Ljava/lang/String;I)V;
+* Signature: (Ljava/lang/String;)V;
 */
 JNIEXPORT jboolean JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path, jint baudrate) {
+Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring path) {
     speed_t speed;
 
     /* Check arguments */
     {
-        speed = getBaudrate(baudrate);
+        speed = getBaudrate(19200);
         if (speed == -1) {
             /* TODO: throw an exception */
             LOGE("Invalid baudrate");
@@ -234,7 +234,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
         jboolean iscopy;
         const char *path_utf = env->GetStringUTFChars(path, &iscopy);
         LOGE("Opening serial port %s with flags 0x%x", path_utf, O_RDWR | 0);
-        fd = open(path_utf, O_RDWR | 0);
+        fd = open(path_utf, O_RDWR | O_NONBLOCK);
         LOGE("open() fd = %d", fd);
         env->ReleaseStringUTFChars(path, path_utf);
         if (fd == -1) {
@@ -279,6 +279,10 @@ int writeToBox(char *buffer, int len) {
         LOGE("seriail open fail!");
         return -1;
     }
+    char buf[1024] = {0};
+    int nread = read(fd,buf, sizeof(buf));
+    LOGE_HEX("CLEAR_BUF", buf, nread);
+
     LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
     //		sleep(1); //写完之后睡一秒
@@ -307,7 +311,6 @@ int readFormBox(char *buffer, int timeOut) {
         FD_ZERO(&readfd);                                    //清空集合
         FD_SET(fd, &readfd);                                 // 把要检测的句柄fd加入到集合里
         ret = select(fd + 1, &readfd, NULL, NULL, &timeout); // 检测我们上面设置到集合readfd里的句柄是否有可读信息
-        LOGE("ret=%d", ret);
         switch (ret) {
             case -1: // 这说明select函数出错
                 LOGE("fd read failure");
@@ -326,7 +329,6 @@ int readFormBox(char *buffer, int timeOut) {
                         bool start = false;
                         int k = 1;
                         int len, begin = 0;
-                        LOGE("nread[%d]", nread);
                         for (int i = 0; i < nread; i++) {
                             if (start) {
                                 buffer[k] = tempBuff[i];
@@ -534,6 +536,8 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
 
     writeToBox(input, sizeof(input));
 
+    codes.clear();
+
     char buf[1024] = {0};
 
     int len = readFormBox(buf, TIMEOUT);
@@ -589,12 +593,12 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
 
             for (i = 0; i < codes.size(); i++) {
                 FaultCode faultCode = codes[i];
-                correctUtfBytes(faultCode.id);
-                correctUtfBytes(faultCode.suit);
-                correctUtfBytes(faultCode.desc_ch);
-                correctUtfBytes(faultCode.desc_en);
-                correctUtfBytes(faultCode.system);
-                correctUtfBytes(faultCode.detail);
+                 correctUtfBytes(faultCode.id);
+                 correctUtfBytes(faultCode.suit);
+                 correctUtfBytes(faultCode.desc_ch);
+                 correctUtfBytes(faultCode.desc_en);
+                 correctUtfBytes(faultCode.system);
+                 correctUtfBytes(faultCode.detail);
                 jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
                                                         env->NewStringUTF(faultCode.id),
                                                         env->NewStringUTF(faultCode.suit),
@@ -1573,8 +1577,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj,
             }
         }
     } else {
-        strcat(result,
-               "数据异常! 校验失败");
+        strcat(result,"数据异常! 校验失败");
     }
     return env->NewStringUTF(result);
 }

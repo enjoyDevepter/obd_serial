@@ -66,11 +66,10 @@ public class OBDCore {
      * 开启串口设备
      *
      * @param path     串口名称
-     * @param baudrate 波特率
      * @return 成功标识
      */
-    public boolean open(String path, int baudrate) {
-        return obdBusiness.open(path, baudrate);
+    public boolean open(String path) {
+        return obdBusiness.open(path);
     }
 
     /**

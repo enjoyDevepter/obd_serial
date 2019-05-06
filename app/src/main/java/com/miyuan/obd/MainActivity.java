@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.getFixedData).setOnClickListener(this);
         findViewById(R.id.getDynamicData).setOnClickListener(this);
         indexET = findViewById(R.id.index);
-        OBDCore.getInstance(this).open("/dev/ttyMT1", 19200);
+        OBDCore.getInstance(this).open("/dev/ttyMT2");
     }
 
     @Override

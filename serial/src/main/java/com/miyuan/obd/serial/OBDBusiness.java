@@ -13,7 +13,7 @@ class OBDBusiness {
 
     native void initDBPath(String dbPath);
 
-    native boolean open(String path, int baudrate);
+    native boolean open(String path);
 
     native void close();
 
