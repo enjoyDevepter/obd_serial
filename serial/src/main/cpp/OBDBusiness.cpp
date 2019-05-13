@@ -38,6 +38,8 @@ char *db_path;
 
 int fd;
 
+bool isLaunched = false;
+
 /*
 * 故障码信息
 */
@@ -444,7 +446,7 @@ void getFaultCodeInfo(vector<string> ids) {
     int rc;
     rc = sqlite3_open_v2(db_path, &db, SQLITE_OPEN_READONLY, NULL);
     if (rc != SQLITE_OK) {
-        printf("Can't open database: %s \n", sqlite3_errmsg(db));
+        LOGE("Can't open database: %s \n", sqlite3_errmsg(db));
         return;
     }
 
@@ -593,7 +595,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
 
             for (i = 0; i < codes.size(); i++) {
                 FaultCode faultCode = codes[i];
-                 correctUtfBytes(faultCode.id);
+//                 correctUtfBytes(faultCode.id);
                  correctUtfBytes(faultCode.suit);
                  correctUtfBytes(faultCode.desc_ch);
                  correctUtfBytes(faultCode.desc_en);
@@ -818,12 +820,11 @@ Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj,
     int len = readFormBox(buf, TIMEOUT);
 
     char result[1024] = {0};
-    formatStr(result, buf, len);
+//    formatStr(result, buf, len);
     char temp[20] = {0};
     unsigned short tempS;
     float tempF;
-    if (
-            isValid(buf, len)) {
+    if (isValid(buf, len)) {
         if (buf[1] == 0x03 && buf[2] == 0x02) {
             if (buf[7] == 0) // 数据不支持
             {
@@ -1597,11 +1598,27 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, j
 
     writeToBox(input, sizeof(input));
 
-    char result[1024];
+    char buf[1024];
 
-    int len = readFormBox(result, TIMEOUT);
+    int len = readFormBox(buf, TIMEOUT);
 
-    return isValid(result, len);
+    bool result = isValid(buf,len);
+
+    if(result){
+        isLaunched = status;
+    }
+
+    return result;
+}
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    isLaunched
+* Signature: ()V
+*/
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_isLaunched(JNIEnv *env, jobject jobj) {
+    return isLaunched;
 }
 
 /*
@@ -1625,7 +1642,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj, ji
     int len = readFormBox(buf, TIMEOUT);
 
     if (isValid(buf, len) && len == 11) {
-        return mile == ((buf[5] << 24) + (buf[6] << 16 + (buf[7] << 8) + buf[8]));
+        return mile == ((buf[5] << 24) + (buf[6] << 16) + (buf[7] << 8) + buf[8]);
     }
     return false;
 }

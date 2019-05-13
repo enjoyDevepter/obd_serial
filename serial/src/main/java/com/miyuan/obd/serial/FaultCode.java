@@ -10,8 +10,7 @@ public class FaultCode {
      */
     private String id;
     /**
-     *
-     * 故障
+     * 故障所对应车型
      */
     private String suit;
     /**
@@ -44,6 +43,11 @@ public class FaultCode {
         this.id = id;
     }
 
+    /**
+     * 获取故障所适用车型
+     *
+     * @return
+     */
     public String getSuit() {
         return suit;
     }
@@ -115,9 +119,7 @@ public class FaultCode {
 
     @Override
     public String toString() {
-        return "FaultCode{" +
-                "id='" + id + '\'' +
-                '}';
+        return "'" + id + '\'';
     }
 }
 

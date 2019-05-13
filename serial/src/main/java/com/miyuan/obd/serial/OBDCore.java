@@ -65,7 +65,7 @@ public class OBDCore {
     /**
      * 开启串口设备
      *
-     * @param path     串口名称
+     * @param path 串口名称
      * @return 成功标识
      */
     public boolean open(String path) {
@@ -149,4 +149,14 @@ public class OBDCore {
         return obdBusiness.initMileage(mile);
     }
 
+    /**
+     * 车辆是否启动
+     *
+     * @return 启动状态
+     *         true     启动
+     *         false    停止
+     */
+    public synchronized boolean isLaunched() {
+        return obdBusiness.isLaunched();
+    }
 }

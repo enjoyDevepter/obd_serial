@@ -21,7 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText indexET;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sample_text = findViewById(R.id.sample_text);
