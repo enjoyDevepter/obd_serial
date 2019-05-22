@@ -29,13 +29,13 @@ public class OBDCore {
      */
     public static OBDCore getInstance(final Context context) {
         obdBusiness = new OBDBusiness();
-        final File db = new File(Environment.getExternalStorageDirectory().getPath() + File.separator + "physical.db");
+        final File db = new File(context.getExternalCacheDir().getPath() + File.separator + "physical");
         if (!db.exists()) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        InputStream is = context.getAssets().open("physical.db");
+                        InputStream is = context.getAssets().open("physical");
                         final FileOutputStream fos = new FileOutputStream(db);
                         byte[] buffer = new byte[1024];
                         int byteCount = 0;

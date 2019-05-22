@@ -119,7 +119,14 @@ public class FaultCode {
 
     @Override
     public String toString() {
-        return "'" + id + '\'';
+        return "FaultCode{" +
+                "id='" + id + '\'' +
+                ", suit='" + suit + '\'' +
+                ", desc_ch='" + desc_ch + '\'' +
+                ", desc_en='" + desc_en + '\'' +
+                ", system='" + system + '\'' +
+                ", detail='" + detail + '\'' +
+                '}';
     }
 }
 

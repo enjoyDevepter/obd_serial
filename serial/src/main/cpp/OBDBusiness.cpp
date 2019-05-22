@@ -91,8 +91,7 @@ char *jstring2str(JNIEnv *env, jstring jstr) {
         rtn[alen] = 0;
     }
 
-    env->ReleaseByteArrayElements(barr, ba,
-                                  0);
+    env->ReleaseByteArrayElements(barr, ba,0);
     return rtn;
 }
 
@@ -207,7 +206,7 @@ static speed_t getBaudrate(jint baudrate) {
 * Signature: (Ljava/lang/String;)V;
 */
 JNIEXPORT void JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass thiz, jstring path) {
+Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass, jstring path) {
     db_path = jstring2str(env, path);
 }
 
@@ -388,6 +387,29 @@ Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
     return env->NewStringUTF((version).c_str());
 }
 
+char *base64_encode(const char *input, int length)
+{
+    BIO *bmem = NULL;
+    BIO *b64 = NULL;
+    BUF_MEM *bptr = NULL;
+
+    b64 = BIO_new(BIO_f_base64());
+    BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
+    bmem = BIO_new(BIO_s_mem());
+    b64 = BIO_push(b64, bmem);
+    BIO_write(b64, input, length);
+    BIO_flush(b64);
+    BIO_get_mem_ptr(b64, &bptr);
+
+    char *buff = (char *)malloc(bptr->length + 1);
+    memcpy(buff, bptr->data, bptr->length);
+    buff[bptr->length] = 0;
+
+    BIO_free_all(b64);
+
+    return buff;
+}
+
 /*
 * 解密
 */
@@ -412,31 +434,30 @@ static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName
     int i = 0;
     FaultCode code;
     for (i = 0; i < argc; i++) {
-        char *decode = base64_decode(argv[i], strlen(argv[i]));
+//        char *decode = base64_decode(argv[i], strlen(argv[i]));
         if (!strcmp(azColName[i], "id")) {
             strcpy(code.id, argv[i]);
         }
         if (!strcmp(azColName[i], "suit")) {
-            strcpy(code.suit, decode);
+            strcpy(code.suit, argv[i]);
         }
         if (!strcmp(azColName[i], "desc_ch")) {
-            strcpy(code.desc_ch, decode);
+            strcpy(code.desc_ch, argv[i]);
         }
         if (!strcmp(azColName[i], "desc_en")) {
-            strcpy(code.desc_en, decode);
+            strcpy(code.desc_en, argv[i]);
         }
         if (!strcmp(azColName[i], "system")) {
-            strcpy(code.system, decode);
+            strcpy(code.system, argv[i]);
         }
         if (!strcmp(azColName[i], "detail")) {
-            strcpy(code.detail, decode);
+            strcpy(code.detail, argv[i]);
         }
-        LOGE("azColName[i] == %s", decode);
+        LOGE("azColName[i] == %s", argv[i]);
     }
     codes.push_back(code);
     return 0;
 }
-
 
 void getFaultCodeInfo(vector<string> ids) {
     char sql[1024] = {0};
@@ -474,58 +495,6 @@ void getFaultCodeInfo(vector<string> ids) {
     }
 }
 
-void correctUtfBytes(char *bytes) {
-    char three = 0;
-    while (*bytes != '\0') {
-        unsigned char utf8 = *(bytes++);
-        three = 0;
-        // Switch on the high four bits.
-        switch (utf8 >> 4) {
-            case 0x00:
-            case 0x01:
-            case 0x02:
-            case 0x03:
-            case 0x04:
-            case 0x05:
-            case 0x06:
-            case 0x07:
-                // Bit pattern 0xxx. No need for any extra bytes.
-                break;
-            case 0x08:
-            case 0x09:
-            case 0x0a:
-            case 0x0b:
-            case 0x0f:
-                /*
-                 * Bit pattern 10xx or 1111, which are illegal start bytes.
-                 * Note: 1111 is valid for normal UTF-8, but not the
-                 * modified UTF-8 used here.
-                 */
-                *(bytes - 1) = '?';
-                break;
-            case 0x0e:
-                // Bit pattern 1110, so there are two additional bytes.
-                utf8 = *(bytes++);
-                if ((utf8 & 0xc0) != 0x80) {
-                    --bytes;
-                    *(bytes - 1) = '?';
-                    break;
-                }
-                three = 1;
-                // Fall through to take care of the final byte.
-            case 0x0c:
-            case 0x0d:
-                // Bit pattern 110x, so there is one additional byte.
-                utf8 = *(bytes++);
-                if ((utf8 & 0xc0) != 0x80) {
-                    --bytes;
-                    if (three)--bytes;
-                    *(bytes - 1) = '?';
-                }
-                break;
-        }
-    }
-}
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    getFaultCode
@@ -541,8 +510,9 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
     codes.clear();
 
     char buf[1024] = {0};
-
     int len = readFormBox(buf, TIMEOUT);
+//    int len = 32;
+//    char buf[32] = {0x7E,0x08,0x01,0x00,0x19,0x08,0x03,0x10,0x05,0x03,0x01,0x09,0x03,0x81,0x23,0x03,0x41,0x56,0x07,0x91,0x05,0x07,0x41,0x19,0x07,0xC8,0x12,0x07,0x41,0x18,0xFF,0x7E};
 
     if (isValid(buf, len)) {
         // 解析故障码总数
@@ -595,12 +565,6 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
 
             for (i = 0; i < codes.size(); i++) {
                 FaultCode faultCode = codes[i];
-//                 correctUtfBytes(faultCode.id);
-                 correctUtfBytes(faultCode.suit);
-                 correctUtfBytes(faultCode.desc_ch);
-                 correctUtfBytes(faultCode.desc_en);
-                 correctUtfBytes(faultCode.system);
-                 correctUtfBytes(faultCode.detail);
                 jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
                                                         env->NewStringUTF(faultCode.id),
                                                         env->NewStringUTF(faultCode.suit),
@@ -1607,7 +1571,6 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, j
     if(result){
         isLaunched = status;
     }
-
     return result;
 }
 
