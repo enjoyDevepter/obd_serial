@@ -4,11 +4,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.miyuan.obd.serial.OBDCore;
 import com.miyuan.obd.serial.PanelBoardInfo;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,9 +50,50 @@ public class PanelActivity extends AppCompatActivity {
                 temperature.setText(String.valueOf(panelBoardInfo.getTemperature()) + "℃");
                 engineLoad.setText(String.valueOf(panelBoardInfo.getEngineLoad()) + "%");
                 residualFuel.setText(String.valueOf(panelBoardInfo.getResidualFuel()) + "%");
+                boolean status = Boolean.valueOf(panelBoardInfo.getStatus());
+                if (status != start) {
+                    init(status);
+                    start = status;
+                }
             }
         }
     };
+
+    private void init(boolean start) {
+        Log.e("obd_core", "PanelActivity init " + start);
+        String status = "";
+        if (start) {
+            // 开启
+            status = "1 175";
+        } else {
+            // 关闭
+            status = "0 175";
+        }
+        final File file = new File("/sys/devices/platform/rc_motor/stepmotor");
+        if (file.exists()) {
+            Log.e("obd_core", "PanelActivity file.exists() ");
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(file);
+                fos.write(status.getBytes());
+                fos.flush();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (null != fos) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
     private Timer timer;
     private TimerTask timerTask;
 
@@ -70,7 +116,7 @@ public class PanelActivity extends AppCompatActivity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
-        OBDCore.getInstance(this).open("/dev/ttyMT0");
+        OBDCore.getInstance(this).open("/dev/ttyMT1");
 
     }
 

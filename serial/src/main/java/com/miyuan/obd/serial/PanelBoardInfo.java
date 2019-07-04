@@ -19,8 +19,9 @@ public class PanelBoardInfo implements Serializable {
     private String temperature;
     private String engineLoad;
     private String residualFuel;
+    private String status;
 
-    PanelBoardInfo(String voltage, String instantaneousFuelConsumption, String averageFuelConsumption, String totalFuelConsumptionDuringThisTrip, String mileageOfTrip, String totalMileage, String drivingTimeOfTrip, String totalDrivingTime, String rotationRate, String speed, String temperature, String engineLoad, String residualFuel) {
+    PanelBoardInfo(String voltage, String instantaneousFuelConsumption, String averageFuelConsumption, String totalFuelConsumptionDuringThisTrip, String mileageOfTrip, String totalMileage, String drivingTimeOfTrip, String totalDrivingTime, String rotationRate, String speed, String temperature, String engineLoad, String residualFuel, String status) {
         this.voltage = voltage;
         this.instantaneousFuelConsumption = instantaneousFuelConsumption;
         this.averageFuelConsumption = averageFuelConsumption;
@@ -34,6 +35,7 @@ public class PanelBoardInfo implements Serializable {
         this.temperature = temperature;
         this.engineLoad = engineLoad;
         this.residualFuel = residualFuel;
+        this.status = status;
     }
 
     /**
@@ -153,6 +155,16 @@ public class PanelBoardInfo implements Serializable {
         return residualFuel;
     }
 
+    /**
+     * 获取车辆启动状态
+     *
+     * @return
+     */
+    public boolean getStatus() {
+        return true;
+    }
+
+
     @Override
     public String toString() {
         return "PanelBoardInfo{" +
@@ -169,6 +181,7 @@ public class PanelBoardInfo implements Serializable {
                 ", temperature=" + temperature +
                 ", engineLoad=" + engineLoad +
                 ", residualFuel=" + residualFuel +
+                ", status=" + status +
                 '}';
     }
 }

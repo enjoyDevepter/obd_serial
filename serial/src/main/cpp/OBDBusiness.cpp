@@ -71,6 +71,7 @@ typedef struct {
     char temperature[20];
     char engineLoad[20];
     char residualFuel[20];
+    char status[];
 } PanelBoard;
 
 vector<FaultCode> codes;
@@ -628,8 +629,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 
         PanelBoard panelBoard;
         char temp[20] = {0};
-        sprintf(temp, "%.1f",
-                ((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
+        sprintf(temp, "%.1f",((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
         memcpy(panelBoard.voltage, temp, sizeof(temp));
 
         memset(temp, 0, sizeof(temp));
@@ -682,11 +682,15 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
         sprintf(temp, "%d", buf[45]);
         memcpy(panelBoard.residualFuel, temp, sizeof(temp));
 
+        memset(temp, 0, sizeof(temp));
+        sprintf(temp, "%d", buf[46]);
+        memcpy(panelBoard.status, temp, sizeof(temp));
+
         //获取PanelBoardInfo类
         jclass panel_board_cls = env->FindClass("com/miyuan/obd/serial/PanelBoardInfo");
         //获取PanelBoardInfo的构造函数
         jmethodID panel_board_init = env->GetMethodID(panel_board_cls, "<init>",
-                                                      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+                                                      "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 
         jobject panel_board_obj = env->NewObject(panel_board_cls, panel_board_init,
                                                  env->NewStringUTF(panelBoard.voltage),
@@ -704,7 +708,8 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
                                                  env->NewStringUTF(panelBoard.speed),
                                                  env->NewStringUTF(panelBoard.temperature),
                                                  env->NewStringUTF(panelBoard.engineLoad),
-                                                 env->NewStringUTF(panelBoard.residualFuel));
+                                                 env->NewStringUTF(panelBoard.residualFuel),
+                                                 env->NewStringUTF(panelBoard.status));
         return panel_board_obj;
     }
     return NULL;
