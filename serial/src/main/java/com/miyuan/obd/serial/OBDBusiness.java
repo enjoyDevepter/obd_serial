@@ -19,7 +19,7 @@ class OBDBusiness {
 
     native String getVersion();
 
-    native List<FaultCode> getFaultCode();
+//    native List<FaultCode> getFaultCode();
 
     native boolean cleanFaultCode();
 
@@ -32,4 +32,6 @@ class OBDBusiness {
     native boolean initMileage(int mile);
 
     native boolean isLaunched();
+
+    native boolean isConnect();
 }

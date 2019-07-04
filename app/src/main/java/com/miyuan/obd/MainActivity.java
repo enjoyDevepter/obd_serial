@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.miyuan.obd.serial.FaultCode;
 import com.miyuan.obd.serial.OBDCore;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.getFixedData).setOnClickListener(this);
         findViewById(R.id.getDynamicData).setOnClickListener(this);
         indexET = findViewById(R.id.index);
-        OBDCore.getInstance(this).open("/dev/ttyMT2");
+//        OBDCore.getInstance(this).open("/dev/ttyMT0");
     }
 
     @Override
@@ -49,15 +48,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.getFaultCode:
                 StringBuilder sb = new StringBuilder();
-                List<FaultCode> codes = OBDCore.getInstance(this).getFaultCode();
+//                List<FaultCode> codes = OBDCore.getInstance(this).getFaultCode();
                 sample_text.setText("");
-                if (codes != null) {
-                    for (FaultCode code : codes) {
-                        sb.append(code.toString())
-                                .append("\r\n");
-                    }
-                    sample_text.setText(sb.toString());
-                }
+//                if (codes != null) {
+//                    for (FaultCode code : codes) {
+//                        sb.append(code.toString())
+//                                .append("\r\n");
+//                    }
+//                    sample_text.setText(sb.toString());
+//                }
                 break;
             case R.id.cleanFaultCode:
                 sample_text.setText(String.valueOf(OBDCore.getInstance(this).cleanFaultCode()));

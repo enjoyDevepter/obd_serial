@@ -41,10 +41,10 @@ add_library(sqlite
 #        PROPERTIES IMPORTED_LOCATION
 #        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
 
-set_target_properties(
-        sqlite
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
+#set_target_properties(
+#        sqlite
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
 
 #set_target_properties(
 #        utils
@@ -57,21 +57,21 @@ set_target_properties(
 #        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
 
 #添加两个预编译库
-add_library(openssl-crypto
-        STATIC
-        IMPORTED)
-
-set_target_properties(openssl-crypto
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
-
-add_library(openssl-ssl
-        STATIC
-        IMPORTED)
-
-set_target_properties(openssl-ssl
-        PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
+#add_library(openssl-crypto
+#        STATIC
+#        IMPORTED)
+#
+#set_target_properties(openssl-crypto
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
+#
+#add_library(openssl-ssl
+#        STATIC
+#        IMPORTED)
+#
+#set_target_properties(openssl-ssl
+#        PROPERTIES IMPORTED_LOCATION
+#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
 
 add_library( # Sets the name of the library.
         serial
@@ -113,4 +113,4 @@ target_link_libraries( # Specifies the target library.
         # Links the target library to the log library
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
-        ${log-lib} openssl-ssl openssl-crypto sqlite)
+        ${log-lib})

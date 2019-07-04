@@ -23,10 +23,8 @@ android {
 //        main {
 //            assets.srcDirs = ['assets']
 //            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
-//
 //        }
 //    }
-
 }
 
 

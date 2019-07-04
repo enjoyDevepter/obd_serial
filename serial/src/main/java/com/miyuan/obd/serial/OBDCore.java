@@ -89,14 +89,14 @@ public class OBDCore {
     }
 
 
-    /**
-     * 获取故障码
-     *
-     * @return 故障码集合
-     */
-    public synchronized List<FaultCode> getFaultCode() {
-        return obdBusiness.getFaultCode();
-    }
+//    /**
+//     * 获取故障码
+//     *
+//     * @return 故障码集合
+//     */
+//    public synchronized List<FaultCode> getFaultCode() {
+//        return obdBusiness.getFaultCode();
+//    }
 
     /**
      * 清除当前故障码
@@ -153,10 +153,20 @@ public class OBDCore {
      * 车辆是否启动
      *
      * @return 启动状态
-     *         true     启动
-     *         false    停止
+     * true     启动
+     * false    停止
      */
     public synchronized boolean isLaunched() {
         return obdBusiness.isLaunched();
+    }
+
+
+    /**
+     * 连接是否正常
+     *
+     * @return
+     */
+    public boolean isConnect() {
+        return obdBusiness.isConnect();
     }
 }

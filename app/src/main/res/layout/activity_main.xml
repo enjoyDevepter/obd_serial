@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -22,21 +23,24 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="车辆启动" />
+                android:text="车辆启动"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/stop"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="车辆停止" />
+                android:text="车辆停止"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/mile"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="设置里程" />
+                android:text="设置里程"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -50,14 +54,16 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="获取故障码" />
+                android:text="获取故障码"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/cleanFaultCode"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="清除当前故障码" />
+                android:text="清除当前故障码"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <LinearLayout
@@ -71,14 +77,16 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="获取固定数据" />
+                android:text="获取固定数据"
+                android:textColor="@android:color/white" />
 
             <Button
                 android:id="@+id/getDynamicData"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:text="仪表盘数据" />
+                android:text="仪表盘数据"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
         <EditText
@@ -86,15 +94,17 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="10dp"
-            android:hint="请输入数据编号 1" />
+            android:hint="请输入数据编号 1"
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/sample_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
         android:layout_centerInParent="true"
-        android:text="Hello World!" />
+        android:text="Hello World!"
+        android:textColor="@android:color/white"
+        android:textSize="15sp" />
 
 </RelativeLayout>

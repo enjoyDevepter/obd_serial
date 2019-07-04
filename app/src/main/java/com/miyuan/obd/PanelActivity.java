@@ -51,6 +51,8 @@ public class PanelActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
 
+    private boolean start;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +70,12 @@ public class PanelActivity extends AppCompatActivity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
-
+        OBDCore.getInstance(this).open("/dev/ttyMT0");
 
     }
 
     PanelBoardInfo panelBoardInfo;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -80,10 +83,10 @@ public class PanelActivity extends AppCompatActivity {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                 panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
-                 handler.sendEmptyMessage(0);
+                panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
+                handler.sendEmptyMessage(0);
             }
-        }, 0, 1000);
+        }, 2000, 1000);
     }
 
     @Override

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/black"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -23,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="电瓶电压"
+                android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
@@ -30,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:textColor="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -51,6 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="瞬时油耗"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -58,7 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -80,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="平均油耗"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -87,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -113,6 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="本次行程总油耗"
+                android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
@@ -120,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:textColor="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -141,6 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="本次行驶里程"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -148,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -170,6 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="当前总里程"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -177,7 +184,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -203,6 +210,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="本次行驶时长"
+                android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
@@ -210,7 +218,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:textColor="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -231,6 +239,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="当前行驶总时长"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -238,7 +247,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -260,6 +269,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="转速"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -267,7 +277,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -293,6 +303,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="车速"
+                android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
             <TextView
@@ -300,7 +311,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:textColor="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
                 android:textSize="25sp" />
 
         </LinearLayout>
@@ -321,6 +332,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="水温"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -328,7 +340,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -350,6 +362,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="发动机负荷"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -357,7 +370,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
@@ -379,6 +392,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="剩余燃油"
+                    android:textColor="@android:color/white"
                     android:textSize="18sp" />
 
                 <TextView
@@ -386,7 +400,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:textColor="@android:color/holo_red_light"
+                    android:textColor="@android:color/white"
                     android:textSize="25sp" />
 
             </LinearLayout>
