@@ -71,6 +71,7 @@ public class PanelActivity extends AppCompatActivity {
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
         OBDCore.getInstance(this).open("/dev/ttyMT0");
+        OBDCore.getInstance(this).setCarStatus(true);
 
     }
 
