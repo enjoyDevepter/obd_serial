@@ -1,16 +1,27 @@
 package com.miyuan.obd;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.miyuan.obd.serial.OBDCore;
 import com.miyuan.obd.serial.PanelBoardInfo;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 
 public class PanelActivity extends AppCompatActivity {
@@ -88,6 +99,26 @@ public class PanelActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
             }
         }, 2000, 1000);
+
+        PermissionUtil.requestPermissionForInit(new PermissionUtil.RequestPermission() {
+            @Override
+            public void onRequestPermissionSuccess() {
+
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+            }
+        }, new RxPermissions(this), RxErrorHandler.builder().with(this).responseErrorListener(new ResponseErrorListener() {
+            @Override
+            public void handleResponseError(Context context, Throwable t) {
+
+            }
+        }).build());
     }
 
     @Override
