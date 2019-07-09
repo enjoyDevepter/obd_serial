@@ -56,7 +56,6 @@ public class PanelActivity extends AppCompatActivity {
                 temperature.setText(String.valueOf(panelBoardInfo.getTemperature()) + "℃");
                 engineLoad.setText(String.valueOf(panelBoardInfo.getEngineLoad()) + "%");
                 residualFuel.setText(String.valueOf(panelBoardInfo.getResidualFuel()) + "%");
-                Log.d("panelBoardInfo.getStatus()  " + panelBoardInfo.getStatus() + "   start===  " + start);
                 if (panelBoardInfo.getStatus() != start) {
                     init(panelBoardInfo.getStatus());
                     start = panelBoardInfo.getStatus();
@@ -66,7 +65,6 @@ public class PanelActivity extends AppCompatActivity {
     };
 
     private void init(boolean start) {
-        Log.d("PanelActivity init " + start);
         String status = "";
         if (start) {
             // 开启
@@ -77,7 +75,6 @@ public class PanelActivity extends AppCompatActivity {
         }
         final File file = new File("/sys/devices/platform/rc_motor/stepmotor");
         if (file.exists()) {
-            Log.d("PanelActivity file.exists() ");
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(file);
