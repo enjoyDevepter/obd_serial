@@ -1,21 +1,27 @@
 package com.miyuan.obd;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.miyuan.obd.serial.OBDCore;
 import com.miyuan.obd.serial.PanelBoardInfo;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import me.jessyan.rxerrorhandler.core.RxErrorHandler;
+import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
 
 
 public class PanelActivity extends AppCompatActivity {
@@ -50,17 +56,17 @@ public class PanelActivity extends AppCompatActivity {
                 temperature.setText(String.valueOf(panelBoardInfo.getTemperature()) + "℃");
                 engineLoad.setText(String.valueOf(panelBoardInfo.getEngineLoad()) + "%");
                 residualFuel.setText(String.valueOf(panelBoardInfo.getResidualFuel()) + "%");
-                boolean status = Boolean.valueOf(panelBoardInfo.getStatus());
-                if (status != start) {
-                    init(status);
-                    start = status;
+                Log.d("panelBoardInfo.getStatus()  " + panelBoardInfo.getStatus() + "   start===  " + start);
+                if (panelBoardInfo.getStatus() != start) {
+                    init(panelBoardInfo.getStatus());
+                    start = panelBoardInfo.getStatus();
                 }
             }
         }
     };
 
     private void init(boolean start) {
-        Log.e("obd_core", "PanelActivity init " + start);
+        Log.d("PanelActivity init " + start);
         String status = "";
         if (start) {
             // 开启
@@ -71,7 +77,7 @@ public class PanelActivity extends AppCompatActivity {
         }
         final File file = new File("/sys/devices/platform/rc_motor/stepmotor");
         if (file.exists()) {
-            Log.e("obd_core", "PanelActivity file.exists() ");
+            Log.d("PanelActivity file.exists() ");
             FileOutputStream fos = null;
             try {
                 fos = new FileOutputStream(file);
@@ -117,7 +123,7 @@ public class PanelActivity extends AppCompatActivity {
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
         OBDCore.getInstance(this).open("/dev/ttyMT1");
-
+        Log.d("PanelActivity init ");
     }
 
     PanelBoardInfo panelBoardInfo;
@@ -133,6 +139,26 @@ public class PanelActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
             }
         }, 2000, 1000);
+
+        PermissionUtil.requestPermissionForInit(new PermissionUtil.RequestPermission() {
+            @Override
+            public void onRequestPermissionSuccess() {
+
+            }
+
+            @Override
+            public void onRequestPermissionFailure(List<String> permissions) {
+            }
+
+            @Override
+            public void onRequestPermissionFailureWithAskNeverAgain(List<String> permissions) {
+            }
+        }, new RxPermissions(this), RxErrorHandler.builder().with(this).responseErrorListener(new ResponseErrorListener() {
+            @Override
+            public void handleResponseError(Context context, Throwable t) {
+
+            }
+        }).build());
     }
 
     @Override

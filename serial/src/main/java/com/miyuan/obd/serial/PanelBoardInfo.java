@@ -161,7 +161,7 @@ public class PanelBoardInfo implements Serializable {
      * @return
      */
     public boolean getStatus() {
-        return true;
+        return "1".equals(status);
     }
 
 
