@@ -289,7 +289,7 @@ int writeToBox(char *buffer, int len) {
 
     LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
-    //		sleep(1); //写完之后睡一秒
+    usleep(1000*100); //写完之后睡一秒
     if (length > 0) {
         LOGE("write device success");
         return length;
