@@ -34,7 +34,7 @@ extern "C"
 
 string KEY = "MIYUAN_0BD";
 
-char *db_path;
+//char *db_path;
 
 int fd;
 
@@ -127,7 +127,7 @@ void LOGE_HEX(const char *msg, char *data, int len) {
         return;
     }
     formatStr(buffer, data, len);
-    LOGE("%s", buffer);
+//    LOGE("%s", buffer);
     free(buffer);
     free(temp);
     temp = NULL;
@@ -202,17 +202,17 @@ static speed_t getBaudrate(jint baudrate) {
             return -1;
     }
 }
-
-/*
-* Class:     com_miyuan_obd_serial_OBDBusiness
-* Method:    initDBPath
-* Signature: (Ljava/lang/String;)V;
-*/
-JNIEXPORT void JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass, jstring path) {
-    db_path = jstring2str(env, path);
-}
-
+//
+///*
+//* Class:     com_miyuan_obd_serial_OBDBusiness
+//* Method:    initDBPath
+//* Signature: (Ljava/lang/String;)V;
+//*/
+//JNIEXPORT void JNICALL
+//Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass, jstring path) {
+//    db_path = jstring2str(env, path);
+//}
+//
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
@@ -285,23 +285,23 @@ int writeToBox(char *buffer, int len) {
     }
     char buf[1024] = {0};
     int nread = read(fd, buf, sizeof(buf));
-    LOGE_HEX("CLEAR_BUF", buf, nread);
+//    LOGE_HEX("CLEAR_BUF", buf, nread);
 
-    LOGE_HEX("APP-OBD", buffer, len);
+//    LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
     //		sleep(1); //写完之后睡一秒
     if (length > 0) {
-        LOGE("write device success");
+//        LOGE("write device success");
         return length;
     } else {
-        LOGE("write device error");
+//        LOGE("write device error");
     }
     return -1;
 }
 
 int readFormBox(char *buffer, int timeOut) {
     if (fd == -1) {
-        LOGE("seriail open fail!");
+//        LOGE("seriail open fail!");
         return -1;
     }
 
@@ -317,10 +317,10 @@ int readFormBox(char *buffer, int timeOut) {
         ret = select(fd + 1, &readfd, NULL, NULL, &timeout); // 检测我们上面设置到集合readfd里的句柄是否有可读信息
         switch (ret) {
             case -1: // 这说明select函数出错
-                LOGE("fd read failure");
+//                LOGE("fd read failure");
                 return -1;
             case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
-                LOGE("fd read timeOut");
+//                LOGE("fd read timeOut");
                 times++;
                 return -1;
             default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
@@ -330,7 +330,7 @@ int readFormBox(char *buffer, int timeOut) {
                     bzero(tempBuff, sizeof(tempBuff));
                     int nread = read(fd, tempBuff, sizeof(tempBuff));
                     if (nread > 0) {
-                        LOGE_HEX("OBD-APP", tempBuff, nread);
+//                        LOGE_HEX("OBD-APP", tempBuff, nread);
                         memset(buffer, 0, sizeof(char) * 100);
                         bool start = false;
                         int k = 1;
@@ -340,7 +340,7 @@ int readFormBox(char *buffer, int timeOut) {
                                 buffer[k] = tempBuff[i];
                                 k++;
                                 if (tempBuff[i] == 0x7e && (i == begin + len + 6)) {
-                                    LOGE_HEX("deal OBD-APP ", buffer, k);
+//                                    LOGE_HEX("deal OBD-APP ", buffer, k);
                                     return k;
                                 }
                             }

@@ -1,7 +1,5 @@
 package com.miyuan.obd.serial;
 
-import java.util.List;
-
 class OBDBusiness {
 
     static {
@@ -11,15 +9,11 @@ class OBDBusiness {
     public OBDBusiness() {
     }
 
-    native void initDBPath(String dbPath);
-
     native boolean open(String path);
 
     native void close();
 
     native String getVersion();
-
-//    native List<FaultCode> getFaultCode();
 
     native boolean cleanFaultCode();
 
