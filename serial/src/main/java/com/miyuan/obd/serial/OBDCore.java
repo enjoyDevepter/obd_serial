@@ -1,13 +1,6 @@
 package com.miyuan.obd.serial;
 
 import android.content.Context;
-import android.os.Environment;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * OBD通信核心类
@@ -66,25 +59,6 @@ public class OBDCore {
     }
 
 
-//    /**
-//     * 获取故障码
-//     *
-//     * @return 故障码集合
-//     */
-//    public synchronized List<FaultCode> getFaultCode() {
-//        return obdBusiness.getFaultCode();
-//    }
-
-    /**
-     * 清除当前故障码
-     *
-     * @return 清除成功标示
-     */
-    public synchronized boolean cleanFaultCode() {
-        return obdBusiness.cleanFaultCode();
-    }
-
-
     /**
      * 获取仪表盘信息
      *
@@ -92,17 +66,6 @@ public class OBDCore {
      */
     public synchronized PanelBoardInfo getFixedData() {
         return obdBusiness.getFixedData();
-    }
-
-
-    /**
-     * 根据实时数据类型获取相应数据
-     *
-     * @param dynamicDataType 实时数据类型 {@link com.miyuan.obd.serial.DynamicDataType}
-     * @return 实时数据类型对应数据
-     */
-    public synchronized String getDynamicData(int dynamicDataType) {
-        return obdBusiness.getDynamicData(dynamicDataType);
     }
 
 

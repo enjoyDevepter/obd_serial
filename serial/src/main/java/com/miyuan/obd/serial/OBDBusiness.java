@@ -15,11 +15,7 @@ class OBDBusiness {
 
     native String getVersion();
 
-    native boolean cleanFaultCode();
-
     native PanelBoardInfo getFixedData();
-
-    native String getDynamicData(int dynamicDataType);
 
     native boolean setCarStatus(boolean status);
 
