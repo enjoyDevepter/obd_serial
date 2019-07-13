@@ -20,9 +20,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.miyuan.obd.MainActivity"
-            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

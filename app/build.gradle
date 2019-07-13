@@ -19,18 +19,18 @@ android {
         }
     }
 
-//    sourceSets { // 工程结构配置
-//        main {
-//            assets.srcDirs = ['assets']
-//            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
-//        }
-//    }
+    sourceSets { // 工程结构配置
+        main {
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs'] // 配置此处才会打包jni 的.so 文件
+        }
+    }
 }
 
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':serial')
+//    implementation project(path: ':serial')
     implementation 'com.jakewharton.timber:timber:4.7.0'
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
