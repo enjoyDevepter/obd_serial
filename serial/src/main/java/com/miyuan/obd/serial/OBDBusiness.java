@@ -3,7 +3,7 @@ package com.miyuan.obd.serial;
 class OBDBusiness {
 
     static {
-        System.loadLibrary("serial");
+        System.loadLibrary("t6_serial");
     }
 
     public OBDBusiness() {

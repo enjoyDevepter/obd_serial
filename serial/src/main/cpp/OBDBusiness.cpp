@@ -127,7 +127,7 @@ void LOGE_HEX(const char *msg, char *data, int len) {
         return;
     }
     formatStr(buffer, data, len);
-//    LOGE("%s", buffer);
+    LOGE("%s", buffer);
     free(buffer);
     free(temp);
     temp = NULL;
@@ -285,9 +285,9 @@ int writeToBox(char *buffer, int len) {
     }
     char buf[1024] = {0};
     int nread = read(fd, buf, sizeof(buf));
-//    LOGE_HEX("CLEAR_BUF", buf, nread);
+    LOGE_HEX("CLEAR_BUF", buf, nread);
 
-//    LOGE_HEX("APP-OBD", buffer, len);
+    LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
     usleep(1000*100); //写完之后睡一秒
     if (length > 0) {
@@ -330,7 +330,7 @@ int readFormBox(char *buffer, int timeOut) {
                     bzero(tempBuff, sizeof(tempBuff));
                     int nread = read(fd, tempBuff, sizeof(tempBuff));
                     if (nread > 0) {
-//                        LOGE_HEX("OBD-APP", tempBuff, nread);
+                        LOGE_HEX("OBD-APP", tempBuff, nread);
                         memset(buffer, 0, sizeof(char) * 100);
                         bool start = false;
                         int k = 1;
@@ -340,7 +340,7 @@ int readFormBox(char *buffer, int timeOut) {
                                 buffer[k] = tempBuff[i];
                                 k++;
                                 if (tempBuff[i] == 0x7e && (i == begin + len + 6)) {
-//                                    LOGE_HEX("deal OBD-APP ", buffer, k);
+                                    LOGE_HEX("deal OBD-APP ", buffer, k);
                                     return k;
                                 }
                             }

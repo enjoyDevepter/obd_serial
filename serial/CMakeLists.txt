@@ -74,7 +74,7 @@ add_library(sqlite
 #        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libssl.a)
 
 add_library( # Sets the name of the library.
-        serial
+        t6_serial
 
         # Sets the library as a shared library.
         SHARED
@@ -109,7 +109,7 @@ find_library( # Sets the name of the path variable.
 # build script, prebuilt third-party libraries, or system libraries.
 
 target_link_libraries( # Specifies the target library.
-        serial
+        t6_serial
         # Links the target library to the log library
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
