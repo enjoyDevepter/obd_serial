@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <vector>
 #include "android/log.h"
-//#include <sqlite3.h>
+#include <sqlite3.h>
 //#include <openssl/crypto.h>
 //#include <openssl/des.h>
 //#include <openssl/pem.h>
@@ -434,178 +434,178 @@ Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
 //    return buffer;
 //}
 
-//static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName) {
-//    int i = 0;
-//    FaultCode code;
-//    for (i = 0; i < argc; i++) {
-////        char *decode = base64_decode(argv[i], strlen(argv[i]));
-//        if (!strcmp(azColName[i], "id")) {
-//            strcpy(code.id, argv[i]);
-//        }
-//        if (!strcmp(azColName[i], "suit")) {
-//            strcpy(code.suit, argv[i]);
-//        }
-//        if (!strcmp(azColName[i], "desc_ch")) {
-//            strcpy(code.desc_ch, argv[i]);
-//        }
-//        if (!strcmp(azColName[i], "desc_en")) {
-//            strcpy(code.desc_en, argv[i]);
-//        }
-//        if (!strcmp(azColName[i], "system")) {
-//            strcpy(code.system, argv[i]);
-//        }
-//        if (!strcmp(azColName[i], "detail")) {
-//            strcpy(code.detail, argv[i]);
-//        }
-//        LOGE("azColName[i] == %s", argv[i]);
-//    }
-//    codes.push_back(code);
-//    return 0;
-//}
+static int callback_fault(void *NotUsed, int argc, char **argv, char **azColName) {
+    int i = 0;
+    FaultCode code;
+    for (i = 0; i < argc; i++) {
+//        char *decode = base64_decode(argv[i], strlen(argv[i]));
+        if (!strcmp(azColName[i], "id")) {
+            strcpy(code.id, argv[i]);
+        }
+        if (!strcmp(azColName[i], "suit")) {
+            strcpy(code.suit, argv[i]);
+        }
+        if (!strcmp(azColName[i], "desc_ch")) {
+            strcpy(code.desc_ch, argv[i]);
+        }
+        if (!strcmp(azColName[i], "desc_en")) {
+            strcpy(code.desc_en, argv[i]);
+        }
+        if (!strcmp(azColName[i], "system")) {
+            strcpy(code.system, argv[i]);
+        }
+        if (!strcmp(azColName[i], "detail")) {
+            strcpy(code.detail, argv[i]);
+        }
+        LOGE("azColName[i] == %s", argv[i]);
+    }
+    codes.push_back(code);
+    return 0;
+}
 
-//void getFaultCodeInfo(vector<string> ids) {
-//    char sql[1024] = {0};
-//    sqlite3 *db;
-//    char *zErrMsg = 0;
-//    const char *data = "Callback function called";
-//    int rc;
-//    rc = sqlite3_open_v2(db_path, &db, SQLITE_OPEN_READONLY, NULL);
-//    if (rc != SQLITE_OK) {
-//        LOGE("Can't open database: %s \n", sqlite3_errmsg(db));
-//        return;
-//    }
-//
-//    strcat(sql, "SELECT id,suit,desc_ch,desc_en,system,detail from code where id in(");
-//    int i = 0;
-//    for (i = 0; i < ids.size(); i++) {
-//        char temp[10] = {0};
-//        if (i != ids.size() - 1) {
-//            sprintf(temp, "'%s',", ids[i].c_str());
-//        } else {
-//            sprintf(temp, "'%s');", ids[i].c_str());
-//        }
-//        strcat(sql, temp);
-//    }
-//
-//    LOGE("SQL  %s\n", sql);
-//
-//    rc = sqlite3_exec(db, sql, callback_fault, (void *) data, &zErrMsg);
-//    if (rc != SQLITE_OK) {
-//        LOGE("SQL error: %s\n", zErrMsg);
-//        sqlite3_free(zErrMsg);
-//        return;
-//    } else {
-//        sqlite3_close(db);
-//    }
-//}
+void getFaultCodeInfo(vector<string> ids) {
+    char sql[1024] = {0};
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    const char *data = "Callback function called";
+    int rc;
+    rc = sqlite3_open_v2(db_path, &db, SQLITE_OPEN_READONLY, NULL);
+    if (rc != SQLITE_OK) {
+        LOGE("Can't open database: %s \n", sqlite3_errmsg(db));
+        return;
+    }
+
+    strcat(sql, "SELECT id,suit,desc_ch,desc_en,system,detail from code where id in(");
+    int i = 0;
+    for (i = 0; i < ids.size(); i++) {
+        char temp[10] = {0};
+        if (i != ids.size() - 1) {
+            sprintf(temp, "'%s',", ids[i].c_str());
+        } else {
+            sprintf(temp, "'%s');", ids[i].c_str());
+        }
+        strcat(sql, temp);
+    }
+
+    LOGE("SQL  %s\n", sql);
+
+    rc = sqlite3_exec(db, sql, callback_fault, (void *) data, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        LOGE("SQL error: %s\n", zErrMsg);
+        sqlite3_free(zErrMsg);
+        return;
+    } else {
+        sqlite3_close(db);
+    }
+}
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    getFaultCode
 * Signature: ()Ljava/util/List;
 */
-//JNIEXPORT jobject JNICALL
-//Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
-//    char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
-//    input[4] = input[1] ^ input[2] ^ input[3];
-//
-//    writeToBox(input, sizeof(input));
-//
-//    codes.clear();
-//
-//    char buf[1024] = {0};
-//    int len = readFormBox(buf, TIMEOUT);
-////    int len = 32;
-////    char buf[32] = {0x7E,0x08,0x01,0x00,0x19,0x08,0x03,0x10,0x05,0x03,0x01,0x09,0x03,0x81,0x23,0x03,0x41,0x56,0x07,0x91,0x05,0x07,0x41,0x19,0x07,0xC8,0x12,0x07,0x41,0x18,0xFF,0x7E};
-//
-//    jclass list_jcs = env->FindClass("java/util/ArrayList");
-//    //获取ArrayList构造函数id
-//    jmethodID list_init = env->GetMethodID(list_jcs, "<init>", "()V");
-//    //创建一个ArrayList对象
-//    jobject list_obj = env->NewObject(list_jcs, list_init, "");
-//
-//    if (isValid(buf, len)) {
-//        // 解析故障码总数
-//        int count, i;
-//        count = buf[5];
-//        //获取ArrayList对象的add()的methodID
-//        jmethodID list_add = env->GetMethodID(list_jcs, "add", "(Ljava/lang/Object;)Z");
-//
-//        //获取FaultCode类
-//        jclass fault_code_cls = env->FindClass("com/miyuan/obd/serial/FaultCode");
-//        //获取FaultCode的构造函数
-//        jmethodID fault_code_init = env->GetMethodID(fault_code_cls, "<init>",
-//                                                     "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-//
-//        vector<string> ids;
-//        if (count > 0) {
-//            for (i = 0; i < count; i++) {
-//                char item[3] = {0};
-//                char code[8] = {0};
-//                memcpy(item, buf + 6 + i * 3, 3);
-//                switch ((item[1] & 0xFF) >> 6) {
-//                    case 0:
-//                        strcat(code, "P");
-//                        break;
-//                    case 1:
-//                        strcat(code, "C");
-//                        break;
-//                    case 2:
-//                        strcat(code, "B");
-//                        break;
-//                    case 3:
-//                        strcat(code, "U");
-//                        break;
-//                }
-//                char temp[4] = {0};
-//                sprintf(temp, "%02X", item[1] & 0x3F);
-//                strcat(code, temp);
-//                sprintf(temp, "%02X", item[2]);
-//                strcat(code, temp);
-//                ids.push_back(code);
-//            }
-//            // [7E 08 01 00 19 08 03 10 05 03 01 09 03 81 23 03 41 56 07 91 05 07 41 19 07 C8 12 07 41 18 FF 7E]
-//            // 查询故障码详细信息
-//            getFaultCodeInfo(ids);
-//
-//            for (i = 0; i < codes.size(); i++) {
-//                FaultCode faultCode = codes[i];
-//                jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
-//                                                        env->NewStringUTF(faultCode.id),
-//                                                        env->NewStringUTF(faultCode.suit),
-//                                                        env->NewStringUTF(faultCode.desc_ch),
-//                                                        env->NewStringUTF(faultCode.desc_en),
-//                                                        env->NewStringUTF(faultCode.system),
-//                                                        env->NewStringUTF(faultCode.detail));
-//                env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
-//            }
-//        }
-//    }
-//    return list_obj;
-//}
+JNIEXPORT jobject JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
+    char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    codes.clear();
+
+    char buf[1024] = {0};
+    int len = readFormBox(buf, TIMEOUT);
+//    int len = 32;
+//    char buf[32] = {0x7E,0x08,0x01,0x00,0x19,0x08,0x03,0x10,0x05,0x03,0x01,0x09,0x03,0x81,0x23,0x03,0x41,0x56,0x07,0x91,0x05,0x07,0x41,0x19,0x07,0xC8,0x12,0x07,0x41,0x18,0xFF,0x7E};
+
+    jclass list_jcs = env->FindClass("java/util/ArrayList");
+    //获取ArrayList构造函数id
+    jmethodID list_init = env->GetMethodID(list_jcs, "<init>", "()V");
+    //创建一个ArrayList对象
+    jobject list_obj = env->NewObject(list_jcs, list_init, "");
+
+    if (isValid(buf, len)) {
+        // 解析故障码总数
+        int count, i;
+        count = buf[5];
+        //获取ArrayList对象的add()的methodID
+        jmethodID list_add = env->GetMethodID(list_jcs, "add", "(Ljava/lang/Object;)Z");
+
+        //获取FaultCode类
+        jclass fault_code_cls = env->FindClass("com/miyuan/obd/serial/FaultCode");
+        //获取FaultCode的构造函数
+        jmethodID fault_code_init = env->GetMethodID(fault_code_cls, "<init>",
+                                                     "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+
+        vector<string> ids;
+        if (count > 0) {
+            for (i = 0; i < count; i++) {
+                char item[3] = {0};
+                char code[8] = {0};
+                memcpy(item, buf + 6 + i * 3, 3);
+                switch ((item[1] & 0xFF) >> 6) {
+                    case 0:
+                        strcat(code, "P");
+                        break;
+                    case 1:
+                        strcat(code, "C");
+                        break;
+                    case 2:
+                        strcat(code, "B");
+                        break;
+                    case 3:
+                        strcat(code, "U");
+                        break;
+                }
+                char temp[4] = {0};
+                sprintf(temp, "%02X", item[1] & 0x3F);
+                strcat(code, temp);
+                sprintf(temp, "%02X", item[2]);
+                strcat(code, temp);
+                ids.push_back(code);
+            }
+            // [7E 08 01 00 19 08 03 10 05 03 01 09 03 81 23 03 41 56 07 91 05 07 41 19 07 C8 12 07 41 18 FF 7E]
+            // 查询故障码详细信息
+            getFaultCodeInfo(ids);
+
+            for (i = 0; i < codes.size(); i++) {
+                FaultCode faultCode = codes[i];
+                jobject fault_code_obj = env->NewObject(fault_code_cls, fault_code_init,
+                                                        env->NewStringUTF(faultCode.id),
+                                                        env->NewStringUTF(faultCode.suit),
+                                                        env->NewStringUTF(faultCode.desc_ch),
+                                                        env->NewStringUTF(faultCode.desc_en),
+                                                        env->NewStringUTF(faultCode.system),
+                                                        env->NewStringUTF(faultCode.detail));
+                env->CallBooleanMethod(list_obj, list_add, fault_code_obj);
+            }
+        }
+    }
+    return list_obj;
+}
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    cleanFaultCode
 * Signature: ()Z
 */
-//JNIEXPORT jboolean JNICALL
-//Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj) {
-//    char input[6] = {HEAD, 0x81, 0x02, 0x00, 0x00, HEAD};
-//    input[4] = input[1] ^ input[2] ^ input[3];
-//
-//    writeToBox(input, sizeof(input));
-//
-//    char result[1024];
-//
-//    int len = readFormBox(result, TIMEOUT);
-//
-//    if (isValid(result, len)) {
-//        return result[5] == 0;
-//    } else {
-//        return false;
-//    }
-//}
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj) {
+    char input[6] = {HEAD, 0x81, 0x02, 0x00, 0x00, HEAD};
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    char result[1024];
+
+    int len = readFormBox(result, TIMEOUT);
+
+    if (isValid(result, len)) {
+        return result[5] == 0;
+    } else {
+        return false;
+    }
+}
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness

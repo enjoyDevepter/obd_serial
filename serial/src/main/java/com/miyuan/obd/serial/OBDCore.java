@@ -2,6 +2,8 @@ package com.miyuan.obd.serial;
 
 import android.content.Context;
 
+import java.util.List;
+
 /**
  * OBD通信核心类
  */
@@ -56,6 +58,25 @@ public class OBDCore {
      */
     public synchronized String getVersion() {
         return obdBusiness.getVersion();
+    }
+
+
+    /**
+     * 获取故障码
+     *
+     * @return 故障码集合
+     */
+    public synchronized List<FaultCode> getFaultCode() {
+        return obdBusiness.getFaultCode();
+    }
+
+    /**
+     * 清除当前故障码
+     *
+     * @return 清除成功标示
+     */
+    public synchronized boolean cleanFaultCode() {
+        return obdBusiness.cleanFaultCode();
     }
 
 

@@ -1,5 +1,7 @@
 package com.miyuan.obd.serial;
 
+import java.util.List;
+
 class OBDBusiness {
 
     static {
@@ -14,6 +16,10 @@ class OBDBusiness {
     native void close();
 
     native String getVersion();
+
+    native List<FaultCode> getFaultCode();
+
+    native boolean cleanFaultCode();
 
     native PanelBoardInfo getFixedData();
 
