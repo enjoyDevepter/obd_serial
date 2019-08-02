@@ -29,6 +29,21 @@ add_library(cutils
 add_library(vndksupport
         SHARED
         IMPORTED)
+add_library(backtrace
+        SHARED
+        IMPORTED)
+add_library(base
+        SHARED
+        IMPORTED)
+
+add_library(unwind
+        SHARED
+        IMPORTED)
+add_library(lzma
+        SHARED
+        IMPORTED)
+
+
 
 set_target_properties(
         vndksupport
@@ -55,6 +70,26 @@ set_target_properties(
         c++
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libc++.so)
+
+set_target_properties(
+        backtrace
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libbacktrace.so)
+
+set_target_properties(
+        base
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libbase.so)
+
+set_target_properties(
+        unwind
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libunwind.so)
+
+set_target_properties(
+        lzma
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/liblzma.so)
 
 #添加两个预编译库
 #add_library(openssl-crypto
@@ -113,4 +148,4 @@ target_link_libraries( # Specifies the target library.
         # Links the target library to the log library
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
-        ${log-lib} sqlite utils c++ cutils vndksupport )
+        ${log-lib} sqlite utils c++ cutils vndksupport backtrace base unwind lzma )

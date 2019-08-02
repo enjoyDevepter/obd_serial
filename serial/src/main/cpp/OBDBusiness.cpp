@@ -34,7 +34,7 @@ extern "C"
 
 string KEY = "MIYUAN_0BD";
 
-//char *db_path;
+char *db_path;
 
 int fd;
 
@@ -202,17 +202,17 @@ static speed_t getBaudrate(jint baudrate) {
             return -1;
     }
 }
-//
-///*
-//* Class:     com_miyuan_obd_serial_OBDBusiness
-//* Method:    initDBPath
-//* Signature: (Ljava/lang/String;)V;
-//*/
-//JNIEXPORT void JNICALL
-//Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass, jstring path) {
-//    db_path = jstring2str(env, path);
-//}
-//
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    initDBPath
+* Signature: (Ljava/lang/String;)V;
+*/
+JNIEXPORT void JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_initDBPath(JNIEnv *env, jclass, jstring path) {
+    db_path = jstring2str(env, path);
+}
+
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
@@ -289,7 +289,7 @@ int writeToBox(char *buffer, int len) {
 
     LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
-    usleep(1000*100); //写完之后睡一秒
+    usleep(1000 * 100); //写完之后睡一秒
     if (length > 0) {
 //        LOGE("write device success");
         return length;
@@ -320,7 +320,7 @@ int readFormBox(char *buffer, int timeOut) {
 //                LOGE("fd read failure");
                 return -1;
             case 0: // 说明在我们设定的时间值5秒加0毫秒的时间内，mTty的状态没有发生变化
-//                LOGE("fd read timeOut");
+                LOGE("fd read timeOut");
                 times++;
                 return -1;
             default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
@@ -629,7 +629,8 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 
         PanelBoard panelBoard;
         char temp[20] = {0};
-        sprintf(temp, "%.1f",((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
+        sprintf(temp, "%.1f",
+                ((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
         memcpy(panelBoard.voltage, temp, sizeof(temp));
 
         memset(temp, 0, sizeof(temp));

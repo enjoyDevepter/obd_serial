@@ -11,6 +11,8 @@ class OBDBusiness {
     public OBDBusiness() {
     }
 
+    native void initDBPath(String dbPath);
+
     native boolean open(String path);
 
     native void close();
