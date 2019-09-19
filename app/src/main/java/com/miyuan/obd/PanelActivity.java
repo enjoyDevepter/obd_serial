@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import me.jessyan.rxerrorhandler.core.RxErrorHandler;
 import me.jessyan.rxerrorhandler.handler.listener.ResponseErrorListener;
@@ -96,10 +99,6 @@ public class PanelActivity extends AppCompatActivity {
         }
 
     }
-
-    private Timer timer;
-    private TimerTask timerTask;
-
     private boolean start;
 
     @Override
@@ -119,8 +118,8 @@ public class PanelActivity extends AppCompatActivity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
-        OBDCore.getInstance(this).open("/dev/ttyMT1");
-        Log.d("PanelActivity init ");
+        OBDCore.getInstance(this).open("/dev/ttyLP3");
+//        Log.d("PanelActivity init ");
     }
 
     PanelBoardInfo panelBoardInfo;
@@ -128,14 +127,16 @@ public class PanelActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
-                handler.sendEmptyMessage(0);
-            }
-        }, 2000, 1000);
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+                                                             panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
+                                                             handler.sendEmptyMessage(0);
+                                                         }
+                                                     },
+                2, 1, TimeUnit.SECONDS);
 
         PermissionUtil.requestPermissionForInit(new PermissionUtil.RequestPermission() {
             @Override
@@ -156,11 +157,5 @@ public class PanelActivity extends AppCompatActivity {
 
             }
         }).build());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        timer.cancel();
     }
 }
