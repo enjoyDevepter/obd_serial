@@ -159,12 +159,12 @@ public class OBDCore {
     }
 
     /**
-     * 设置启停状态
+     * 设置车辆是否有启停功能
      *
-     * @param start
+     * @param has
      * @return
      */
-    public boolean setAutoStart(boolean start) {
-        return obdBusiness.setAutoStart(start);
+    public boolean setAutoStart(boolean has) {
+        return obdBusiness.setAutoStart(has);
     }
 }
