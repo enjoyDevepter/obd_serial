@@ -70,16 +70,8 @@ public class PanelActivity extends Activity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
-        OBDCore.getInstance(this).open("/dev/ttyMT0");
+        OBDCore.getInstance(this).open("/dev/ttyS4");
         OBDCore.getInstance(this).setCarStatus(true);
-//        timer = new Timer();
-//        timer.scheduleAtFixedRate(new TimerTask() {
-//            @Override
-//            public void run() {
-//
-//            }
-//        }, 0, 1000);
-
         panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
         handler.sendEmptyMessage(0);
 
