@@ -48,10 +48,6 @@ public class PanelActivity extends Activity {
             }
         }
     };
-    private Timer timer;
-    private TimerTask timerTask;
-
-    private boolean start;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

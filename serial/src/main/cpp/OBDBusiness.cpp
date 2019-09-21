@@ -98,7 +98,7 @@ char *jstring2str(JNIEnv *env, jstring jstr) {
     return rtn;
 }
 
-void formatStr(char *buf, char *data, int len) {
+void formatStr(char *buf, unsigned char *data, int len) {
     if (buf == NULL || data == NULL) {
         return;
     }
@@ -115,7 +115,7 @@ void formatStr(char *buf, char *data, int len) {
     strcat(buf, "]\r\n");
 }
 
-void LOGE_HEX(const char *msg, char *data, int len) {
+void LOGE_HEX(const char *msg, unsigned char *data, int len) {
     char *buffer = (char *) malloc((sizeof(char)) * 1024);
     char *temp = (char *) malloc((sizeof(char)) * 5);
 
@@ -278,18 +278,18 @@ Java_com_miyuan_obd_serial_OBDBusiness_open(JNIEnv *env, jclass thiz, jstring pa
 /*
 * 向串口写入数据
 */
-int writeToBox(char *buffer, int len) {
+int writeToBox(unsigned char *buffer, int len) {
     if (fd == -1) {
         LOGE("seriail open fail!");
         return -1;
     }
-    char buf[1024] = {0};
+    unsigned char buf[1024] = {0};
     int nread = read(fd, buf, sizeof(buf));
     LOGE_HEX("CLEAR_BUF", buf, nread);
 
     LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
-    usleep(1000 * 100); //写完之后睡一秒
+//    usleep(1000 * 100); //写完之后睡一秒
     if (length > 0) {
 //        LOGE("write device success");
         return length;
@@ -299,7 +299,7 @@ int writeToBox(char *buffer, int len) {
     return -1;
 }
 
-int readFormBox(char *buffer, int timeOut) {
+int readFormBox(unsigned char *buffer, int timeOut) {
     if (fd == -1) {
 //        LOGE("seriail open fail!");
         return -1;
@@ -326,7 +326,7 @@ int readFormBox(char *buffer, int timeOut) {
             default: //说明等待时间还未到0秒加500毫秒，mTty的状态发生了变化
                 if (FD_ISSET(fd, &readfd)) { // 先判断一下mTty这外被监视的句柄是否真的变成可读的了
                     times = 0;
-                    char tempBuff[300];
+                    unsigned char tempBuff[300];
                     bzero(tempBuff, sizeof(tempBuff));
                     int nread = read(fd, tempBuff, sizeof(tempBuff));
                     if (nread > 0) {
@@ -360,7 +360,7 @@ int readFormBox(char *buffer, int timeOut) {
     return -1;
 }
 
-bool isValid(char *result, int len) {
+bool isValid(unsigned char *result, int len) {
     if (result[0] == 0x7e && result[len - 1] == 0x7e && len >= 7) {
         int cr = result[1];
         for (int i = 2; i < len - 2; i++) {
@@ -506,14 +506,14 @@ void getFaultCodeInfo(vector<string> ids) {
 */
 JNIEXPORT jobject JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
-    char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
+    unsigned char input[6] = {HEAD, 0x81, 0x01, 0x00, 0x00, HEAD};
     input[4] = input[1] ^ input[2] ^ input[3];
 
     writeToBox(input, sizeof(input));
 
     codes.clear();
 
-    char buf[1024] = {0};
+    unsigned char buf[1024] = {0};
     int len = readFormBox(buf, TIMEOUT);
 //    int len = 32;
 //    char buf[32] = {0x7E,0x08,0x01,0x00,0x19,0x08,0x03,0x10,0x05,0x03,0x01,0x09,0x03,0x81,0x23,0x03,0x41,0x56,0x07,0x91,0x05,0x07,0x41,0x19,0x07,0xC8,0x12,0x07,0x41,0x18,0xFF,0x7E};
@@ -591,12 +591,12 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFaultCode(JNIEnv *env, jobject jobj) {
 */
 JNIEXPORT jboolean JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj) {
-    char input[6] = {HEAD, 0x81, 0x02, 0x00, 0x00, HEAD};
+    unsigned char input[6] = {HEAD, 0x81, 0x02, 0x00, 0x00, HEAD};
     input[4] = input[1] ^ input[2] ^ input[3];
 
     writeToBox(input, sizeof(input));
 
-    char result[1024];
+    unsigned char result[1024];
 
     int len = readFormBox(result, TIMEOUT);
 
@@ -614,12 +614,12 @@ Java_com_miyuan_obd_serial_OBDBusiness_cleanFaultCode(JNIEnv *env, jobject jobj)
 */
 JNIEXPORT jobject JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
-    char input[7] = {HEAD, 0x83, 0x01, 0x00, 0x01, 0x00, HEAD};
+    unsigned char input[7] = {HEAD, 0x83, 0x01, 0x00, 0x01, 0x00, HEAD};
     input[5] = input[1] ^ input[2] ^ input[3] ^ input[4];
 
     writeToBox(input, sizeof(input));
 
-    char buf[1024] = {0};
+    unsigned char buf[1024] = {0};
 
     memset(buf, 0, sizeof(char) * 1024);
 
@@ -1563,7 +1563,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 */
 JNIEXPORT jboolean JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, jboolean status) {
-    char input[6] = {HEAD, 0x89, 0x01, 0x01, 0x00, HEAD};
+    unsigned char input[6] = {HEAD, 0x89, 0x01, 0x01, 0x00, HEAD};
     if (!status) {
         input[3] = 0x00;
     }
@@ -1571,7 +1571,7 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, j
 
     writeToBox(input, sizeof(input));
 
-    char buf[1024];
+    unsigned char buf[1024];
 
     int len = readFormBox(buf, TIMEOUT);
 
@@ -1585,12 +1585,63 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, j
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    setAutoStart
+* Signature: (Z)V
+*/
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_setAutoStart(JNIEnv *env, jobject jobj, jboolean start) {
+    unsigned char input[6] = {HEAD, 0x8B, 0x01, 0x01, 0x00, HEAD};
+    if (!start) {
+        input[3] = 0x00;
+    }
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    bool result = isValid(buf, len);
+
+    return result;
+}
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    isLaunched
 * Signature: ()V
 */
 JNIEXPORT jboolean JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_isLaunched(JNIEnv *env, jobject jobj) {
     return isLaunched;
+}
+
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    initMileage
+* Signature: (I)Z;
+*/
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj, jint mile) {
+    unsigned char input[9] = {HEAD, 0x86, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, HEAD};
+    input[3] = (mile & 0xFF000000) >> 24;
+    input[4] = (mile & 0x00FF0000) >> 16;
+    input[5] = (mile & 0x0000FF00) >> 8;
+    input[6] = mile & 0x000000FF;
+    input[7] = input[1] ^ input[2] ^ input[3] ^ input[4] ^ input[5] ^ input[6];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    if (isValid(buf, len) && len == 11) {
+        return mile == ((buf[5] << 24) + (buf[6] << 16) + (buf[7] << 8) + buf[8]);
+    }
+    return false;
 }
 
 /*
@@ -1601,32 +1652,6 @@ Java_com_miyuan_obd_serial_OBDBusiness_isLaunched(JNIEnv *env, jobject jobj) {
 JNIEXPORT jboolean JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_isConnect(JNIEnv *env, jobject jobj) {
     return !(times >= 3);
-}
-
-/*
-* Class:     com_miyuan_obd_serial_OBDBusiness
-* Method:    initMileage
-* Signature: (I)Z;
-*/
-JNIEXPORT jboolean JNICALL
-Java_com_miyuan_obd_serial_OBDBusiness_initMileage(JNIEnv *env, jobject jobj, jint mile) {
-    char input[9] = {HEAD, 0x86, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, HEAD};
-    input[3] = (mile & 0xFF000000) >> 24;
-    input[4] = (mile & 0x00FF0000) >> 16;
-    input[5] = (mile & 0x0000FF00) >> 8;
-    input[6] = mile & 0x000000FF;
-    input[7] = input[1] ^ input[2] ^ input[3] ^ input[4] ^ input[5] ^ input[6];
-
-    writeToBox(input, sizeof(input));
-
-    char buf[1024];
-
-    int len = readFormBox(buf, TIMEOUT);
-
-    if (isValid(buf, len) && len == 11) {
-        return mile == ((buf[5] << 24) + (buf[6] << 16) + (buf[7] << 8) + buf[8]);
-    }
-    return false;
 }
 #ifdef __cplusplus
 }

@@ -31,5 +31,7 @@ class OBDBusiness {
 
     native boolean isLaunched();
 
+    native boolean setAutoStart(boolean start);
+
     native boolean isConnect();
 }
