@@ -157,4 +157,14 @@ public class OBDCore {
     public boolean isConnect() {
         return obdBusiness.isConnect();
     }
+
+    /**
+     * 设置启停状态
+     *
+     * @param start
+     * @return
+     */
+    public boolean setAutoStart(boolean start) {
+        return obdBusiness.setAutoStart(start);
+    }
 }
