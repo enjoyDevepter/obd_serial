@@ -109,4 +109,14 @@ public class OBDCore {
     public boolean isConnect() {
         return obdBusiness.isConnect();
     }
+
+    /**
+     * 设置车辆是否有启停功能
+     *
+     * @param has
+     * @return
+     */
+    public boolean setAutoStart(boolean has) {
+        return obdBusiness.setAutoStart(has);
+    }
 }
