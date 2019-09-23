@@ -1585,6 +1585,31 @@ Java_com_miyuan_obd_serial_OBDBusiness_setCarStatus(JNIEnv *env, jobject jobj, j
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    setAutoStart
+* Signature: (Z)V
+*/
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_setAutoStart(JNIEnv *env, jobject jobj, jboolean start) {
+    unsigned char input[6] = {HEAD, 0x8B, 0x01, 0x01, 0x00, HEAD};
+    if (!start) {
+        input[3] = 0x00;
+    }
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    bool result = isValid(buf, len);
+
+    return result;
+}
+
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    isLaunched
 * Signature: ()V
 */

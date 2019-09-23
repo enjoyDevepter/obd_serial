@@ -27,6 +27,8 @@ class OBDBusiness {
 
     native boolean setCarStatus(boolean status);
 
+    native boolean setAutoStart(boolean start);
+
     native boolean initMileage(int mile);
 
     native boolean isLaunched();
