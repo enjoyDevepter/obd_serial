@@ -721,840 +721,840 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 * Method:    getDynamicData
 * Signature: (I)Ljava/lang/String;
 */
-//JNIEXPORT jstring JNICALL
-//Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType) {
-//    char input[7] = {HEAD, 0x83, 0x02, 0x01, 0x00, 0x00, HEAD};
-//    if (dynamicType == 300 || dynamicType == 301)
-//        input[4] = 3;
-//    else if (dynamicType == 200 || dynamicType == 201)
-//        input[4] = 20;
-//    else if (dynamicType == 210 || dynamicType == 211)
-//        input[4] = 21;
-//    else if (dynamicType == 220 || dynamicType == 221)
-//        input[4] = 22;
-//    else if (dynamicType == 230 || dynamicType == 231)
-//        input[4] = 23;
-//    else if (dynamicType == 240 || dynamicType == 241)
-//        input[4] = 24;
-//    else if (dynamicType == 250 || dynamicType == 251)
-//        input[4] = 25;
-//    else if (dynamicType == 260 || dynamicType == 261)
-//        input[4] = 26;
-//    else if (dynamicType == 270 || dynamicType == 271)
-//        input[4] = 27;
-//    else if (dynamicType == 360 || dynamicType == 361)
-//        input[4] = 36;
-//    else if (dynamicType == 370 || dynamicType == 371)
-//        input[4] = 37;
-//    else if (dynamicType == 380 || dynamicType == 381)
-//        input[4] = 38;
-//    else if (dynamicType == 390 || dynamicType == 391)
-//        input[4] = 39;
-//    else if (dynamicType == 400 || dynamicType == 401)
-//        input[4] = 40;
-//    else if (dynamicType == 410 || dynamicType == 411)
-//        input[4] = 41;
-//    else if (dynamicType == 420 || dynamicType == 421)
-//        input[4] = 42;
-//    else if (dynamicType == 430 || dynamicType == 431)
-//        input[4] = 43;
-//    else if (dynamicType == 520 || dynamicType == 521)
-//        input[4] = 52;
-//    else if (dynamicType == 530 || dynamicType == 531)
-//        input[4] = 53;
-//    else if (dynamicType == 540 || dynamicType == 541)
-//        input[4] = 54;
-//    else if (dynamicType == 550 || dynamicType == 551)
-//        input[4] = 55;
-//    else if (dynamicType == 560 || dynamicType == 561)
-//        input[4] = 56;
-//    else if (dynamicType == 570 || dynamicType == 571)
-//        input[4] = 57;
-//    else if (dynamicType == 580 || dynamicType == 581)
-//        input[4] = 58;
-//    else if (dynamicType == 590 || dynamicType == 591)
-//        input[4] = 59;
-//    else if (dynamicType == 850 || dynamicType == 851)
-//        input[4] = 85;
-//    else if (dynamicType == 860 || dynamicType == 861)
-//        input[4] = 86;
-//    else if (dynamicType == 870 || dynamicType == 871)
-//        input[4] = 87;
-//    else if (dynamicType == 880 || dynamicType == 881)
-//        input[4] = 88;
-//    else
-//        input[4] = dynamicType;
-//    input[5] = input[1] ^ input[2] ^ input[3] ^ input[4];
-//
-//    writeToBox(input, sizeof(input));
-//
-//    char buf[1024];
-//
-//    int len = readFormBox(buf, TIMEOUT);
-//
-//    char result[1024] = {0};
-////    formatStr(result, buf, len);
-//    char temp[20] = {0};
-//    unsigned short tempS;
-//    float tempF;
-//    if (isValid(buf, len)) {
-//        if (buf[1] == 0x03 && buf[2] == 0x02) {
-//            if (buf[7] == 0) // 数据不支持
-//            {
-//                strcat(result, "数据不支持");
-//            } else {
-//                short id = buf[6];
-//                switch (id) {
-//                    case 0x01: // 电脑(ECU)中存储的故障码数量
-//                        tempS = buf[8] & 0x7f;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x02: // 冻结故障码
-//                        tempS = (buf[8] << 8) + buf[9];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x03:
-//                        switch (dynamicType) {
-//                            case 300:
-//                                switch (buf[8]) {
-//                                    case 1:
-//                                        strcat(result, "OBD II(California ARB)");
-//                                        break;
-//                                    case 2:
-//                                        strcat(result, "OBD(Federal EPA)");
-//                                        break;
-//                                    case 3:
-//                                        strcat(result, "OBD and OBD II");
-//                                        break;
-//                                    case 4:
-//                                        strcat(result, "OBD I");
-//                                        break;
-//                                    case 5:
-//                                        strcat(result, "Not intended to meet any OBD requirements");
-//                                        break;
-//                                    case 6:
-//                                        strcat(result, "EOBD(Europe)");
-//                                        break;
-//                                }
-//                                break;
-//                            case 301:
-//                                strcat(result, "数据不支持");
-//                                break;
-//                        }
-//                        break;
-//                    case 0x04:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x05:
-//                        tempS = buf[8] - 40;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x06:
-//                    case 0x07:
-//                    case 0x08:
-//                    case 0x09:
-//                        tempF = buf[8] * 100 / 128 - 100;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0A:
-//                        tempS = buf[8] * 3;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0B:
-//                        tempS = buf[8];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0C:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 4;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0D:
-//                        tempS = buf[8];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0E:
-//                        tempF = buf[8] / 2 - 64;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x0F:
-//                        tempS = buf[8] - 40;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x10:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 100;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x11:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x12:
-//                        switch (buf[8]) {
-//                            case 1:
-//                                strcat(result, "Upstream");
-//                                break;
-//                            case 2:
-//                                strcat(result, "Downstream of catalytic converter");
-//                                break;
-//                            case 4:
-//                                strcat(result, "From the outside atmosphere or off ");
-//                                break;
-//                            case 8:
-//                                strcat(result, "Pump commanded on for diagnostics");
-//                                break;
-//                        }
-//                        break;
-//                    case 0x13:
-//                        tempS = buf[8];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x14:
-//                        switch (dynamicType) {
-//                            case 200:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 201:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x15:
-//                        switch (dynamicType) {
-//                            case 210:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 211:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x16:
-//                        switch (dynamicType) {
-//                            case 220:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 221:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x17:
-//                        switch (dynamicType) {
-//                            case 230:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 231:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x18:
-//                        switch (dynamicType) {
-//                            case 240:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 241:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x19:
-//                        switch (dynamicType) {
-//                            case 250:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 251:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x1A:
-//                        switch (dynamicType) {
-//                            case 260:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 261:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x1B:
-//                        switch (dynamicType) {
-//                            case 270:
-//                                tempF = buf[8] * 0.005;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 271:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x1C:
-//                        switch (buf[8]) {
-//                            case 1:
-//                                strcat(result, "OBD II(California ARB)");
-//                                break;
-//                            case 2:
-//                                strcat(result, "OBD(Federal EPA)");
-//                                break;
-//                            case 3:
-//                                strcat(result, "OBD and OBD II");
-//                                break;
-//                            case 4:
-//                                strcat(result, "OBD I");
-//                                break;
-//                            case 5:
-//                                strcat(result, "Not intended to meet any OBD requirements");
-//                                break;
-//                            case 6:
-//                                strcat(result, "EOBD(Europe)");
-//                                break;
-//                        }
-//                        break;
-//                    case 0x1D:
-//                        strcat(result,
-//                               "数据不支持!");
-//                        break;
-//                    case 0x1E:
-//                        strcat(result, buf[8] & 1 == 0 ? "PTO not active" : "PTO active");
-//                        break;
-//                    case 0x1F:
-//                        tempS = (buf[8] << 8) + buf[9];
-//                        sprintf(result, "%hd", tempS);
-//                        break;
-//                    case 0x21:
-//                        tempS = (buf[8] << 8) + buf[9];
-//                        sprintf(result, "%hd", tempS);
-//                        break;
-//                    case 0x22:
-//                        tempF = ((buf[8] << 8) + buf[9]) * 0.079;
-//                        sprintf(result, "%0.2f", tempF);
-//                        break;
-//                    case 0x23:
-//                        tempS = ((buf[8] << 8) + buf[9]) * 10;
-//                        sprintf(result, "%hd", tempS);
-//                        break;
-//                    case 0x24:
-//                        switch (dynamicType) {
-//                            case 360:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 361:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x25:
-//                        switch (dynamicType) {
-//                            case 370:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 371:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x26:
-//                        switch (dynamicType) {
-//                            case 380:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 381:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x27:
-//                        switch (dynamicType) {
-//                            case 390:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 391:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x28:
-//                        switch (dynamicType) {
-//                            case 400:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 401:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x29:
-//                        switch (dynamicType) {
-//                            case 410:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 411:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x2A:
-//                        switch (dynamicType) {
-//                            case 420:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 421:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x2B:
-//                        switch (dynamicType) {
-//                            case 430:
-//                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 431:
-//                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x2C:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x2D:
-//                        tempF = buf[8] * 100 / 128 - 100;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x2E:
-//                    case 0x2F:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x31:
-//                        tempS = (buf[8] << 8) + buf[9];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x32:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 4;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x33:
-//                        tempS = buf[8];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x34:
-//                        switch (dynamicType) {
-//                            case 520:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 521:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x35:
-//                        switch (dynamicType) {
-//                            case 530:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 531:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x36:
-//                        switch (dynamicType) {
-//                            case 540:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 541:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x37:
-//                        switch (dynamicType) {
-//                            case 550:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 551:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x38:
-//                        switch (dynamicType) {
-//                            case 560:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 561:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x39:
-//                        switch (dynamicType) {
-//                            case 570:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 571:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x3A:
-//                        switch (dynamicType) {
-//                            case 580:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 581:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x3B:
-//                        switch (dynamicType) {
-//                            case 590:
-//                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 591:
-//                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x3C:
-//                    case 0x3D:
-//                    case 0x3E:
-//                    case 0x3F:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 10 - 40;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x42:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 1000;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x43:
-//                        tempF = ((buf[8] << 8) + buf[9]) * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x44:
-//                        tempF = ((buf[8] << 8) + buf[9]) * 2 / 65535;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x45:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x46:
-//                        tempS = buf[8] - 40;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x47:
-//                    case 0x48:
-//                    case 0x49:
-//                    case 0x4A:
-//                    case 0x4B:
-//                    case 0x4C:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x4D:
-//                    case 0x4E:
-//                        tempS = (buf[8] << 8) + buf[9];
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x51:
-//                        switch (buf[8]) {
-//                            case 0x01:
-//                                strcat(result, "GAS");
-//                                break;
-//                            case 0x02:
-//                                strcat(result, "METH");
-//                                break;
-//                            case 0x03:
-//                                strcat(result, "ETH");
-//                                break;
-//                            case 0x04:
-//                                strcat(result, "DSL");
-//                                break;
-//                            case 0x05:
-//                                strcat(result, "LPG");
-//                                break;
-//                            case 0x06:
-//                                strcat(result, "CNG");
-//                                break;
-//                            case 0x07:
-//                                strcat(result, "PROP");
-//                                break;
-//                            case 0x08:
-//                                strcat(result, "ELEC");
-//                                break;
-//                            case 0x09:
-//                                strcat(result, "BI_GAS");
-//                                break;
-//                            case 0x0A:
-//                                strcat(result, "BI_METH");
-//                                break;
-//                            case 0x0B:
-//                                strcat(result, "BI_ETH");
-//                                break;
-//                            case 0x0C:
-//                                strcat(result, "BI_LPG");
-//                                break;
-//                            case 0x0D:
-//                                strcat(result, "BI_CNG");
-//                                break;
-//                            case 0x0E:
-//                                strcat(result, "BI_PROP");
-//                                break;
-//                            case 0x0F:
-//                                strcat(result, "BI_ELEC");
-//                                break;
-//                        }
-//                        break;
-//                    case 0x52:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x53:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 200;
-//                        sprintf(temp, "%0.2f", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x54:
-//                        tempS = (buf[8] << 8) + buf[9] - 32768;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x55:
-//                        switch (dynamicType) {
-//                            case 850:
-//                                tempF = buf[8] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 851:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x56:
-//                        switch (dynamicType) {
-//                            case 860:
-//                                tempF = buf[8] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 861:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x57:
-//                        switch (dynamicType) {
-//                            case 870:
-//                                tempF = buf[8] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 871:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x58:
-//                        switch (dynamicType) {
-//                            case 880:
-//                                tempF = buf[8] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                            case 881:
-//                                tempF = buf[9] * 100 / 128 - 100;
-//                                sprintf(temp, "%0.2f", tempF);
-//                                strcat(result, temp);
-//                                break;
-//                        }
-//                        break;
-//                    case 0x59:
-//                        tempS = ((buf[8] << 8) + buf[9]) * 10;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x5A:
-//                    case 0x5B:
-//                        tempF = buf[8] * 100 / 255;
-//                        sprintf(temp, "%0.2F", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x5C:
-//                        tempS = buf[8] - 40;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x5D:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 128 - 210;
-//                        sprintf(temp, "%0.2F", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x5E:
-//                        tempF = ((buf[8] << 8) + buf[9]) / 20;
-//                        sprintf(temp, "%0.2F", tempF);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x61:
-//                    case 0x62:
-//                        tempS = buf[8] - 125;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x63:
-//                        tempS = ((buf[8] << 8) + buf[9]) * 10;
-//                        sprintf(temp, "%hd", tempS);
-//                        strcat(result, temp);
-//                        break;
-//                    case 0x64:
-//                        strcat(result, "数据不支持!");
-//                        break;
-//                    default:
-//                        strcat(result, "数据不支持!");
-//                        break;
-//                }
-//            }
-//        }
-//    } else {
-//        strcat(result, "数据异常! 校验失败");
-//    }
-//    return env->NewStringUTF(result);
-//}
+JNIEXPORT jstring JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_getDynamicData(JNIEnv *env, jobject jobj, jint dynamicType) {
+    unsigned char input[7] = {HEAD, 0x83, 0x02, 0x01, 0x00, 0x00, HEAD};
+    if (dynamicType == 300 || dynamicType == 301)
+        input[4] = 3;
+    else if (dynamicType == 200 || dynamicType == 201)
+        input[4] = 20;
+    else if (dynamicType == 210 || dynamicType == 211)
+        input[4] = 21;
+    else if (dynamicType == 220 || dynamicType == 221)
+        input[4] = 22;
+    else if (dynamicType == 230 || dynamicType == 231)
+        input[4] = 23;
+    else if (dynamicType == 240 || dynamicType == 241)
+        input[4] = 24;
+    else if (dynamicType == 250 || dynamicType == 251)
+        input[4] = 25;
+    else if (dynamicType == 260 || dynamicType == 261)
+        input[4] = 26;
+    else if (dynamicType == 270 || dynamicType == 271)
+        input[4] = 27;
+    else if (dynamicType == 360 || dynamicType == 361)
+        input[4] = 36;
+    else if (dynamicType == 370 || dynamicType == 371)
+        input[4] = 37;
+    else if (dynamicType == 380 || dynamicType == 381)
+        input[4] = 38;
+    else if (dynamicType == 390 || dynamicType == 391)
+        input[4] = 39;
+    else if (dynamicType == 400 || dynamicType == 401)
+        input[4] = 40;
+    else if (dynamicType == 410 || dynamicType == 411)
+        input[4] = 41;
+    else if (dynamicType == 420 || dynamicType == 421)
+        input[4] = 42;
+    else if (dynamicType == 430 || dynamicType == 431)
+        input[4] = 43;
+    else if (dynamicType == 520 || dynamicType == 521)
+        input[4] = 52;
+    else if (dynamicType == 530 || dynamicType == 531)
+        input[4] = 53;
+    else if (dynamicType == 540 || dynamicType == 541)
+        input[4] = 54;
+    else if (dynamicType == 550 || dynamicType == 551)
+        input[4] = 55;
+    else if (dynamicType == 560 || dynamicType == 561)
+        input[4] = 56;
+    else if (dynamicType == 570 || dynamicType == 571)
+        input[4] = 57;
+    else if (dynamicType == 580 || dynamicType == 581)
+        input[4] = 58;
+    else if (dynamicType == 590 || dynamicType == 591)
+        input[4] = 59;
+    else if (dynamicType == 850 || dynamicType == 851)
+        input[4] = 85;
+    else if (dynamicType == 860 || dynamicType == 861)
+        input[4] = 86;
+    else if (dynamicType == 870 || dynamicType == 871)
+        input[4] = 87;
+    else if (dynamicType == 880 || dynamicType == 881)
+        input[4] = 88;
+    else
+        input[4] = dynamicType;
+    input[5] = input[1] ^ input[2] ^ input[3] ^ input[4];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    char result[1024] = {0};
+//    formatStr(result, buf, len);
+    char temp[20] = {0};
+    unsigned short tempS;
+    float tempF;
+    if (isValid(buf, len)) {
+        if (buf[1] == 0x03 && buf[2] == 0x02) {
+            if (buf[7] == 0) // 数据不支持
+            {
+                strcat(result, "数据不支持");
+            } else {
+                short id = buf[6];
+                switch (id) {
+                    case 0x01: // 电脑(ECU)中存储的故障码数量
+                        tempS = buf[8] & 0x7f;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x02: // 冻结故障码
+                        tempS = (buf[8] << 8) + buf[9];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x03:
+                        switch (dynamicType) {
+                            case 300:
+                                switch (buf[8]) {
+                                    case 1:
+                                        strcat(result, "OBD II(California ARB)");
+                                        break;
+                                    case 2:
+                                        strcat(result, "OBD(Federal EPA)");
+                                        break;
+                                    case 3:
+                                        strcat(result, "OBD and OBD II");
+                                        break;
+                                    case 4:
+                                        strcat(result, "OBD I");
+                                        break;
+                                    case 5:
+                                        strcat(result, "Not intended to meet any OBD requirements");
+                                        break;
+                                    case 6:
+                                        strcat(result, "EOBD(Europe)");
+                                        break;
+                                }
+                                break;
+                            case 301:
+                                strcat(result, "数据不支持");
+                                break;
+                        }
+                        break;
+                    case 0x04:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x05:
+                        tempS = buf[8] - 40;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x06:
+                    case 0x07:
+                    case 0x08:
+                    case 0x09:
+                        tempF = buf[8] * 100 / 128 - 100;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x0A:
+                        tempS = buf[8] * 3;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x0B:
+                        tempS = buf[8];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x0C:
+                        tempF = ((buf[8] << 8) + buf[9]) / 4;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x0D:
+                        tempS = buf[8];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x0E:
+                        tempF = buf[8] / 2 - 64;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x0F:
+                        tempS = buf[8] - 40;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x10:
+                        tempF = ((buf[8] << 8) + buf[9]) / 100;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x11:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x12:
+                        switch (buf[8]) {
+                            case 1:
+                                strcat(result, "Upstream");
+                                break;
+                            case 2:
+                                strcat(result, "Downstream of catalytic converter");
+                                break;
+                            case 4:
+                                strcat(result, "From the outside atmosphere or off ");
+                                break;
+                            case 8:
+                                strcat(result, "Pump commanded on for diagnostics");
+                                break;
+                        }
+                        break;
+                    case 0x13:
+                        tempS = buf[8];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x14:
+                        switch (dynamicType) {
+                            case 200:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 201:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x15:
+                        switch (dynamicType) {
+                            case 210:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 211:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x16:
+                        switch (dynamicType) {
+                            case 220:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 221:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x17:
+                        switch (dynamicType) {
+                            case 230:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 231:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x18:
+                        switch (dynamicType) {
+                            case 240:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 241:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x19:
+                        switch (dynamicType) {
+                            case 250:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 251:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x1A:
+                        switch (dynamicType) {
+                            case 260:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 261:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x1B:
+                        switch (dynamicType) {
+                            case 270:
+                                tempF = buf[8] * 0.005;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 271:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x1C:
+                        switch (buf[8]) {
+                            case 1:
+                                strcat(result, "OBD II(California ARB)");
+                                break;
+                            case 2:
+                                strcat(result, "OBD(Federal EPA)");
+                                break;
+                            case 3:
+                                strcat(result, "OBD and OBD II");
+                                break;
+                            case 4:
+                                strcat(result, "OBD I");
+                                break;
+                            case 5:
+                                strcat(result, "Not intended to meet any OBD requirements");
+                                break;
+                            case 6:
+                                strcat(result, "EOBD(Europe)");
+                                break;
+                        }
+                        break;
+                    case 0x1D:
+                        strcat(result,
+                               "数据不支持!");
+                        break;
+                    case 0x1E:
+                        strcat(result, buf[8] & 1 == 0 ? "PTO not active" : "PTO active");
+                        break;
+                    case 0x1F:
+                        tempS = (buf[8] << 8) + buf[9];
+                        sprintf(result, "%hd", tempS);
+                        break;
+                    case 0x21:
+                        tempS = (buf[8] << 8) + buf[9];
+                        sprintf(result, "%hd", tempS);
+                        break;
+                    case 0x22:
+                        tempF = ((buf[8] << 8) + buf[9]) * 0.079;
+                        sprintf(result, "%0.2f", tempF);
+                        break;
+                    case 0x23:
+                        tempS = ((buf[8] << 8) + buf[9]) * 10;
+                        sprintf(result, "%hd", tempS);
+                        break;
+                    case 0x24:
+                        switch (dynamicType) {
+                            case 360:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 361:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x25:
+                        switch (dynamicType) {
+                            case 370:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 371:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x26:
+                        switch (dynamicType) {
+                            case 380:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 381:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x27:
+                        switch (dynamicType) {
+                            case 390:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 391:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x28:
+                        switch (dynamicType) {
+                            case 400:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 401:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x29:
+                        switch (dynamicType) {
+                            case 410:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 411:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x2A:
+                        switch (dynamicType) {
+                            case 420:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 421:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x2B:
+                        switch (dynamicType) {
+                            case 430:
+                                tempF = ((buf[8] << 8) + buf[9]) * 2 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 431:
+                                tempF = ((buf[10] << 8) + buf[11]) * 8 / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x2C:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x2D:
+                        tempF = buf[8] * 100 / 128 - 100;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x2E:
+                    case 0x2F:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x31:
+                        tempS = (buf[8] << 8) + buf[9];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x32:
+                        tempF = ((buf[8] << 8) + buf[9]) / 4;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x33:
+                        tempS = buf[8];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x34:
+                        switch (dynamicType) {
+                            case 520:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 521:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x35:
+                        switch (dynamicType) {
+                            case 530:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 531:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x36:
+                        switch (dynamicType) {
+                            case 540:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 541:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x37:
+                        switch (dynamicType) {
+                            case 550:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 551:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x38:
+                        switch (dynamicType) {
+                            case 560:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 561:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x39:
+                        switch (dynamicType) {
+                            case 570:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 571:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x3A:
+                        switch (dynamicType) {
+                            case 580:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 581:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x3B:
+                        switch (dynamicType) {
+                            case 590:
+                                tempF = ((buf[8] << 8) + buf[9]) / 65536;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 591:
+                                tempF = ((buf[10] << 8) + buf[11]) / 256 - 128;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x3C:
+                    case 0x3D:
+                    case 0x3E:
+                    case 0x3F:
+                        tempF = ((buf[8] << 8) + buf[9]) / 10 - 40;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x42:
+                        tempF = ((buf[8] << 8) + buf[9]) / 1000;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x43:
+                        tempF = ((buf[8] << 8) + buf[9]) * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x44:
+                        tempF = ((buf[8] << 8) + buf[9]) * 2 / 65535;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x45:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x46:
+                        tempS = buf[8] - 40;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x47:
+                    case 0x48:
+                    case 0x49:
+                    case 0x4A:
+                    case 0x4B:
+                    case 0x4C:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x4D:
+                    case 0x4E:
+                        tempS = (buf[8] << 8) + buf[9];
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x51:
+                        switch (buf[8]) {
+                            case 0x01:
+                                strcat(result, "GAS");
+                                break;
+                            case 0x02:
+                                strcat(result, "METH");
+                                break;
+                            case 0x03:
+                                strcat(result, "ETH");
+                                break;
+                            case 0x04:
+                                strcat(result, "DSL");
+                                break;
+                            case 0x05:
+                                strcat(result, "LPG");
+                                break;
+                            case 0x06:
+                                strcat(result, "CNG");
+                                break;
+                            case 0x07:
+                                strcat(result, "PROP");
+                                break;
+                            case 0x08:
+                                strcat(result, "ELEC");
+                                break;
+                            case 0x09:
+                                strcat(result, "BI_GAS");
+                                break;
+                            case 0x0A:
+                                strcat(result, "BI_METH");
+                                break;
+                            case 0x0B:
+                                strcat(result, "BI_ETH");
+                                break;
+                            case 0x0C:
+                                strcat(result, "BI_LPG");
+                                break;
+                            case 0x0D:
+                                strcat(result, "BI_CNG");
+                                break;
+                            case 0x0E:
+                                strcat(result, "BI_PROP");
+                                break;
+                            case 0x0F:
+                                strcat(result, "BI_ELEC");
+                                break;
+                        }
+                        break;
+                    case 0x52:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x53:
+                        tempF = ((buf[8] << 8) + buf[9]) / 200;
+                        sprintf(temp, "%0.2f", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x54:
+                        tempS = (buf[8] << 8) + buf[9] - 32768;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x55:
+                        switch (dynamicType) {
+                            case 850:
+                                tempF = buf[8] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 851:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x56:
+                        switch (dynamicType) {
+                            case 860:
+                                tempF = buf[8] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 861:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x57:
+                        switch (dynamicType) {
+                            case 870:
+                                tempF = buf[8] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 871:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x58:
+                        switch (dynamicType) {
+                            case 880:
+                                tempF = buf[8] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                            case 881:
+                                tempF = buf[9] * 100 / 128 - 100;
+                                sprintf(temp, "%0.2f", tempF);
+                                strcat(result, temp);
+                                break;
+                        }
+                        break;
+                    case 0x59:
+                        tempS = ((buf[8] << 8) + buf[9]) * 10;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x5A:
+                    case 0x5B:
+                        tempF = buf[8] * 100 / 255;
+                        sprintf(temp, "%0.2F", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x5C:
+                        tempS = buf[8] - 40;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x5D:
+                        tempF = ((buf[8] << 8) + buf[9]) / 128 - 210;
+                        sprintf(temp, "%0.2F", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x5E:
+                        tempF = ((buf[8] << 8) + buf[9]) / 20;
+                        sprintf(temp, "%0.2F", tempF);
+                        strcat(result, temp);
+                        break;
+                    case 0x61:
+                    case 0x62:
+                        tempS = buf[8] - 125;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x63:
+                        tempS = ((buf[8] << 8) + buf[9]) * 10;
+                        sprintf(temp, "%hd", tempS);
+                        strcat(result, temp);
+                        break;
+                    case 0x64:
+                        strcat(result, "数据不支持!");
+                        break;
+                    default:
+                        strcat(result, "数据不支持!");
+                        break;
+                }
+            }
+        }
+    } else {
+        strcat(result, "数据异常! 校验失败");
+    }
+    return env->NewStringUTF(result);
+}
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness

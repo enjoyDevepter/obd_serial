@@ -116,6 +116,15 @@ public class OBDCore {
         return obdBusiness.getFixedData();
     }
 
+    /**
+     * 根据实时数据类型获取相应数据
+     *
+     * @param dynamicDataType 实时数据类型 {@link com.miyuan.obd.serial.DynamicDataType}
+     * @return 实时数据类型对应数据
+     */
+    public synchronized String getDynamicData(int dynamicDataType) {
+        return obdBusiness.getDynamicData(dynamicDataType);
+    }
 
     /**
      * 设置车辆起停状态

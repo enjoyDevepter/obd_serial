@@ -25,6 +25,8 @@ class OBDBusiness {
 
     native PanelBoardInfo getFixedData();
 
+    native String getDynamicData(int dynamicDataType);
+
     native boolean setCarStatus(boolean status);
 
     native boolean initMileage(int mile);
