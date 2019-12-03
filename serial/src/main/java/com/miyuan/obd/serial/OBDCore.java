@@ -63,6 +63,7 @@ public class OBDCore {
 
     /**
      * 开启串口设备
+     * 初始化串口，开启之前确保串口有读写权限，默认波特率为19200
      *
      * @param path 串口名称
      * @return 成功标识
@@ -90,6 +91,7 @@ public class OBDCore {
 
     /**
      * 获取故障码
+     * 耗时操作，避免频繁调用，建议应用启动后查询一次即可。
      *
      * @return 故障码集合
      */
@@ -109,6 +111,7 @@ public class OBDCore {
 
     /**
      * 获取仪表盘信息
+     * 可频繁调用，建议每秒一次。
      *
      * @return
      */
@@ -117,7 +120,7 @@ public class OBDCore {
     }
 
     /**
-     * 根据实时数据类型获取相应数据
+     * 根据实时数据类型获取相应数据.间隔1S
      *
      * @param dynamicDataType 实时数据类型 {@link com.miyuan.obd.serial.DynamicDataType}
      * @return 实时数据类型对应数据
@@ -138,7 +141,7 @@ public class OBDCore {
     }
 
     /**
-     * 设置车辆里程
+     * 初始化车辆里程，同步车辆里程。
      *
      * @param mile 仪表盘里程数
      */
