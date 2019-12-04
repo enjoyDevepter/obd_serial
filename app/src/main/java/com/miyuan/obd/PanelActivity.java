@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.miyuan.obd.serial.OBDCore;
 import com.miyuan.obd.serial.PanelBoardInfo;
@@ -17,8 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,6 +39,7 @@ public class PanelActivity extends AppCompatActivity {
     private TextView temperature;
     private TextView engineLoad;
     private TextView residualFuel;
+    private TextView versionTV;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -99,6 +97,7 @@ public class PanelActivity extends AppCompatActivity {
         }
 
     }
+
     private boolean start;
 
     @Override
@@ -118,6 +117,7 @@ public class PanelActivity extends AppCompatActivity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
+        versionTV = findViewById(R.id.version);
         OBDCore.getInstance(this).open("/dev/ttyLP3");
 //        Log.d("PanelActivity init ");
     }

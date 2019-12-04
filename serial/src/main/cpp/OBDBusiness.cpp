@@ -4,6 +4,7 @@
 #include <string>
 #include <termios.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -388,8 +389,28 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv *env,
 */
 JNIEXPORT jstring JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
-    std::string version = "V1.0";
-    return env->NewStringUTF((version).c_str());
+    char input[6] = {HEAD, 0x80, 0x01, 0x01, 0x00, HEAD};
+
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    bool result = isValid(buf, len);
+
+    char version[30] = {0};
+    char temp[1] = {0};
+    if (result) {
+        for (int i = 5; i < 17; i++) {
+            sprintf(temp, "%c", toascii(buf[i]));
+            strcat(version, temp);;
+            memset(temp, 0, sizeof(temp));
+        }
+    }
+    return env->NewStringUTF(version);
 }
 
 //char *base64_encode(const char *input, int length) {
@@ -629,7 +650,8 @@ Java_com_miyuan_obd_serial_OBDBusiness_getFixedData(JNIEnv *env, jobject jobj) {
 
         PanelBoard panelBoard;
         char temp[20] = {0};
-        sprintf(temp, "%.1f",((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
+        sprintf(temp, "%.1f",
+                ((buf[8] << 24) + (buf[9] << 16) + (buf[10] << 8) + buf[11]) / 1000.0);
         memcpy(panelBoard.voltage, temp, sizeof(temp));
 
         memset(temp, 0, sizeof(temp));
