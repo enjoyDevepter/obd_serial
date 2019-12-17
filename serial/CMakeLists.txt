@@ -14,7 +14,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 # Gradle automatically packages shared libraries with your APK.
 
 # 添加.so动态库
-#add_library(sqlite
+#add_library(sqlite3
 #        SHARED
 #        IMPORTED)
 #add_library(utils
@@ -56,9 +56,9 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 #        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libcutils.so)
 #
 #set_target_properties(
-#        sqlite
+#        sqlite3
 #        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite.so)
+#        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/${ANDROID_ABI}/libsqlite3.so)
 #
 #set_target_properties(
 #        utils
@@ -91,14 +91,14 @@ include_directories(${CMAKE_SOURCE_DIR}/src/main/cpp/include)
 #        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/liblzma.so)
 
 #添加两个预编译库
-#add_library(openssl-crypto
-#        STATIC
-#        IMPORTED)
-#
-#set_target_properties(openssl-crypto
-#        PROPERTIES IMPORTED_LOCATION
-#        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libcrypto.a)
-#
+add_library(sqlite3
+        STATIC
+        IMPORTED)
+
+set_target_properties(sqlite3
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libsqlite3.a)
+
 #add_library(openssl-ssl
 #        STATIC
 #        IMPORTED)
@@ -131,12 +131,11 @@ find_library( # Sets the name of the path variable.
 
 
 # 链接头文件
-target_include_directories(
-        t6_serial
-        PRIVATE
-        # serial 需要的头文件
-        ${CMAKE_SOURCE_DIR}/../jniLibs/include
-)
+#target_include_directories(
+#        t6_serial
+#        PRIVATE
+#        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/include
+#)
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
@@ -148,4 +147,4 @@ target_link_libraries( # Specifies the target library.
         # included in the NDK.
         # openssl-ssl openssl-crypto sqlite utils c++ cutils vndksupport
         # ${log-lib} sqlite utils c++ cutils vndksupport backtrace base unwind lzma )
-        ${log-lib})
+        ${log-lib} sqlite3)

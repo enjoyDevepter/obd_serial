@@ -11,7 +11,6 @@
 #include "android/log.h"
 #include <sqlite3.h>
 
-
 using namespace std;
 static const char *TAG = "obd_core";
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
