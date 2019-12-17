@@ -118,7 +118,7 @@ public class PanelActivity extends AppCompatActivity {
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
         versionTV = findViewById(R.id.version);
-        OBDCore.getInstance(this).open("/dev/ttyLP3");
+        OBDCore.getInstance(this).open("/dev/ttyMT1");
 //        Log.d("PanelActivity init ");
     }
 
