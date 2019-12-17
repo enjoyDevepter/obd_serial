@@ -10,18 +10,10 @@
 #include <vector>
 #include "android/log.h"
 #include <sqlite3.h>
-//#include <openssl/crypto.h>
-//#include <openssl/des.h>
-//#include <openssl/pem.h>
-//#include <openssl/bio.h>
-//#include <openssl/evp.h>
-//#include <openssl/ossl_typ.h>
-//#include <openssl/buffer.h>
+
 
 using namespace std;
 static const char *TAG = "obd_core";
-#define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, TAG, fmt, ##args)
-#define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 #define HEAD 0x7e
 #define TIMEOUT 1
@@ -79,7 +71,7 @@ vector<FaultCode> codes;
 
 char *jstring2str(JNIEnv *env, jstring jstr) {
     if (jstr == NULL || env->GetStringLength(jstr) == 0) {
-        return "";
+        return (char *) "";
     }
     char *rtn = NULL;
     jclass clsstring = env->FindClass("java/lang/String");
