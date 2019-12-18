@@ -70,7 +70,6 @@ public class PanelActivity extends Activity {
         residualFuel = findViewById(R.id.residualFuel);
         versionTV = findViewById(R.id.version);
         OBDCore.getInstance(this).open("/dev/ttyMT1");
-        OBDCore.getInstance(this).setCarStatus(true);
     }
 
     PanelBoardInfo panelBoardInfo;
