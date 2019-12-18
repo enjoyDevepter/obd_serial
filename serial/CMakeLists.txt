@@ -97,7 +97,7 @@ add_library(sqlite3
 
 set_target_properties(sqlite3
         PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/src/main/cpp/libs/libsqlite3.a)
+        ${CMAKE_SOURCE_DIR}/src/main/jnilibs/${ANDROID_ABI}/libsqlite3.a)
 
 #add_library(openssl-ssl
 #        STATIC
