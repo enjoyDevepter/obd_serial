@@ -12,7 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.miyuan.obd.PanelActivity">
+        <activity
+            android:name="com.miyuan.obd.PanelActivity"
+            android:exported="true"
+            android:label="ime">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
