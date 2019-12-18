@@ -9,19 +9,10 @@
 #include <fcntl.h>
 #include <vector>
 #include "android/log.h"
-#include <sqlite3.h>
-//#include <openssl/crypto.h>
-//#include <openssl/des.h>
-//#include <openssl/pem.h>
-//#include <openssl/bio.h>
-//#include <openssl/evp.h>
-//#include <openssl/ossl_typ.h>
-//#include <openssl/buffer.h>
+#include "sqlite3.h"
 
 using namespace std;
 static const char *TAG = "obd_core";
-#define LOGI(fmt, args...) __android_log_print(ANDROID_LOG_INFO, TAG, fmt, ##args)
-#define LOGD(fmt, args...) __android_log_print(ANDROID_LOG_DEBUG, TAG, fmt, ##args)
 #define LOGE(fmt, args...) __android_log_print(ANDROID_LOG_ERROR, TAG, fmt, ##args)
 #define HEAD 0x7e
 #define TIMEOUT 1
@@ -289,19 +280,15 @@ int writeToBox(unsigned char *buffer, int len) {
 
     LOGE_HEX("APP-OBD", buffer, len);
     int length = write(fd, buffer, len);
-//    usleep(1000 * 100); //写完之后睡一秒
+    usleep(1000 * 100); //写完之后睡一秒
     if (length > 0) {
-//        LOGE("write device success");
         return length;
-    } else {
-//        LOGE("write device error");
     }
     return -1;
 }
 
 int readFormBox(unsigned char *buffer, int timeOut) {
     if (fd == -1) {
-//        LOGE("seriail open fail!");
         return -1;
     }
 
@@ -388,8 +375,28 @@ JNIEXPORT void JNICALL Java_com_miyuan_obd_serial_OBDBusiness_close(JNIEnv *env,
 */
 JNIEXPORT jstring JNICALL
 Java_com_miyuan_obd_serial_OBDBusiness_getVersion(JNIEnv *env, jobject jobj) {
-    std::string version = "V1.0";
-    return env->NewStringUTF((version).c_str());
+    unsigned char input[6] = {HEAD, 0x80, 0x01, 0x01, 0x00, HEAD};
+
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    bool result = isValid(buf, len);
+
+    char version[30] = {0};
+    char temp[1] = {0};
+    if (result) {
+        for (int i = 5; i < 17; i++) {
+            sprintf(temp, "%c", toascii(buf[i]));
+            strcat(version, temp);;
+            memset(temp, 0, sizeof(temp));
+        }
+    }
+    return env->NewStringUTF(version);
 }
 
 //char *base64_encode(const char *input, int length) {

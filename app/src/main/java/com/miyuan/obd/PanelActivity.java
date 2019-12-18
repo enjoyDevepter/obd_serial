@@ -9,8 +9,9 @@ import android.widget.TextView;
 import com.miyuan.obd.serial.OBDCore;
 import com.miyuan.obd.serial.PanelBoardInfo;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 public class PanelActivity extends Activity {
@@ -28,6 +29,7 @@ public class PanelActivity extends Activity {
     private TextView temperature;
     private TextView engineLoad;
     private TextView residualFuel;
+    private TextView versionTV;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,28 +68,26 @@ public class PanelActivity extends Activity {
         temperature = findViewById(R.id.temperature);
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
-        OBDCore.getInstance(this).open("/dev/ttyS4");
+        versionTV = findViewById(R.id.version);
+        OBDCore.getInstance(this).open("/dev/ttyMT1");
         OBDCore.getInstance(this).setCarStatus(true);
-        panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
-        handler.sendEmptyMessage(0);
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    try {
-                        Thread.sleep(1000);
-                        panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
-                        handler.sendEmptyMessage(0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
     }
 
     PanelBoardInfo panelBoardInfo;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        versionTV.setText(OBDCore.getInstance(this).getVersion());
+        ScheduledExecutorService scheduledExecutorService =
+                Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
+                                                         @Override
+                                                         public void run() {
+                                                             panelBoardInfo = OBDCore.getInstance(PanelActivity.this).getFixedData();
+                                                             handler.sendEmptyMessage(0);
+                                                         }
+                                                     },
+                2, 1, TimeUnit.SECONDS);
+    }
 }
