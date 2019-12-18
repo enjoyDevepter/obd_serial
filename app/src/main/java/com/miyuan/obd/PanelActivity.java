@@ -127,6 +127,7 @@ public class PanelActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        versionTV.setText(OBDCore.getInstance(this).getVersion());
         ScheduledExecutorService scheduledExecutorService =
                 Executors.newSingleThreadScheduledExecutor();
         scheduledExecutorService.scheduleAtFixedRate(new Runnable() {
