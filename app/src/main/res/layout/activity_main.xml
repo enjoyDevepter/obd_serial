@@ -73,6 +73,29 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/simulate_open"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="模拟ACC开"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/simulate_close"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="模拟ACC关"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <Button
                 android:id="@+id/getFixedData"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -102,7 +125,9 @@
         android:id="@+id/sample_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:text="Hello World!"
         android:textColor="@android:color/white"
         android:textSize="15sp" />

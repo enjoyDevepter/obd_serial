@@ -179,4 +179,14 @@ public class OBDCore {
     public boolean setAutoStart(boolean has) {
         return obdBusiness.setAutoStart(has);
     }
+
+    /**
+     * 模拟ACC测试
+     *
+     * @param open
+     * @return
+     */
+    public boolean simulateAcc(boolean open) {
+        return obdBusiness.simulateAcc(open);
+    }
 }

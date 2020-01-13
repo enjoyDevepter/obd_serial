@@ -1616,6 +1616,30 @@ Java_com_miyuan_obd_serial_OBDBusiness_setAutoStart(JNIEnv *env, jobject jobj, j
 
 /*
 * Class:     com_miyuan_obd_serial_OBDBusiness
+* Method:    simulateAcc
+* Signature: (Z)V
+*/
+JNIEXPORT jboolean JNICALL
+Java_com_miyuan_obd_serial_OBDBusiness_simulateAcc(JNIEnv *env, jobject jobj, jboolean open) {
+    unsigned char input[6] = {HEAD, 0x88, 0x02, 0x01, 0x00, HEAD};
+    if (!open) {
+        input[3] = 0x00;
+    }
+    input[4] = input[1] ^ input[2] ^ input[3];
+
+    writeToBox(input, sizeof(input));
+
+    unsigned char buf[1024];
+
+    int len = readFormBox(buf, TIMEOUT);
+
+    bool result = isValid(buf, len);
+
+    return result && buf[3] == open;;
+}
+
+/*
+* Class:     com_miyuan_obd_serial_OBDBusiness
 * Method:    isLaunched
 * Signature: ()V
 */

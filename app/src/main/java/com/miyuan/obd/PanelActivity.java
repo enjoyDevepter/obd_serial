@@ -69,7 +69,7 @@ public class PanelActivity extends Activity {
         engineLoad = findViewById(R.id.engineLoad);
         residualFuel = findViewById(R.id.residualFuel);
         versionTV = findViewById(R.id.version);
-        OBDCore.getInstance(this).open("/dev/ttyMT1");
+        OBDCore.getInstance(this).open("/dev/ttyMT2");
     }
 
     PanelBoardInfo panelBoardInfo;

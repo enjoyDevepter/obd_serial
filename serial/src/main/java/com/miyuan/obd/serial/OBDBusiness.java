@@ -35,5 +35,7 @@ class OBDBusiness {
 
     native boolean setAutoStart(boolean start);
 
+    native boolean simulateAcc(boolean open);
+
     native boolean isConnect();
 }
